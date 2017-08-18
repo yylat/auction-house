@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+    <Properties>
+        <property name="filePattern">%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %logger{3} - %msg%n</property>
+        <property name="consolePattern">%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %logger{2} - %msg%n</property>
+    </Properties>
+    <Appenders>
+        <Console name="Console"
+                 target="SYSTEM_OUT">
+            <PatternLayout pattern="${consolePattern}"/>
+        </Console>
+        <RollingFile name="File"
+                     fileName="auction/logs/log.txt"
+                     filePattern="auction/logs/$${date:yyyy-MM-dd}/log-%i.txt">
+            <PatternLayout pattern="${filePattern}"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="100 KB"/>
+            </Policies>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="File"/>
+        </Root>
+    </Loggers>
+</Configuration>
