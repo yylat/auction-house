@@ -70,7 +70,7 @@
                     </c:when>
                     <c:otherwise>
 
-                        <ctg:grid items="${requestScope.items}"/>
+                        <%@ include file="/jsp/jspf/items-list.jsp" %>
 
                     </c:otherwise>
                 </c:choose>

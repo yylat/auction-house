@@ -17,23 +17,20 @@ import com.epam.auction.exception.DAOLayerException;
 import com.epam.auction.exception.ReceiverLayerException;
 import com.epam.auction.receiver.ItemReceiver;
 import com.epam.auction.util.Converter;
+import com.epam.auction.validator.ItemValidator;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class ItemReceiverImpl implements ItemReceiver {
 
     @Override
-    public boolean loadUserItems(RequestContent requestContent) throws ReceiverLayerException {
-        boolean result = false;
-
+    public void loadUserItems(RequestContent requestContent) throws ReceiverLayerException {
         User user = (User) requestContent.getSessionAttribute(RequestConstant.USER);
 
         if (user != null) {
@@ -42,18 +39,14 @@ public class ItemReceiverImpl implements ItemReceiver {
             try (DAOManager daoManager = new DAOManager(itemDAO)) {
                 requestContent.setRequestAttribute(RequestConstant.ITEMS,
                         itemDAO.findAll(user.getId()));
-                result = true;
             } catch (DAOLayerException e) {
                 throw new ReceiverLayerException(e.getMessage(), e);
             }
-
         }
-
-        return result;
     }
 
     @Override
-    public boolean loadCategories(RequestContent requestContent) throws ReceiverLayerException {
+    public void loadCategories(RequestContent requestContent) throws ReceiverLayerException {
         ItemCategoryDAO itemCategoryDAO = new ItemCategoryDAOImpl();
 
         try (DAOManager daoManager = new DAOManager(itemCategoryDAO)) {
@@ -61,14 +54,10 @@ public class ItemReceiverImpl implements ItemReceiver {
         } catch (DAOLayerException e) {
             throw new ReceiverLayerException(e.getMessage(), e);
         }
-
-        return true;
     }
 
     @Override
-    public boolean createItem(RequestContent requestContent) throws ReceiverLayerException {
-        boolean result;
-
+    public void createItem(RequestContent requestContent) throws ReceiverLayerException {
         Item item = new Item(
                 requestContent.getRequestParameter(RequestConstant.TITLE)[0],
                 requestContent.getRequestParameter(RequestConstant.DESCRIPTION)[0],
@@ -79,40 +68,37 @@ public class ItemReceiverImpl implements ItemReceiver {
                 Integer.valueOf(requestContent.getRequestParameter(RequestConstant.CATEGORY_ID)[0]),
                 ((User) requestContent.getSessionAttribute(RequestConstant.USER)).getId());
 
-        List<InputStream> files = requestContent.getFiles();
+        ItemValidator itemValidator = new ItemValidator();
+        if (itemValidator.validItemParam(item)) {
+            List<InputStream> files = requestContent.getFiles();
 
-        ItemDAO itemDAO = new ItemDAOImpl();
-        PhotoDAO photoDAO = new PhotoDAOImpl();
+            ItemDAO itemDAO = new ItemDAOImpl();
+            PhotoDAO photoDAO = new PhotoDAOImpl();
 
-        DAOManager daoManager = new DAOManager(true, itemDAO, photoDAO);
-        daoManager.beginTransaction();
-        try {
-            result = itemDAO.create(item);
-            int itemId = item.getId();
-
-            if (files != null) {
-                List<Photo> photos = files.stream()
-                        .map(file -> new Photo(file, itemId))
-                        .collect(Collectors.toList());
-
-                for (Photo photo : photos) {
-                    result = photoDAO.create(photo);
+            DAOManager daoManager = new DAOManager(true, itemDAO, photoDAO);
+            daoManager.beginTransaction();
+            try {
+                boolean itemCreated = itemDAO.create(item);
+                boolean photosSaved = true;
+                if (itemCreated && files != null) {
+                    photosSaved = savePhotos(photoDAO, files, item.getId());
                 }
+                if (photosSaved) {
+                    daoManager.commit();
+                }
+            } catch (DAOLayerException e) {
+                daoManager.rollback();
+                throw new ReceiverLayerException(e.getMessage(), e);
+            } finally {
+                daoManager.endTransaction();
             }
-            daoManager.commit();
-        } catch (DAOLayerException e) {
-            daoManager.rollback();
-            throw new ReceiverLayerException(e.getMessage(), e);
-        } finally {
-            daoManager.endTransaction();
+        } else {
+            throw new ReceiverLayerException(itemValidator.getValidationMessage());
         }
-
-
-        return result;
     }
 
     @Override
-    public boolean loadImage(RequestContent requestContent) throws ReceiverLayerException {
+    public void loadImage(RequestContent requestContent) throws ReceiverLayerException {
         int itemId = Integer.valueOf(requestContent.getRequestParameter(RequestConstant.ITEM_ID)[0]);
 
         PhotoDAO photoDAO = new PhotoDAOImpl();
@@ -124,54 +110,20 @@ public class ItemReceiverImpl implements ItemReceiver {
         } catch (DAOLayerException | IOException e) {
             throw new ReceiverLayerException(e.getMessage(), e);
         }
-
-        return true;
     }
 
     @Override
-    public boolean loadCertainItems(RequestContent requestContent) throws ReceiverLayerException {
-        boolean result = false;
-
-        String[] statuses = requestContent.getRequestParameter(RequestConstant.ITEM_STATUS);
-
-        if (statuses != null) {
-
-            Stream<ItemStatus> statusesStream = Arrays.stream(ItemStatus.values());
-            List<Integer> statusesId = Arrays.stream(statuses)
-                    .map(status -> status.toUpperCase().replaceAll("-", "_"))
-                    .filter(status -> statusesStream.anyMatch(itemStatus -> itemStatus.toString().equals(status)))
-                    .map(status -> ItemStatus.valueOf(status).getId())
-                    .collect(Collectors.toList());
-
-            if (!statusesId.isEmpty()) {
-                ItemDAO itemDAO = new ItemDAOImpl();
-
-                try (DAOManager daoManager = new DAOManager(itemDAO)) {
-                    requestContent.setRequestAttribute(RequestConstant.ITEMS,
-                            itemDAO.findCertain(statusesId));
-                    result = true;
-                } catch (DAOLayerException e) {
-                    throw new ReceiverLayerException(e.getMessage(), e);
-                }
-            }
-
-        }
-
-        return result;
+    public void loadItemsForCheck(RequestContent requestContent) throws ReceiverLayerException {
+        loadItems(requestContent, ItemStatus.CREATED);
     }
 
     @Override
-    public boolean loadItemsForCheck(RequestContent requestContent) throws ReceiverLayerException {
-        return loadItems(requestContent, ItemStatus.CREATED);
+    public void loadActiveItems(RequestContent requestContent) throws ReceiverLayerException {
+        loadItems(requestContent, ItemStatus.ACTIVE);
     }
 
     @Override
-    public boolean loadActiveItems(RequestContent requestContent) throws ReceiverLayerException {
-        return loadItems(requestContent, ItemStatus.ACTIVE);
-    }
-
-    @Override
-    public boolean loadAllImages(RequestContent requestContent) throws ReceiverLayerException {
+    public void loadAllImages(RequestContent requestContent) throws ReceiverLayerException {
         int itemId = Integer.valueOf(requestContent.getRequestParameter(RequestConstant.ITEM_ID)[0]);
 
         PhotoDAO photoDAO = new PhotoDAOImpl();
@@ -182,16 +134,14 @@ public class ItemReceiverImpl implements ItemReceiver {
                 photos.add(Converter.inputStreamToString(photo.getPhotoFile()));
             }
 
-            requestContent.setAjaxResponse(photos);
+            requestContent.setAjaxResponse(Converter.objectToJson(photos));
         } catch (DAOLayerException | IOException e) {
             throw new ReceiverLayerException(e.getMessage(), e);
         }
-
-        return true;
     }
 
     @Override
-    public boolean loadItem(RequestContent requestContent) {
+    public void loadItem(RequestContent requestContent) throws ReceiverLayerException {
         int itemId = Integer.valueOf(requestContent.getRequestParameter(RequestConstant.ITEM_ID)[0]);
 
         ItemDAO itemDAO = new ItemDAOImpl();
@@ -200,13 +150,11 @@ public class ItemReceiverImpl implements ItemReceiver {
             requestContent.setRequestAttribute(RequestConstant.ITEM,
                     itemDAO.findEntityById(itemId));
         } catch (DAOLayerException e) {
-            e.printStackTrace();
+            throw new ReceiverLayerException(e.getMessage(), e);
         }
-
-        return true;
     }
 
-    private boolean loadItems(RequestContent requestContent, ItemStatus itemStatus) throws ReceiverLayerException {
+    private void loadItems(RequestContent requestContent, ItemStatus itemStatus) throws ReceiverLayerException {
         ItemDAO itemDAO = new ItemDAOImpl();
 
         try (DAOManager daoManager = new DAOManager(itemDAO)) {
@@ -215,8 +163,21 @@ public class ItemReceiverImpl implements ItemReceiver {
         } catch (DAOLayerException e) {
             throw new ReceiverLayerException(e.getMessage(), e);
         }
+    }
 
-        return true;
+    private boolean savePhotos(PhotoDAO photoDAO, List<InputStream> files, int itemId) throws DAOLayerException {
+        boolean result = false;
+        List<Photo> photos = files.stream()
+                .map(file -> new Photo(file, itemId))
+                .collect(Collectors.toList());
+
+        for (Photo photo : photos) {
+            result = photoDAO.create(photo);
+            if (!result) {
+                return false;
+            }
+        }
+        return result;
     }
 
 }

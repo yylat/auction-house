@@ -16,8 +16,7 @@ public class AdminReceiverImpl implements AdminReceiver {
     private static final String USERS_ATTR = "users";
 
     @Override
-    public boolean loadUsers(RequestContent requestContent) throws ReceiverLayerException {
-
+    public void loadUsers(RequestContent requestContent) throws ReceiverLayerException {
         UserDAO userDAO = new UserDAOImpl();
 
         try (DAOManager daoManager = new DAOManager(userDAO)) {
@@ -25,14 +24,10 @@ public class AdminReceiverImpl implements AdminReceiver {
         } catch (DAOLayerException e) {
             throw new ReceiverLayerException(e.getMessage(), e);
         }
-
-        return true;
     }
 
     @Override
-    public boolean approveItem(RequestContent requestContent) throws ReceiverLayerException {
-        boolean result;
-
+    public void approveItem(RequestContent requestContent) throws ReceiverLayerException {
         int itemId = Integer.valueOf(requestContent.getRequestParameter(RequestConstant.ITEM_ID)[0]);
 
         ItemDAO itemDAO = new ItemDAOImpl();
@@ -41,16 +36,15 @@ public class AdminReceiverImpl implements AdminReceiver {
         daoManager.beginTransaction();
 
         try {
-            result = itemDAO.approveItem(itemId);
-            daoManager.commit();
+            if (itemDAO.approveItem(itemId)) {
+                daoManager.commit();
+            }
         } catch (DAOLayerException e) {
             daoManager.rollback();
             throw new ReceiverLayerException(e.getMessage(), e);
         } finally {
             daoManager.endTransaction();
         }
-
-        return result;
     }
 
 }

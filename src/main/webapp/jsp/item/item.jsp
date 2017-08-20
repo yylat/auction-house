@@ -31,13 +31,15 @@
 <fmt:message bundle="${msg}" key="item.startDate" var="itemStartDate"/>
 <fmt:message bundle="${msg}" key="item.closeDate" var="itemCloseDate"/>
 
+<fmt:message bundle="${msg}" key="form.priceRule" var="priceRule"/>
+
 <fmt:message bundle="${msg}" key="message.noPhotosForItem" var="noPhotosForItem"/>
 
 <fmt:message bundle="${msg}" key="label.makeBid" var="makeBid"/>
 
 <c:if test="${requestScope.item == null}">
     <jsp:forward page="${pageContext.request.contextPath}/controller">
-        <jsp:param name="command" value="load-user-items"/>
+        <jsp:param name="command" value="load-active-items"/>
     </jsp:forward>
 </c:if>
 
@@ -91,7 +93,7 @@
                                 <form action="">
                                     <input type="hidden" name="command" value=""/>
                                     <button class="w3-button w3-round-xlarge pro-green w3-ripple">
-                                            edit
+                                        edit
                                     </button>
                                 </form>
                             </c:when>
@@ -110,6 +112,21 @@
                 <div class="text-on-color money">${requestScope.item.actualPrice}</div>
             </div>
 
+            <c:if test="${(requestScope.item.status.id == 3) && (sessionScope.user.id != requestScope.item.sellerId)}">
+                <div class="w3-container w3-margin">
+                    <form action="${pageContext.request.contextPath}/controller" method="post">
+                        <input type="hidden" name="command" value="make-bid"/>
+                        <input name="bid-value" class="w3-input back-back-color w3-col m3 s4" type="number" step="0.001"
+                               min="${requestScope.item.actualPrice}"
+                               max="99999999999999999999.999" value="${requestScope.item.actualPrice + 1}" required
+                               title="${priceRule}"/>
+                        <button class="w3-margin-left w3-button pro-red">
+                                ${makeBid}
+                        </button>
+                    </form>
+                </div>
+            </c:if>
+
             <div class="w3-row-padding">
 
                 <div class="w3-col m7">
@@ -123,7 +140,7 @@
 
                 <div class="w3-col m5">
 
-                    <div class="w3-card">
+                    <div class="w3-card w3-margin-top">
                         <div class="w3-container w3-padding pro-lightgrey">${prices}</div>
                         <div class="w3-container w3-padding">
                             ${itemStartPrice}:

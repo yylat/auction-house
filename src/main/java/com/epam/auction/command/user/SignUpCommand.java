@@ -14,7 +14,6 @@ import org.apache.logging.log4j.Logger;
 public class SignUpCommand extends AbstractCommand {
 
     private static final Logger logger = LogManager.getLogger();
-    private static final String OPEN_SIGN_UP_ATTR = "openSignUp";
 
     public SignUpCommand(Receiver receiver) {
         super(receiver);
@@ -22,17 +21,10 @@ public class SignUpCommand extends AbstractCommand {
 
     @Override
     public Page execute(RequestContent requestContent) {
-        Page page = new Page();
+        Page page = new Page(PageName.ACTIVE_ITEMS, TransferMethod.FORWARD);
 
         try {
-            if (doAction(requestContent)) {
-                page.setPageName(PageName.MAIN);
-                page.setTransferMethod(TransferMethod.FORWARD);
-            } else {
-                requestContent.setRequestAttribute(OPEN_SIGN_UP_ATTR, true);
-                page.setPageName(PageName.MAIN);
-                page.setTransferMethod(TransferMethod.FORWARD);
-            }
+            doAction(requestContent);
         } catch (ReceiverLayerException e) {
             logger.log(Level.ERROR, e.getMessage(), e);
         }

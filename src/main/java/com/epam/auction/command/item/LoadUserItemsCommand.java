@@ -21,17 +21,10 @@ public class LoadUserItemsCommand extends AbstractCommand {
 
     @Override
     public Page execute(RequestContent requestContent) {
-        Page page = new Page();
+        Page page = new Page(PageName.USER_ITEMS, TransferMethod.FORWARD);
 
         try {
-            if (doAction(requestContent)) {
-                page.setPageName(PageName.USER_ITEMS);
-                page.setTransferMethod(TransferMethod.FORWARD);
-            } else {
-                page.setPageName(PageName.ERROR);
-                page.setTransferMethod(TransferMethod.REDIRECT);
-            }
-
+            doAction(requestContent);
         } catch (ReceiverLayerException e) {
             logger.log(Level.ERROR, e.getMessage(), e);
         }

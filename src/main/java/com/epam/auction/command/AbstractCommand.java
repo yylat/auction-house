@@ -19,8 +19,8 @@ public abstract class AbstractCommand {
 
     public abstract Page execute(RequestContent requestContent);
 
-    protected boolean doAction(RequestContent requestContent) throws ReceiverLayerException {
-        return receiver.action(CommandType.takeCommandType(this), requestContent);
+    protected void doAction(RequestContent requestContent) throws ReceiverLayerException {
+        receiver.action(CommandType.takeCommandType(this), requestContent);
     }
 
 }

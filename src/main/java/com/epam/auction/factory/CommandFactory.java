@@ -25,7 +25,7 @@ public class CommandFactory {
             } else {
                 logger.log(Level.WARN, "Unknown command attribute [" + commandName + "] in request.");
             }
-            command = CommandType.OPEN_MAIN_PAGE.getCommand();
+            command = CommandType.LOAD_ACTIVE_ITEMS.getCommand();
         }
         return command;
     }

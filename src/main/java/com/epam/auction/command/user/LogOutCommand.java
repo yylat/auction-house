@@ -21,6 +21,7 @@ public class LogOutCommand extends AbstractCommand {
 
     @Override
     public Page execute(RequestContent requestContent) {
+        Page page = new Page(PageName.ACTIVE_ITEMS, TransferMethod.REDIRECT);
 
         try {
             doAction(requestContent);
@@ -28,7 +29,7 @@ public class LogOutCommand extends AbstractCommand {
             logger.log(Level.ERROR, e);
         }
 
-        return new Page(PageName.MAIN, TransferMethod.REDIRECT);
+        return page;
     }
 
 }

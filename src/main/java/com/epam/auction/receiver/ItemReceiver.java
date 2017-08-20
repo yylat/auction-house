@@ -5,22 +5,20 @@ import com.epam.auction.exception.ReceiverLayerException;
 
 public interface ItemReceiver extends Receiver {
 
-    boolean loadUserItems(RequestContent requestContent) throws ReceiverLayerException;
+    void loadUserItems(RequestContent requestContent) throws ReceiverLayerException;
 
-    boolean loadCategories(RequestContent requestContent) throws ReceiverLayerException;
+    void loadCategories(RequestContent requestContent) throws ReceiverLayerException;
 
-    boolean createItem(RequestContent requestContent) throws ReceiverLayerException;
+    void createItem(RequestContent requestContent) throws ReceiverLayerException;
 
-    boolean loadImage(RequestContent requestContent) throws ReceiverLayerException;
+    void loadImage(RequestContent requestContent) throws ReceiverLayerException;
 
-    boolean loadCertainItems(RequestContent requestContent) throws ReceiverLayerException;
+    void loadItemsForCheck(RequestContent requestContent) throws ReceiverLayerException;
 
-    boolean loadItemsForCheck(RequestContent requestContent) throws ReceiverLayerException;
+    void loadActiveItems(RequestContent requestContent) throws ReceiverLayerException;
 
-    boolean loadActiveItems(RequestContent requestContent) throws ReceiverLayerException;
+    void loadAllImages(RequestContent requestContent) throws ReceiverLayerException;
 
-    boolean loadAllImages(RequestContent requestContent) throws ReceiverLayerException;
-
-    boolean loadItem(RequestContent requestContent);
+    void loadItem(RequestContent requestContent) throws ReceiverLayerException;
 
 }

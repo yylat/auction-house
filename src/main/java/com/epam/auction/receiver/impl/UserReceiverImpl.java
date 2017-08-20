@@ -15,34 +15,27 @@ import com.epam.auction.validator.UserValidator;
 public class UserReceiverImpl implements UserReceiver {
 
     @Override
-    public boolean signIn(RequestContent requestContent) throws ReceiverLayerException {
-        boolean result;
-
+    public void signIn(RequestContent requestContent) throws ReceiverLayerException {
         User user = new User(
                 requestContent.getRequestParameter(RequestConstant.USERNAME)[0],
                 Encoder.encode(requestContent.getRequestParameter(RequestConstant.PASSWORD)[0]));
 
         UserDAO userDAO = new UserDAOImpl();
 
-        try(DAOManager daoManager = new DAOManager(userDAO)){
-            result = userDAO.isExist(user);
+        try (DAOManager daoManager = new DAOManager(userDAO)) {
+            if (userDAO.isExist(user)) {
+                requestContent.setSessionAttribute(RequestConstant.USER, user);
+            } else {
+                requestContent.setRequestAttribute(RequestConstant.WRONG_USERNAME_PASSWORD, true);
+                requestContent.setRequestAttribute(RequestConstant.OPEN_SIGN_IN, true);
+            }
         } catch (DAOLayerException e) {
             throw new ReceiverLayerException(e.getMessage(), e);
         }
-
-        if (result) {
-            requestContent.setSessionAttribute(RequestConstant.USER, user);
-        } else {
-            requestContent.setRequestAttribute(RequestConstant.WRONG_USERNAME_PASSWORD, true);
-        }
-
-        return result;
     }
 
     @Override
-    public boolean signUp(RequestContent requestContent) throws ReceiverLayerException {
-        boolean result = false;
-
+    public void signUp(RequestContent requestContent) throws ReceiverLayerException {
         User user = new User(
                 requestContent.getRequestParameter(RequestConstant.USERNAME)[0],
                 requestContent.getRequestParameter(RequestConstant.PASSWORD)[0],
@@ -58,6 +51,8 @@ public class UserReceiverImpl implements UserReceiver {
 
             UserDAO userDAO = new UserDAOImpl();
             DAOManager daoManager = new DAOManager(true, userDAO);
+
+            boolean result = false;
 
             daoManager.beginTransaction();
             try {
@@ -78,19 +73,18 @@ public class UserReceiverImpl implements UserReceiver {
 
             if (result) {
                 requestContent.setRequestAttribute(RequestConstant.SUCCESSFUL_REGISTRATION, true);
+            } else {
+                requestContent.setRequestAttribute(RequestConstant.OPEN_SIGN_UP, true);
             }
 
         } else {
             throw new ReceiverLayerException(validator.getValidationMessage());
         }
-
-        return result;
     }
 
     @Override
-    public boolean logOut(RequestContent requestContent) {
+    public void logOut(RequestContent requestContent) {
         requestContent.destroySessionAttributes();
-        return true;
     }
 
 }

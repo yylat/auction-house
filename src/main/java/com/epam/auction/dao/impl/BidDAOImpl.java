@@ -7,6 +7,8 @@ import com.epam.auction.exception.DAOLayerException;
 import com.epam.auction.exception.MethodNotSupportedException;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BidDAOImpl extends GenericDAOImpl<Bid> implements BidDAO {
 
@@ -33,10 +35,10 @@ public class BidDAOImpl extends GenericDAOImpl<Bid> implements BidDAO {
         boolean result = false;
 
         try (CallableStatement statement = connection.prepareCall(TableConstant.Bid.QUERY_CREATE)) {
+            statement.registerOutParameter(1, Types.INTEGER);
             defineQueryAttributes(entity, statement);
-            statement.registerOutParameter(4, Types.INTEGER);
             if (statement.execute()) {
-                entity.setId(statement.getInt(4));
+                entity.setId(statement.getInt(1));
                 result = true;
             }
         } catch (SQLException e) {
@@ -63,9 +65,27 @@ public class BidDAOImpl extends GenericDAOImpl<Bid> implements BidDAO {
 
     @Override
     void defineQueryAttributes(Bid entity, PreparedStatement statement) throws SQLException {
-        statement.setInt(1, entity.getItemId());
-        statement.setInt(2, entity.getBidderId());
-        statement.setBigDecimal(3, entity.getBidValue());
+        statement.setInt(2, entity.getItemId());
+        statement.setInt(3, entity.getBidderId());
+        statement.setBigDecimal(4, entity.getBidValue());
     }
 
+    @Override
+    public List<Bid> findAll(int userId) throws DAOLayerException {
+        List<Bid> bids;
+
+        try(PreparedStatement statement = connection.prepareStatement(TableConstant.Bid.QUERY_FIND_ALL_FOR_USER)){
+            statement.setInt(1, userId);
+            ResultSet resultSet = statement.executeQuery();
+
+            bids = new ArrayList<>();
+            while(resultSet.next()){
+                bids.add(extractEntity(resultSet));
+            }
+        } catch (SQLException e) {
+            throw new DAOLayerException(e.getMessage(), e);
+        }
+
+        return bids;
+    }
 }

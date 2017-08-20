@@ -76,6 +76,10 @@ public class RequestContent {
         return ajaxResponse;
     }
 
+    public void setAjaxResponse(String json){
+        this.ajaxResponse = json;
+    }
+
     public void setAjaxResponse(Object object) {
         this.ajaxResponse = Converter.objectToJson(object);
     }

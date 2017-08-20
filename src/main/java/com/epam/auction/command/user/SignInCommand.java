@@ -1,6 +1,7 @@
 package com.epam.auction.command.user;
 
 import com.epam.auction.command.AbstractCommand;
+import com.epam.auction.constant.RequestConstant;
 import com.epam.auction.content.RequestContent;
 import com.epam.auction.page.Page;
 import com.epam.auction.exception.ReceiverLayerException;
@@ -14,7 +15,6 @@ import org.apache.logging.log4j.Logger;
 public class SignInCommand extends AbstractCommand {
 
     private static final Logger logger = LogManager.getLogger();
-    private static final String OPEN_SIGN_IN_ATTR = "openSignIn";
 
     public SignInCommand(Receiver receiver) {
         super(receiver);
@@ -23,14 +23,13 @@ public class SignInCommand extends AbstractCommand {
     @Override
     public Page execute(RequestContent requestContent) {
         Page page = new Page();
+        page.setPageName(PageName.ACTIVE_ITEMS);
 
         try {
-            if (doAction(requestContent)) {
-                page.setPageName(PageName.MAIN);
+            doAction(requestContent);
+            if (requestContent.getSessionAttribute(RequestConstant.USER) != null) {
                 page.setTransferMethod(TransferMethod.REDIRECT);
             } else {
-                requestContent.setRequestAttribute(OPEN_SIGN_IN_ATTR, true);
-                page.setPageName(PageName.MAIN);
                 page.setTransferMethod(TransferMethod.FORWARD);
             }
         } catch (ReceiverLayerException e) {

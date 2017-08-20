@@ -9,7 +9,8 @@ public enum ItemStatus {
     ACTIVE(3),
     SOLD(4),
     CANCELED(5),
-    ENDED(6);
+    ENDED(6),
+    NOT_CONFIRMED(7);
 
     private int id;
 

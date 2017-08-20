@@ -11,26 +11,20 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class LoadCertainItemsCommand extends AbstractCommand {
+public class LoadActiveItemsCommand extends AbstractCommand {
 
     private final static Logger logger = LogManager.getLogger();
 
-    public LoadCertainItemsCommand(Receiver receiver) {
+    public LoadActiveItemsCommand(Receiver receiver) {
         super(receiver);
     }
 
     @Override
     public Page execute(RequestContent requestContent) {
-        Page page = new Page();
+        Page page = new Page(PageName.ACTIVE_ITEMS, TransferMethod.FORWARD);
 
         try {
-            if (doAction(requestContent)) {
-                page.setPageName(PageName.ALL_ITEM);
-                page.setTransferMethod(TransferMethod.FORWARD);
-            } else {
-                page.setPageName(PageName.ERROR);
-                page.setTransferMethod(TransferMethod.REDIRECT);
-            }
+            doAction(requestContent);
         } catch (ReceiverLayerException e) {
             logger.log(Level.ERROR, e.getMessage(), e);
         }

@@ -10,6 +10,10 @@ abstract class Validator {
         return validationMessage;
     }
 
+    void setValidationMessage(String validationMessage) {
+        this.validationMessage = validationMessage;
+    }
+
     boolean validate(String verifiable, String pattern) {
         if (Pattern.compile(pattern).matcher(verifiable).find()) {
             return true;

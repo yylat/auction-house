@@ -15,8 +15,6 @@ import org.apache.logging.log4j.Logger;
 public class ChangeLocaleCommand extends AbstractCommand {
 
     private static final Logger logger = LogManager.getLogger();
-    private static final String REFERER_HEADER = "referer";
-    private static final String HOST_HEADER = "host";
 
     public ChangeLocaleCommand(Receiver receiver) {
         super(receiver);
@@ -24,15 +22,11 @@ public class ChangeLocaleCommand extends AbstractCommand {
 
     @Override
     public Page execute(RequestContent requestContent) {
-        Page page = new Page();
-
         PageName pageName = (PageName) requestContent.getSessionAttribute(RequestConstant.CURRENT_PAGE);
+        Page page = new Page(pageName, TransferMethod.FORWARD);
 
         try {
-            if (doAction(requestContent)) {
-                page.setPageName(pageName);
-                page.setTransferMethod(TransferMethod.FORWARD);
-            }
+            doAction(requestContent);
         } catch (ReceiverLayerException e) {
             logger.log(Level.ERROR, e.getMessage(), e);
         }

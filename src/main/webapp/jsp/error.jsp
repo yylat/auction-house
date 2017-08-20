@@ -40,7 +40,6 @@
                     <c:otherwise>
                         <p>${pageContext.exception}</p>
                         <p>${pageContext.exception.message}</p>
-                        <p>${pageContext.exception.stackTrace}</p>
                     </c:otherwise>
                 </c:choose>
             </div>

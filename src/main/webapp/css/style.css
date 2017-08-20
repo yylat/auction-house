@@ -484,6 +484,13 @@ b, strong {
     font-weight: bold;
 }
 
+.button-reset {
+    width: 100%;
+    border: 0;
+    background: inherit;
+    cursor: pointer;
+}
+
 @media (max-width: 993px) {
 
     main {

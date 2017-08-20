@@ -24,7 +24,12 @@ public final class RequestConstant {
     public static final String USERNAME_ALREADY_EXIST = "usernameAlreadyExist";
     public static final String EMAIL_ALREADY_EXIST = "emailAlreadyExist";
 
+    public static final String OPEN_SIGN_UP = "openSignUp";
+    public static final String OPEN_SIGN_IN = "openSignIn";
+
     public static final String ITEMS = "items";
+    public static final String BIDS = "bids";
+    public static final String BID_ITEM_MAP = "bidItemMap";
 
     public static final String TITLE = "title";
     public static final String DESCRIPTION = "description";

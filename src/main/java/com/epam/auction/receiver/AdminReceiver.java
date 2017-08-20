@@ -5,8 +5,8 @@ import com.epam.auction.exception.ReceiverLayerException;
 
 public interface AdminReceiver extends Receiver {
 
-    boolean loadUsers(RequestContent requestContent) throws ReceiverLayerException;
+    void loadUsers(RequestContent requestContent) throws ReceiverLayerException;
 
-    boolean approveItem(RequestContent requestContent) throws ReceiverLayerException;
+    void approveItem(RequestContent requestContent) throws ReceiverLayerException;
 
 }

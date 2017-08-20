@@ -6,8 +6,8 @@ import com.epam.auction.exception.ReceiverLayerException;
 
 public interface Receiver {
 
-    default boolean action(CommandType commandType, RequestContent requestContent) throws ReceiverLayerException {
-        return commandType.doReceiver(requestContent);
+    default void action(CommandType commandType, RequestContent requestContent) throws ReceiverLayerException {
+        commandType.doReceiver(requestContent);
     }
 
 }

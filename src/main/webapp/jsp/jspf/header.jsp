@@ -50,9 +50,10 @@
                             <a href="#" class="w3-bar-item w3-button pro-hover-green w3-ripple">
                                     ${account}
                             </a>
-                            <a href="#" class="w3-bar-item w3-button pro-hover-green w3-ripple">
-                                    ${bids}
-                            </a>
+                            <form action="${pageContext.request.contextPath}/controller">
+                                <input type="hidden" name="command" value="load-bids">
+                                <button class="w3-bar-item w3-button pro-hover-green w3-ripple">${bids}</button>
+                            </form>
                             <form action="${pageContext.request.contextPath}/controller">
                                 <input type="hidden" name="command" value="load-user-items">
                                 <button class="w3-bar-item w3-button pro-hover-green w3-ripple">${lots}</button>

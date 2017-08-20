@@ -50,7 +50,10 @@ public final class TableConstant {
         public final static String QUERY_FIND_BY_ID =
                 "SELECT `bid_id`, `item_id`, `bidder_id`, `bid_value`, `is_winning` FROM `bid` WHERE `bid_id` = ?";
         public final static String QUERY_CREATE =
-                "{CALL insert_bid (?, ?, ?, ?)}";
+                "{? = CALL insert_bid (?, ?, ?)}";
+
+        public final static String QUERY_FIND_ALL_FOR_USER =
+                "SELECT `bid_id`, `item_id`, `bidder_id`, `bid_value`, `is_winning` FROM `bid` WHERE `bidder_id` = ? ORDER BY `bid_id` DESC";
     }
 
     public static final class ItemCategory {

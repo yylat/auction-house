@@ -19,14 +19,4 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
     </tag>
-    <tag>
-        <name>grid</name>
-        <tag-class>com.epam.auction.tag.ItemGridTag</tag-class>
-        <body-content>empty</body-content>
-        <attribute>
-            <name>items</name>
-            <required>true</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-    </tag>
 </taglib>

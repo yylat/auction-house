@@ -5,10 +5,10 @@ import com.epam.auction.exception.ReceiverLayerException;
 
 public interface UserReceiver extends Receiver {
 
-    boolean signIn(RequestContent requestContent) throws ReceiverLayerException;
+    void signIn(RequestContent requestContent) throws ReceiverLayerException;
 
-    boolean signUp(RequestContent requestContent) throws ReceiverLayerException;
+    void signUp(RequestContent requestContent) throws ReceiverLayerException;
 
-    boolean logOut(RequestContent requestContent);
+    void logOut(RequestContent requestContent);
 
 }

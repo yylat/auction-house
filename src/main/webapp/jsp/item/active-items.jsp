@@ -8,7 +8,7 @@
 
 <fmt:message bundle="${msg}" key="label.projectTitle" var="projectTitle"/>
 
-<fmt:message bundle="${msg}" key="menu.items" var="items"/>
+<fmt:message bundle="${msg}" key="menu.activeItems" var="activeItems"/>
 
 <fmt:message bundle="${msg}" key="message.noItemsYet" var="noItemsYet"/>
 
@@ -16,8 +16,7 @@
 
 <c:if test="${requestScope.items == null}">
     <jsp:forward page="${pageContext.request.contextPath}/controller">
-        <jsp:param name="command" value="load-certain-items"/>
-        <jsp:param name="item-status" value="active"/>
+        <jsp:param name="command" value="load-active-items"/>
     </jsp:forward>
 </c:if>
 
@@ -48,7 +47,7 @@
 
                 <div class="w3-col s6 w3-margin-top">
                     <div class="middle-title uppercase">
-                        ${items}
+                        ${activeItems}
                     </div>
                 </div>
 
@@ -62,7 +61,7 @@
                     </c:when>
                     <c:otherwise>
 
-                        <ctg:grid items="${requestScope.items}"/>
+                        <%@ include file="/jsp/jspf/items-list.jsp" %>
 
                     </c:otherwise>
                 </c:choose>

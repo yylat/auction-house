@@ -21,16 +21,10 @@ public class ApproveItemCommand extends AbstractCommand {
 
     @Override
     public Page execute(RequestContent requestContent) {
-        Page page = new Page();
+        Page page = new Page(PageName.ITEMS_MANAGEMENT, TransferMethod.REDIRECT);
 
         try {
-            if (doAction(requestContent)) {
-                page.setPageName(PageName.ITEMS_MANAGEMENT);
-                page.setTransferMethod(TransferMethod.REDIRECT);
-            } else {
-                page.setPageName(PageName.ERROR);
-                page.setTransferMethod(TransferMethod.REDIRECT);
-            }
+            doAction(requestContent);
         } catch (ReceiverLayerException e) {
             logger.log(Level.ERROR, e.getMessage(), e);
         }
