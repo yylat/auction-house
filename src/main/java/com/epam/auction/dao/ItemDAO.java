@@ -12,8 +12,14 @@ public interface ItemDAO extends GenericDAO<Item> {
 
     List<Item> findCertain(List<Integer> statusesId) throws DAOLayerException;
 
-    List<Item> findItems(ItemStatus itemStatus) throws DAOLayerException;
+    boolean updateItemStatus(int itemId, ItemStatus itemStatus) throws DAOLayerException;
 
-    boolean approveItem(int itemId) throws DAOLayerException;
+    List<Item> findItems(int userId, int limit) throws DAOLayerException;
+
+    List<Item> findNextItems(int userId, int lastItemId, int limit) throws DAOLayerException;
+
+    List<Item> findItems(ItemStatus itemStatus, int limit) throws DAOLayerException;
+
+    List<Item> findNextItems(ItemStatus itemStatus, int lastItemId, int limit) throws DAOLayerException;
 
 }

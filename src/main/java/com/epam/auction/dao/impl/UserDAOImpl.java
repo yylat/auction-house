@@ -1,9 +1,8 @@
 package com.epam.auction.dao.impl;
 
-import com.epam.auction.constant.TableConstant;
+import com.epam.auction.dao.TableConstant;
 import com.epam.auction.dao.UserDAO;
 import com.epam.auction.entity.User;
-import com.epam.auction.entity.UserRole;
 import com.epam.auction.exception.DAOLayerException;
 
 import java.sql.PreparedStatement;
@@ -13,27 +12,27 @@ import java.sql.SQLException;
 public class UserDAOImpl extends GenericDAOImpl<User> implements UserDAO {
 
     public UserDAOImpl() {
-        super(TableConstant.User.QUERY_FIND_ALL,
-                TableConstant.User.QUERY_FIND_BY_ID,
-                TableConstant.User.QUERY_DELETE,
-                TableConstant.User.QUERY_CREATE,
-                TableConstant.User.QUERY_UPDATE);
+        super(TableConstant.USER_QUERY_FIND_ALL,
+                TableConstant.USER_QUERY_FIND_BY_ID,
+                TableConstant.USER_QUERY_DELETE,
+                TableConstant.USER_QUERY_CREATE,
+                TableConstant.USER_QUERY_UPDATE);
     }
 
     @Override
     User extractEntity(ResultSet resultSet) throws SQLException {
         return new User(
-                resultSet.getInt(TableConstant.User.COLUMN_ID),
-                resultSet.getString(TableConstant.User.COLUMN_USERNAME),
-                resultSet.getString(TableConstant.User.COLUMN_PASSWORD),
-                resultSet.getString(TableConstant.User.COLUMN_LAST_NAME),
-                resultSet.getString(TableConstant.User.COLUMN_MIDDLE_NAME),
-                resultSet.getString(TableConstant.User.COLUMN_FIRST_NAME),
-                resultSet.getString(TableConstant.User.COLUMN_PHONE_NUMBER),
-                resultSet.getString(TableConstant.User.COLUMN_EMAIL),
-                resultSet.getBigDecimal(TableConstant.User.COLUMN_BALANCE),
-                resultSet.getBoolean(TableConstant.User.COLUMN_IS_DELETED),
-                UserRole.define(resultSet.getInt(TableConstant.User.COLUMN_USER_ROLE_ID)));
+                resultSet.getInt(TableConstant.USER_COLUMN_ID),
+                resultSet.getString(TableConstant.USER_COLUMN_USERNAME),
+                resultSet.getString(TableConstant.USER_COLUMN_PASSWORD),
+                resultSet.getString(TableConstant.USER_COLUMN_LAST_NAME),
+                resultSet.getString(TableConstant.USER_COLUMN_MIDDLE_NAME),
+                resultSet.getString(TableConstant.USER_COLUMN_FIRST_NAME),
+                resultSet.getString(TableConstant.USER_COLUMN_PHONE_NUMBER),
+                resultSet.getString(TableConstant.USER_COLUMN_EMAIL),
+                resultSet.getBigDecimal(TableConstant.USER_COLUMN_BALANCE),
+                resultSet.getBoolean(TableConstant.USER_COLUMN_IS_DELETED),
+                User.UserRole.define(resultSet.getInt(TableConstant.USER_COLUMN_USER_ROLE_ID)));
     }
 
     @Override
@@ -47,27 +46,27 @@ public class UserDAOImpl extends GenericDAOImpl<User> implements UserDAO {
         statement.setString(7, entity.getEmail());
         statement.setBoolean(8, entity.isDeleted());
         statement.setBigDecimal(9, entity.getBalance());
-        statement.setInt(10, entity.getRole().getId());
+        statement.setInt(10, entity.getRole().ordinal());
     }
 
     @Override
     public boolean isExist(User user) throws DAOLayerException {
         boolean result = false;
-        try (PreparedStatement statement = connection.prepareStatement(TableConstant.User.QUERY_IS_EXIST)) {
+        try (PreparedStatement statement = connection.prepareStatement(TableConstant.USER_QUERY_IS_EXIST)) {
             statement.setString(1, user.getUsername());
             statement.setString(2, user.getPassword());
 
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                user.setId(resultSet.getInt(TableConstant.User.COLUMN_ID));
-                user.setLastName(resultSet.getString(TableConstant.User.COLUMN_LAST_NAME));
-                user.setMiddleName(resultSet.getString(TableConstant.User.COLUMN_MIDDLE_NAME));
-                user.setFirstName(resultSet.getString(TableConstant.User.COLUMN_FIRST_NAME));
-                user.setPhoneNumber(resultSet.getString(TableConstant.User.COLUMN_PHONE_NUMBER));
-                user.setEmail(resultSet.getString(TableConstant.User.COLUMN_EMAIL));
-                user.setBalance(resultSet.getBigDecimal(TableConstant.User.COLUMN_BALANCE));
-                user.setDeleted(resultSet.getBoolean(TableConstant.User.COLUMN_IS_DELETED));
-                user.setRole(UserRole.define(resultSet.getInt(TableConstant.User.COLUMN_USER_ROLE_ID)));
+                user.setId(resultSet.getInt(TableConstant.USER_COLUMN_ID));
+                user.setLastName(resultSet.getString(TableConstant.USER_COLUMN_LAST_NAME));
+                user.setMiddleName(resultSet.getString(TableConstant.USER_COLUMN_MIDDLE_NAME));
+                user.setFirstName(resultSet.getString(TableConstant.USER_COLUMN_FIRST_NAME));
+                user.setPhoneNumber(resultSet.getString(TableConstant.USER_COLUMN_PHONE_NUMBER));
+                user.setEmail(resultSet.getString(TableConstant.USER_COLUMN_EMAIL));
+                user.setBalance(resultSet.getBigDecimal(TableConstant.USER_COLUMN_BALANCE));
+                user.setDeleted(resultSet.getBoolean(TableConstant.USER_COLUMN_IS_DELETED));
+                user.setRole(User.UserRole.define(resultSet.getInt(TableConstant.USER_COLUMN_USER_ROLE_ID)));
 
                 result = true;
             }
@@ -79,11 +78,11 @@ public class UserDAOImpl extends GenericDAOImpl<User> implements UserDAO {
     }
 
     public boolean isUsernameAlreadyExist(String username) throws DAOLayerException {
-        return isAlreadyExist(username, TableConstant.User.QUERY_IS_EXIST_USERNAME);
+        return isAlreadyExist(username, TableConstant.USER_QUERY_IS_EXIST_USERNAME);
     }
 
     public boolean isEmailAlreadyExist(String email) throws DAOLayerException {
-        return isAlreadyExist(email, TableConstant.User.QUERY_IS_EXIST_EMAIL);
+        return isAlreadyExist(email, TableConstant.USER_QUERY_IS_EXIST_EMAIL);
     }
 
     private boolean isAlreadyExist(String parameter, String query) throws DAOLayerException {

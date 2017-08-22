@@ -51,9 +51,9 @@
 
 <%@ include file="/jsp/jspf/footer.jsp" %>
 
-<%@ include file="/jsp/jspf/sign-in.jsp" %>
+<%@ include file="/jsp/jspf/sign_in.jsp" %>
 
-<%@ include file="/jsp/jspf/sign-up.jsp" %>
+<%@ include file="/jsp/jspf/sign_up.jsp" %>
 
 <script src="${pageContext.request.contextPath}/js/event.js"></script>
 

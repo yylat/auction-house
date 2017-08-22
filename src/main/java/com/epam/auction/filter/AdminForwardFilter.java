@@ -1,9 +1,8 @@
 package com.epam.auction.filter;
 
-import com.epam.auction.constant.RequestConstant;
+import com.epam.auction.controller.PageAddress;
 import com.epam.auction.entity.User;
-import com.epam.auction.entity.UserRole;
-import com.epam.auction.page.PageName;
+import com.epam.auction.receiver.RequestConstant;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,27 +22,27 @@ import java.io.IOException;
         urlPatterns = {"/jsp/admin/*"})
 public class AdminForwardFilter implements Filter {
 
-    private static final Logger logger = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        logger.log(Level.INFO, this.getClass().getName() + " initialized.");
+        LOGGER.log(Level.INFO, this.getClass().getName() + " initialized.");
     }
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
         User user = (User) httpRequest.getSession().getAttribute(RequestConstant.USER);
-        if (user == null || !user.getRole().equals(UserRole.ADMIN)) {
-            logger.log(Level.INFO, "Attempt to access admin page from user with non admin role. Forwarding to index page.");
-            httpRequest.getRequestDispatcher(PageName.INDEX.getAddress()).forward(servletRequest, servletResponse);
+        if (user == null || !user.getRole().equals(User.UserRole.ADMIN)) {
+            LOGGER.log(Level.INFO, "Attempt to access admin page from user with non admin role. Forwarding to index page.");
+            httpRequest.getRequestDispatcher(PageAddress.ACTIVE_ITEMS).forward(servletRequest, servletResponse);
         }
         filterChain.doFilter(servletRequest, servletResponse);
     }
 
     @Override
     public void destroy() {
-        logger.log(Level.INFO, this.getClass().getName() + " destroyed.");
+        LOGGER.log(Level.INFO, this.getClass().getName() + " destroyed.");
     }
 
 }

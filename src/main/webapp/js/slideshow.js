@@ -4,7 +4,7 @@
 
     function displayErrorMsg() {
         var newItem = document.createElement("p");
-        var textNode = document.createTextNode(photosContainer.getAttribute("error-message"));
+        var textNode = document.createTextNode(photosContainer.getAttribute("data-error-message"));
         newItem.appendChild(textNode);
         photosContainer.insertBefore(newItem, null);
     }
@@ -57,7 +57,7 @@
 
     function loadPhotos(itemId) {
         var xhttp = new XMLHttpRequest();
-        xhttp.open("GET", "/ajax?command=load-all-images&item-id=" + itemId + "&t=" + Math.random(), true);
+        xhttp.open("GET", "/ajax?command=load-all-photos&itemId=" + itemId + "&t=" + Math.random(), true);
         xhttp.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
 
@@ -94,6 +94,6 @@
         xhttp.send();
     }
 
-    loadPhotos(photosContainer.getAttribute("item-id"));
+    loadPhotos(photosContainer.getAttribute("data-item-id"));
 
 })();

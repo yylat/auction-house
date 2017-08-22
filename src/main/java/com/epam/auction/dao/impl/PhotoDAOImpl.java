@@ -1,6 +1,6 @@
 package com.epam.auction.dao.impl;
 
-import com.epam.auction.constant.TableConstant;
+import com.epam.auction.dao.TableConstant;
 import com.epam.auction.dao.PhotoDAO;
 import com.epam.auction.entity.Photo;
 import com.epam.auction.exception.DAOLayerException;
@@ -14,19 +14,19 @@ import java.util.List;
 public class PhotoDAOImpl extends GenericDAOImpl<Photo> implements PhotoDAO {
 
     public PhotoDAOImpl() {
-        super(TableConstant.Photo.QUERY_FIND_ALL,
-                TableConstant.Photo.QUERY_FIND_BY_ID,
-                TableConstant.Photo.QUERY_DELETE,
-                TableConstant.Photo.QUERY_CREATE,
-                TableConstant.Photo.QUERY_UPDATE);
+        super(TableConstant.PHOTO_QUERY_FIND_ALL,
+                TableConstant.PHOTO_QUERY_FIND_BY_ID,
+                TableConstant.PHOTO_QUERY_DELETE,
+                TableConstant.PHOTO_QUERY_CREATE,
+                TableConstant.PHOTO_QUERY_UPDATE);
     }
 
     @Override
     Photo extractEntity(ResultSet resultSet) throws SQLException {
         return new Photo(
-                resultSet.getInt(TableConstant.Photo.COLUMN_ID),
-                resultSet.getBinaryStream(TableConstant.Photo.COLUMN_PHOTO_FILE),
-                resultSet.getInt(TableConstant.Photo.COLUMN_ITEM_ID));
+                resultSet.getInt(TableConstant.PHOTO_COLUMN_ID),
+                resultSet.getBinaryStream(TableConstant.PHOTO_COLUMN_PHOTO_FILE),
+                resultSet.getInt(TableConstant.PHOTO_COLUMN_ITEM_ID));
     }
 
     @Override
@@ -39,7 +39,7 @@ public class PhotoDAOImpl extends GenericDAOImpl<Photo> implements PhotoDAO {
     public Photo findItemPhoto(int itemId) throws DAOLayerException {
         Photo photo = null;
 
-        try (PreparedStatement statement = connection.prepareStatement(TableConstant.Photo.QUERY_FIND_ITEM_PHOTO)) {
+        try (PreparedStatement statement = connection.prepareStatement(TableConstant.PHOTO_QUERY_FIND_ITEM_PHOTO)) {
             statement.setInt(1, itemId);
 
             ResultSet resultSet = statement.executeQuery();
@@ -58,7 +58,7 @@ public class PhotoDAOImpl extends GenericDAOImpl<Photo> implements PhotoDAO {
     public List<Photo> findAll(int itemId) throws DAOLayerException {
         List<Photo> photos;
 
-        try (PreparedStatement statement = connection.prepareStatement(TableConstant.Photo.QUERY_FIND_ALL_FOR_ITEM)) {
+        try (PreparedStatement statement = connection.prepareStatement(TableConstant.PHOTO_QUERY_FIND_ALL_FOR_ITEM)) {
             statement.setInt(1, itemId);
 
             ResultSet resultSet = statement.executeQuery();

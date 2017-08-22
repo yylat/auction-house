@@ -1,7 +1,7 @@
 package com.epam.auction.receiver.impl;
 
-import com.epam.auction.constant.RequestConstant;
-import com.epam.auction.content.RequestContent;
+import com.epam.auction.receiver.RequestConstant;
+import com.epam.auction.command.RequestContent;
 import com.epam.auction.db.DAOManager;
 import com.epam.auction.dao.UserDAO;
 import com.epam.auction.dao.impl.UserDAOImpl;
@@ -57,9 +57,9 @@ public class UserReceiverImpl implements UserReceiver {
             daoManager.beginTransaction();
             try {
                 if (userDAO.isUsernameAlreadyExist(user.getUsername())) {
-                    requestContent.setRequestAttribute(RequestConstant.USERNAME_ALREADY_EXIST, true);
+                    requestContent.setSessionAttribute(RequestConstant.USERNAME_ALREADY_EXIST, true);
                 } else if (userDAO.isEmailAlreadyExist(user.getEmail())) {
-                    requestContent.setRequestAttribute(RequestConstant.EMAIL_ALREADY_EXIST, true);
+                    requestContent.setSessionAttribute(RequestConstant.EMAIL_ALREADY_EXIST, true);
                 } else {
                     result = userDAO.create(user);
                     daoManager.commit();
@@ -72,9 +72,7 @@ public class UserReceiverImpl implements UserReceiver {
             }
 
             if (result) {
-                requestContent.setRequestAttribute(RequestConstant.SUCCESSFUL_REGISTRATION, true);
-            } else {
-                requestContent.setRequestAttribute(RequestConstant.OPEN_SIGN_UP, true);
+                requestContent.setSessionAttribute(RequestConstant.SUCCESSFUL_REGISTRATION, true);
             }
 
         } else {

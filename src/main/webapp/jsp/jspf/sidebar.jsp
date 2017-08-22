@@ -8,7 +8,7 @@
         <div class="small-title uppercase">${menuTitle}</div>
     </div>
 
-    <a href="${pageContext.request.contextPath}/controller?command=open-main-page"
+    <a href="${pageContext.request.contextPath}/jsp/item/active_items.jsp"
        class="w3-bar-item pro-bottom-button">${homePage}</a>
     <a href="#" class="w3-bar-item pro-bottom-button">${auctionPage}</a>
     <a href="#" class="w3-bar-item pro-bottom-button">${contactPage}</a>
@@ -45,3 +45,5 @@
     </div>
 
 </div>
+
+<script src="${pageContext.request.contextPath}/js/event.js"></script>

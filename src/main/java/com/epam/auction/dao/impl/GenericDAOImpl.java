@@ -85,10 +85,6 @@ public abstract class GenericDAOImpl<T extends Entity> implements GenericDAO<T> 
         return result;
     }
 
-    public boolean delete(T entity) throws DAOLayerException, MethodNotSupportedException {
-        return delete(entity.getId());
-    }
-
     public boolean create(T entity) throws DAOLayerException {
         boolean result = false;
 

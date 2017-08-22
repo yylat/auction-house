@@ -12,7 +12,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class ConnectionPool {
 
-    private final static Logger logger = LogManager.getLogger();
+    private final static Logger LOGGER = LogManager.getLogger();
 
     private static ReentrantLock lock = new ReentrantLock();
     private static AtomicBoolean isInitialized = new AtomicBoolean(false);
@@ -35,7 +35,7 @@ public class ConnectionPool {
             try {
                 availableConnections.add(dbManager.getConnection());
             } catch (SQLException e) {
-                logger.log(Level.WARN, "Failure while creating connection.", e);
+                LOGGER.log(Level.WARN, "Failure while creating connection.", e);
             }
         }
 
@@ -46,13 +46,13 @@ public class ConnectionPool {
                 try {
                     availableConnections.add(dbManager.getConnection());
                 } catch (SQLException e) {
-                    logger.log(Level.WARN, "Failure while trying to create lacking connection.", e);
+                    LOGGER.log(Level.WARN, "Failure while trying to create lacking connection.", e);
                 }
             } while (attemptToAddIndex < lackingConnectionsAmount);
         }
 
         if (availableConnections.size() < poolSize / 2) {
-            logger.log(Level.FATAL, "Can not initialize connection pool with proper size.");
+            LOGGER.log(Level.FATAL, "Can not initialize connection pool with proper size.");
             throw new RuntimeException();
         }
 
@@ -69,16 +69,16 @@ public class ConnectionPool {
                 if (instance == null) {
                     instance = new ConnectionPool();
                 } else {
-                    logger.log(Level.WARN, "Attempt to create initialized connection pool instance.");
+                    LOGGER.log(Level.WARN, "Attempt to create initialized connection pool instance.");
                 }
 
                 isInitialized.set(true);
-                logger.log(Level.INFO, "Connection pool initialized successfully.");
+                LOGGER.log(Level.INFO, "Connection pool initialized successfully.");
             } finally {
                 lock.unlock();
             }
         } else {
-            logger.log(Level.WARN, "Attempt to initialize already initialized connection pool.");
+            LOGGER.log(Level.WARN, "Attempt to initialize already initialized connection pool.");
         }
     }
 
@@ -92,19 +92,19 @@ public class ConnectionPool {
 
                     DBManager.deregisterDrivers();
                 } else {
-                    logger.log(Level.WARN, "Attempt to destroy not initialized connection pool instance.");
+                    LOGGER.log(Level.WARN, "Attempt to destroy not initialized connection pool instance.");
                 }
 
                 instance = null;
-                logger.log(Level.INFO, "Connection pool destroyed successfully.");
+                LOGGER.log(Level.INFO, "Connection pool destroyed successfully.");
             } catch (SQLException e) {
-                logger.log(Level.FATAL, "Can't destroy connection pool.", e);
+                LOGGER.log(Level.FATAL, "Can't destroy connection pool.", e);
                 throw new RuntimeException();
             } finally {
                 lock.unlock();
             }
         } else {
-            logger.log(Level.WARN, "Attempt to destroy not initialized connection pool.");
+            LOGGER.log(Level.WARN, "Attempt to destroy not initialized connection pool.");
         }
     }
 
@@ -114,17 +114,24 @@ public class ConnectionPool {
             connection = availableConnections.take();
             busyConnections.put(connection);
         } catch (InterruptedException e) {
-            logger.log(Level.WARN, "InterruptedException in available connection queue.", e);
+            LOGGER.log(Level.WARN, "InterruptedException in available connection queue.", e);
         }
         return connection;
     }
 
     public void returnConnection(ProxyConnection connection) {
         if (connection != null && busyConnections.contains(connection)) {
+            try {
+                if (!connection.getAutoCommit()) {
+                    connection.setAutoCommit(true);
+                }
+            } catch (SQLException e) {
+                LOGGER.log(Level.WARN, "Error while trying to check autocommit.");
+            }
             busyConnections.remove(connection);
             availableConnections.add(connection);
         } else {
-            logger.log(Level.WARN, "Connection pool doesn't contain transferred connection.");
+            LOGGER.log(Level.WARN, "Connection pool doesn't contain transferred connection.");
         }
     }
 

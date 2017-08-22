@@ -1,7 +1,8 @@
 package com.epam.auction.receiver.impl;
 
-import com.epam.auction.constant.RequestConstant;
-import com.epam.auction.content.RequestContent;
+import com.epam.auction.entity.ItemStatus;
+import com.epam.auction.receiver.RequestConstant;
+import com.epam.auction.command.RequestContent;
 import com.epam.auction.dao.ItemDAO;
 import com.epam.auction.dao.UserDAO;
 import com.epam.auction.dao.impl.ItemDAOImpl;
@@ -28,6 +29,15 @@ public class AdminReceiverImpl implements AdminReceiver {
 
     @Override
     public void approveItem(RequestContent requestContent) throws ReceiverLayerException {
+        updateItemStatus(requestContent, ItemStatus.CONFIRMED);
+    }
+
+    @Override
+    public void discardItem(RequestContent requestContent) throws ReceiverLayerException {
+        updateItemStatus(requestContent, ItemStatus.NOT_CONFIRMED);
+    }
+
+    private void updateItemStatus(RequestContent requestContent, ItemStatus itemStatus) throws ReceiverLayerException {
         int itemId = Integer.valueOf(requestContent.getRequestParameter(RequestConstant.ITEM_ID)[0]);
 
         ItemDAO itemDAO = new ItemDAOImpl();
@@ -36,7 +46,7 @@ public class AdminReceiverImpl implements AdminReceiver {
         daoManager.beginTransaction();
 
         try {
-            if (itemDAO.approveItem(itemId)) {
+            if (itemDAO.updateItemStatus(itemId, itemStatus)) {
                 daoManager.commit();
             }
         } catch (DAOLayerException e) {

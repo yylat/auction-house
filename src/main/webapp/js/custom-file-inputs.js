@@ -14,7 +14,7 @@
                 }
                 else {
                     this.value = "";
-                    fileName = (this.getAttribute("rule-message") || "");
+                    fileName = (this.getAttribute("data-rule-message") || "");
                 }
             }
             else {

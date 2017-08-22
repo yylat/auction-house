@@ -1,10 +1,11 @@
 package com.epam.auction.command;
 
 import com.epam.auction.command.admin.ApproveItemCommand;
+import com.epam.auction.command.admin.DiscardItemCommand;
 import com.epam.auction.command.admin.LoadItemsForCheckCommand;
-import com.epam.auction.command.ajax.LoadAllImagesCommand;
-import com.epam.auction.command.ajax.LoadImageCommand;
-import com.epam.auction.command.ajax.LoadUsersCommand;
+import com.epam.auction.command.photo.LoadAllPhotosCommand;
+import com.epam.auction.command.photo.LoadPhotoCommand;
+import com.epam.auction.command.admin.LoadUsersCommand;
 import com.epam.auction.command.bid.LoadBidsCommand;
 import com.epam.auction.command.common.ChangeLocaleCommand;
 import com.epam.auction.command.item.CreateItemCommand;
@@ -14,18 +15,9 @@ import com.epam.auction.command.item.LoadUserItemsCommand;
 import com.epam.auction.command.user.LogOutCommand;
 import com.epam.auction.command.user.SignInCommand;
 import com.epam.auction.command.user.SignUpCommand;
-import com.epam.auction.content.RequestContent;
 import com.epam.auction.exception.ReceiverLayerException;
-import com.epam.auction.receiver.AdminReceiver;
-import com.epam.auction.receiver.BidReceiver;
-import com.epam.auction.receiver.CommonReceiver;
-import com.epam.auction.receiver.ItemReceiver;
-import com.epam.auction.receiver.UserReceiver;
-import com.epam.auction.receiver.impl.AdminReceiverImpl;
-import com.epam.auction.receiver.impl.BidReceiverImpl;
-import com.epam.auction.receiver.impl.CommonReceiverImpl;
-import com.epam.auction.receiver.impl.ItemReceiverImpl;
-import com.epam.auction.receiver.impl.UserReceiverImpl;
+import com.epam.auction.receiver.*;
+import com.epam.auction.receiver.impl.*;
 
 import java.util.Arrays;
 
@@ -79,10 +71,10 @@ public enum CommandType {
             ((ItemReceiver) getCommand().getReceiver()).createItem(requestContent);
         }
     },
-    LOAD_IMAGE(new LoadImageCommand(new ItemReceiverImpl())) {
+    LOAD_PHOTO(new LoadPhotoCommand(new PhotoReceiverImpl())) {
         @Override
         public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
-            ((ItemReceiver) getCommand().getReceiver()).loadImage(requestContent);
+            ((PhotoReceiver) getCommand().getReceiver()).loadPhoto(requestContent);
         }
     },
     APPROVE_ITEM(new ApproveItemCommand(new AdminReceiverImpl())) {
@@ -103,10 +95,10 @@ public enum CommandType {
             ((ItemReceiver) getCommand().getReceiver()).loadItem(requestContent);
         }
     },
-    LOAD_ALL_IMAGES(new LoadAllImagesCommand(new ItemReceiverImpl())) {
+    LOAD_ALL_PHOTOS(new LoadAllPhotosCommand(new PhotoReceiverImpl())) {
         @Override
         public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
-            ((ItemReceiver) getCommand().getReceiver()).loadAllImages(requestContent);
+            ((PhotoReceiver) getCommand().getReceiver()).loadAllPhotos(requestContent);
         }
     },
     LOAD_BIDS(new LoadBidsCommand(new BidReceiverImpl())) {
@@ -119,6 +111,12 @@ public enum CommandType {
         @Override
         public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
             ((ItemReceiver) getCommand().getReceiver()).loadActiveItems(requestContent);
+        }
+    },
+    DISCARD_ITEM(new DiscardItemCommand(new AdminReceiverImpl())) {
+        @Override
+        public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
+            ((AdminReceiver) getCommand().getReceiver()).discardItem(requestContent);
         }
     };
 

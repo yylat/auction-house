@@ -1,11 +1,9 @@
 package com.epam.auction.controller;
 
 import com.epam.auction.command.AbstractCommand;
-import com.epam.auction.constant.RequestConstant;
-import com.epam.auction.content.RequestContent;
-import com.epam.auction.factory.CommandFactory;
-import com.epam.auction.page.Page;
-import com.epam.auction.page.TransferMethod;
+import com.epam.auction.receiver.RequestConstant;
+import com.epam.auction.command.RequestContent;
+import com.epam.auction.command.CommandFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -50,16 +48,16 @@ public class FileUploadController extends HttpServlet {
             requestContent.setFiles(files);
         }
 
-        Page page = command.execute(requestContent);
+        PageGuide pageGuide = command.execute(requestContent);
 
-        requestContent.setSessionAttribute(RequestConstant.CURRENT_PAGE, page.getPageName());
+        requestContent.setSessionAttribute(RequestConstant.CURRENT_PAGE, pageGuide.getPageAddress());
 
         requestContent.insertAttributes(request);
 
-        if (TransferMethod.FORWARD.equals(page.getTransferMethod())) {
-            request.getRequestDispatcher(page.getAddress()).forward(request, response);
+        if (TransferMethod.FORWARD.equals(pageGuide.getTransferMethod())) {
+            request.getRequestDispatcher(pageGuide.getPageAddress()).forward(request, response);
         } else {
-            response.sendRedirect(page.getAddress());
+            response.sendRedirect(pageGuide.getPageAddress());
         }
     }
 

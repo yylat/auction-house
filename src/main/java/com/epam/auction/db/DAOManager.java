@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 public class DAOManager implements AutoCloseable {
 
-    private final static Logger logger = LogManager.getLogger();
+    private final static Logger LOGGER = LogManager.getLogger();
 
     private ProxyConnection connection = ConnectionPool.getInstance().takeConnection();
 
@@ -30,7 +30,7 @@ public class DAOManager implements AutoCloseable {
             try {
                 connection.setAutoCommit(false);
             } catch (SQLException e) {
-                logger.log(Level.ERROR, "Exception while trying to begin transaction.", e);
+                LOGGER.log(Level.ERROR, "Exception while trying to begin transaction.", e);
             }
         }
     }
@@ -40,7 +40,7 @@ public class DAOManager implements AutoCloseable {
             try {
                 connection.setAutoCommit(true);
             } catch (SQLException e) {
-                logger.log(Level.ERROR, "Exception while trying to end transaction.", e);
+                LOGGER.log(Level.ERROR, "Exception while trying to end transaction.", e);
             }
         }
 
@@ -51,7 +51,7 @@ public class DAOManager implements AutoCloseable {
         try {
             connection.commit();
         } catch (SQLException e) {
-            logger.log(Level.ERROR, "Commit error.", e);
+            LOGGER.log(Level.ERROR, "Commit error.", e);
         }
     }
 
@@ -59,7 +59,7 @@ public class DAOManager implements AutoCloseable {
         try {
             connection.rollback();
         } catch (SQLException e) {
-            logger.log(Level.ERROR, "Rollback error.", e);
+            LOGGER.log(Level.ERROR, "Rollback error.", e);
         }
     }
 

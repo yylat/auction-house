@@ -13,6 +13,7 @@
 <fmt:message bundle="${msg}" key="message.noItemsYet" var="noItemsYet"/>
 
 <fmt:message bundle="${msg}" key="label.approve" var="approve"/>
+<fmt:message bundle="${msg}" key="label.discard" var="discard"/>
 
 <fmt:message bundle="${msg}" key="form.itemTitle" var="itemTitle"/>
 <fmt:message bundle="${msg}" key="form.description" var="description"/>
@@ -37,10 +38,21 @@
 
 <fmt:message bundle="${msg}" key="label.makeBid" var="makeBid"/>
 
+
 <c:if test="${requestScope.item == null}">
-    <jsp:forward page="${pageContext.request.contextPath}/controller">
-        <jsp:param name="command" value="load-active-items"/>
-    </jsp:forward>
+    <c:choose>
+        <c:when test="${sessionScope.itemId != null}">
+            <jsp:forward page="${pageContext.request.contextPath}/controller">
+                <jsp:param name="command" value="load-item"/>
+                <jsp:param name="itemId" value="${sessionScope.itemId}"/>
+            </jsp:forward>
+        </c:when>
+        <c:otherwise>
+            <jsp:forward page="${pageContext.request.contextPath}/controller">
+                <jsp:param name="command" value="load-active-items"/>
+            </jsp:forward>
+        </c:otherwise>
+    </c:choose>
 </c:if>
 
 <html>
@@ -72,27 +84,31 @@
 
                     <c:if test="${sessionScope.user!=null}">
                         <c:choose>
-                            <c:when test="${(requestScope.item.status.id == 1) && (sessionScope.user.role.id==1)}">
-                                <form action="${pageContext.request.contextPath}/controller">
-                                    <input type="hidden" name="command" value="approve-item"/>
-                                    <input type="hidden" name="item-id" value="${requestScope.item.id}"/>
-                                    <button class="w3-button w3-round-xlarge pro-green w3-ripple">
-                                            ${approve}
-                                    </button>
-                                </form>
-                            </c:when>
-                            <c:when test="${(requestScope.item.status.id == 3) && (sessionScope.user.id != requestScope.item.sellerId)}">
-                                <form action="">
-                                    <input type="hidden" name="command" value=""/>
-                                    <button class="w3-button w3-round-xlarge pro-green w3-ripple">
-                                            ${makeBid}
-                                    </button>
-                                </form>
+                            <c:when test="${(requestScope.item.status == 'CREATED') && (sessionScope.user.role == 'ADMIN')}">
+                                <div class="w3-bar">
+
+                                    <form action="${pageContext.request.contextPath}/controller">
+                                        <input type="hidden" name="command" value="approve-item"/>
+                                        <input type="hidden" name="itemId" value="${requestScope.item.id}"/>
+                                        <button class="w3-button pro-green w3-ripple">
+                                                ${approve}
+                                        </button>
+                                    </form>
+
+                                    <form action="${pageContext.request.contextPath}/controller">
+                                        <input type="hidden" name="command" value="discard-item"/>
+                                        <input type="hidden" name="itemId" value="${requestScope.item.id}"/>
+                                        <button class="w3-button pro-green w3-ripple">
+                                                ${discard}
+                                        </button>
+                                    </form>
+
+                                </div>
                             </c:when>
                             <c:when test="${sessionScope.user.id == requestScope.item.sellerId}">
                                 <form action="">
-                                    <input type="hidden" name="command" value=""/>
-                                    <button class="w3-button w3-round-xlarge pro-green w3-ripple">
+                                    <input type="hidden" name="command" value="edit-item"/>
+                                    <button class="w3-button pro-green w3-ripple">
                                         edit
                                     </button>
                                 </form>
@@ -112,7 +128,7 @@
                 <div class="text-on-color money">${requestScope.item.actualPrice}</div>
             </div>
 
-            <c:if test="${(requestScope.item.status.id == 3) && (sessionScope.user.id != requestScope.item.sellerId)}">
+            <c:if test="${(requestScope.item.status == 'ACTIVE') && (sessionScope.user != null) && (sessionScope.user.id != requestScope.item.sellerId)}">
                 <div class="w3-container w3-margin">
                     <form action="${pageContext.request.contextPath}/controller" method="post">
                         <input type="hidden" name="command" value="make-bid"/>
@@ -132,8 +148,8 @@
                 <div class="w3-col m7">
 
                     <div class="w3-card w3-padding w3-margin-top w3-margin-bottom photos-container" id="photos"
-                         error-message="${noPhotosForItem}"
-                         item-id="${requestScope.item.id}">
+                         data-error-message="${noPhotosForItem}"
+                         data-item-id="${requestScope.item.id}">
                     </div>
 
                 </div>
@@ -182,11 +198,13 @@
 
 </main>
 
-<script src="${pageContext.request.contextPath}/js/load-img.js"></script>
-
 <%@ include file="/jsp/jspf/footer.jsp" %>
 
-<script src="${pageContext.request.contextPath}/js/event.js"></script>
+<c:if test="${sessionScope.user == null}">
+    <%@ include file="/jsp/jspf/sign_in.jsp" %>
+    <%@ include file="/jsp/jspf/sign_up.jsp" %>
+    <script src="${pageContext.request.contextPath}/js/sign.js"></script>
+</c:if>
 
 <script src="${pageContext.request.contextPath}/js/slideshow.js"></script>
 

@@ -14,7 +14,7 @@ import java.util.ResourceBundle;
 
 class DBManager {
 
-    private static final Logger logger = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
 
     private static final String BUNDLE_NAME = "config.database";
 
@@ -52,49 +52,49 @@ class DBManager {
             dbInfo.setProperty(USER_PROP_NAME, resourceBundle.getString(PROP_PREFIX + USER_PROP_NAME));
             dbInfo.setProperty(PASSWORD_PROP_NAME, resourceBundle.getString(PROP_PREFIX + PASSWORD_PROP_NAME));
         } catch (MissingResourceException e) {
-            logger.log(Level.FATAL, e);
+            LOGGER.log(Level.FATAL, e);
             throw new RuntimeException();
         }
 
         try {
             url = resourceBundle.getString(PROP_PREFIX + URL_PROP_NAME);
         } catch (MissingResourceException e) {
-            logger.log(Level.ERROR, e);
+            LOGGER.log(Level.ERROR, e);
             url = DEFAULT_URL;
         }
 
         try {
             dbInfo.setProperty(USE_UNICODE_PROP_NAME, resourceBundle.getString(PROP_PREFIX + USE_UNICODE_PROP_NAME));
         } catch (MissingResourceException e) {
-            logger.log(Level.ERROR, e);
+            LOGGER.log(Level.ERROR, e);
             dbInfo.setProperty(USE_UNICODE_PROP_NAME, DEFAULT_USE_UNICODE);
         }
 
         try {
             dbInfo.setProperty(ENCODING_PROP_NAME, resourceBundle.getString(PROP_PREFIX + ENCODING_PROP_NAME));
         } catch (MissingResourceException e) {
-            logger.log(Level.ERROR, e);
+            LOGGER.log(Level.ERROR, e);
             dbInfo.setProperty(ENCODING_PROP_NAME, DEFAULT_ENCODING);
         }
 
         try {
             dbInfo.setProperty(USE_SSL_PROP_NAME, resourceBundle.getString(PROP_PREFIX + USE_SSL_PROP_NAME));
         } catch (MissingResourceException e) {
-            logger.log(Level.ERROR, e);
+            LOGGER.log(Level.ERROR, e);
             dbInfo.setProperty(USE_SSL_PROP_NAME, DEFAULT_USE_SSL);
         }
 
         try {
             poolSize = Integer.parseInt(resourceBundle.getString(PROP_PREFIX + POOL_SIZE_PROP_NAME));
         } catch (MissingResourceException e) {
-            logger.log(Level.ERROR, e);
+            LOGGER.log(Level.ERROR, e);
             poolSize = DEFAULT_POOL_SIZE;
         }
 
         try {
             driverName = resourceBundle.getString(PROP_PREFIX + DRIVER_PROP_NAME);
         } catch (MissingResourceException e) {
-            logger.log(Level.ERROR, e);
+            LOGGER.log(Level.ERROR, e);
             driverName = DEFAULT_DRIVER_NAME;
         }
 
@@ -111,7 +111,7 @@ class DBManager {
         try {
             Class.forName(driverName);
         } catch (ClassNotFoundException e) {
-            logger.log(Level.FATAL, "DB driver class not found.", e);
+            LOGGER.log(Level.FATAL, "DB driver class not found.", e);
             throw new RuntimeException();
         }
     }
@@ -131,8 +131,7 @@ class DBManager {
             try {
                 DriverManager.deregisterDriver(driver);
             } catch (SQLException e) {
-                logger.log(Level.FATAL, e);
-                throw new RuntimeException();
+                LOGGER.log(Level.ERROR, e);
             }
         }
     }

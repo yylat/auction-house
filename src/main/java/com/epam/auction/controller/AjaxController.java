@@ -1,10 +1,8 @@
 package com.epam.auction.controller;
 
 import com.epam.auction.command.AbstractCommand;
-import com.epam.auction.content.RequestContent;
-import com.epam.auction.factory.CommandFactory;
-import com.epam.auction.page.Page;
-import com.epam.auction.page.PageName;
+import com.epam.auction.command.CommandFactory;
+import com.epam.auction.command.RequestContent;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -34,7 +32,7 @@ public class AjaxController extends HttpServlet {
         CommandFactory commandFactory = new CommandFactory();
         AbstractCommand command = commandFactory.initCommand(requestContent);
 
-        Page page = command.execute(requestContent);
+        PageGuide pageGuide = command.execute(requestContent);
 
         requestContent.insertAttributes(request);
 
@@ -44,8 +42,8 @@ public class AjaxController extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(ajaxResponse);
 
-        if (page != null && PageName.ERROR.equals(page.getPageName())) {
-            response.sendRedirect(page.getAddress());
+        if (pageGuide != null && PageAddress.ERROR.equals(pageGuide.getPageAddress())) {
+            response.sendRedirect(pageGuide.getPageAddress());
         }
 
     }

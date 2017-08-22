@@ -40,11 +40,15 @@
 
                     <c:choose>
                         <c:when test="${sessionScope.user != null}">
-                            <c:if test="${sessionScope.user.role.id == 1}">
-                                <form action="${pageContext.request.contextPath}/controller">
-                                    <input type="hidden" name="command" value="load-items-for-check">
-                                    <button class="w3-bar-item w3-button pro-hover-green w3-ripple">${management}</button>
-                                </form>
+                            <c:if test="${sessionScope.user.role == 'ADMIN'}">
+                                <a href="${pageContext.request.contextPath}/jsp/admin/items_management.jsp"
+                                   class="w3-bar-item w3-button pro-hover-green w3-ripple">
+                                        ${management}
+                                </a>
+                                <%--<form action="${pageContext.request.contextPath}/controller">--%>
+                                    <%--<input type="hidden" name="command" value="load-items-for-check">--%>
+                                    <%--<button class="w3-bar-item w3-button pro-hover-green w3-ripple">${management}</button>--%>
+                                <%--</form>--%>
                             </c:if>
 
                             <a href="#" class="w3-bar-item w3-button pro-hover-green w3-ripple">
@@ -54,10 +58,14 @@
                                 <input type="hidden" name="command" value="load-bids">
                                 <button class="w3-bar-item w3-button pro-hover-green w3-ripple">${bids}</button>
                             </form>
-                            <form action="${pageContext.request.contextPath}/controller">
-                                <input type="hidden" name="command" value="load-user-items">
-                                <button class="w3-bar-item w3-button pro-hover-green w3-ripple">${lots}</button>
-                            </form>
+                            <a href="${pageContext.request.contextPath}/jsp/item/user_items.jsp"
+                               class="w3-bar-item w3-button pro-hover-green w3-ripple">
+                                    ${lots}
+                            </a>
+                            <%--<form action="${pageContext.request.contextPath}/controller">--%>
+                                <%--<input type="hidden" name="command" value="load-user-items">--%>
+                                <%--<button class="w3-bar-item w3-button pro-hover-green w3-ripple">${lots}</button>--%>
+                            <%--</form>--%>
                             <form action="${pageContext.request.contextPath}/controller">
                                 <input type="hidden" name="command" value="log-out">
                                 <button class="w3-bar-item w3-button pro-hover-green w3-ripple">${logOut}</button>

@@ -1,6 +1,6 @@
 package com.epam.auction.receiver;
 
-import com.epam.auction.content.RequestContent;
+import com.epam.auction.command.RequestContent;
 
 public interface CommonReceiver extends Receiver {
 

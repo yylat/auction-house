@@ -1,8 +1,3 @@
-(function (e, t, n) {
-    var r = e.querySelectorAll("html")[0];
-    r.className = r.className.replace(/(^|\s)no-js(\s|$)/, "$1js$2")
-})(document, window, 0);
-
 (function () {
 
     function loadCategories() {
@@ -27,11 +22,10 @@
         xhttp.send();
     }
 
-    loadCategories();
-
     /* Manage opening and closing operation --------------------------------------------- */
 
     function open(element) {
+        loadCategories();
         element.style.display = "block";
     }
 

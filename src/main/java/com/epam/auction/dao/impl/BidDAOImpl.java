@@ -1,6 +1,6 @@
 package com.epam.auction.dao.impl;
 
-import com.epam.auction.constant.TableConstant;
+import com.epam.auction.dao.TableConstant;
 import com.epam.auction.dao.BidDAO;
 import com.epam.auction.entity.Bid;
 import com.epam.auction.exception.DAOLayerException;
@@ -13,10 +13,10 @@ import java.util.List;
 public class BidDAOImpl extends GenericDAOImpl<Bid> implements BidDAO {
 
     public BidDAOImpl() {
-        super(TableConstant.Bid.QUERY_FIND_ALL,
-                TableConstant.Bid.QUERY_FIND_BY_ID,
+        super(TableConstant.BID_QUERY_FIND_ALL,
+                TableConstant.BID_QUERY_FIND_BY_ID,
                 null,
-                TableConstant.Bid.QUERY_CREATE,
+                TableConstant.BID_QUERY_CREATE,
                 null);
     }
 
@@ -26,15 +26,10 @@ public class BidDAOImpl extends GenericDAOImpl<Bid> implements BidDAO {
     }
 
     @Override
-    public boolean delete(Bid entity) throws MethodNotSupportedException {
-        throw new MethodNotSupportedException("Delete bid operation not supported.");
-    }
-
-    @Override
     public boolean create(Bid entity) throws DAOLayerException {
         boolean result = false;
 
-        try (CallableStatement statement = connection.prepareCall(TableConstant.Bid.QUERY_CREATE)) {
+        try (CallableStatement statement = connection.prepareCall(TableConstant.BID_QUERY_CREATE)) {
             statement.registerOutParameter(1, Types.INTEGER);
             defineQueryAttributes(entity, statement);
             if (statement.execute()) {
@@ -56,11 +51,11 @@ public class BidDAOImpl extends GenericDAOImpl<Bid> implements BidDAO {
     @Override
     Bid extractEntity(ResultSet resultSet) throws SQLException {
         return new Bid(
-                resultSet.getInt(TableConstant.Bid.COLUMN_ID),
-                resultSet.getInt(TableConstant.Bid.COLUMN_ITEM_ID),
-                resultSet.getInt(TableConstant.Bid.COLUMN_BIDDER_ID),
-                resultSet.getBigDecimal(TableConstant.Bid.COLUMN_BID_VALUE),
-                resultSet.getBoolean(TableConstant.Bid.COLUMN_IS_WINNING));
+                resultSet.getInt(TableConstant.BID_COLUMN_ID),
+                resultSet.getInt(TableConstant.BID_COLUMN_ITEM_ID),
+                resultSet.getInt(TableConstant.BID_COLUMN_BIDDER_ID),
+                resultSet.getBigDecimal(TableConstant.BID_COLUMN_BID_VALUE),
+                resultSet.getBoolean(TableConstant.BID_COLUMN_IS_WINNING));
     }
 
     @Override
@@ -74,7 +69,7 @@ public class BidDAOImpl extends GenericDAOImpl<Bid> implements BidDAO {
     public List<Bid> findAll(int userId) throws DAOLayerException {
         List<Bid> bids;
 
-        try(PreparedStatement statement = connection.prepareStatement(TableConstant.Bid.QUERY_FIND_ALL_FOR_USER)){
+        try(PreparedStatement statement = connection.prepareStatement(TableConstant.BID_QUERY_FIND_ALL_FOR_USER)){
             statement.setInt(1, userId);
             ResultSet resultSet = statement.executeQuery();
 

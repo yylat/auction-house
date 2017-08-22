@@ -1,6 +1,7 @@
 package com.epam.auction.entity;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 
 public class User extends Entity {
 
@@ -173,4 +174,17 @@ public class User extends Entity {
         return result;
     }
 
+    public enum UserRole {
+
+        ADMIN,
+        USER;
+
+        public static UserRole define(int id) {
+            return Arrays.stream(UserRole.values())
+                    .filter(userRole -> id == userRole.ordinal())
+                    .findFirst()
+                    .orElse(null);
+        }
+
+    }
 }

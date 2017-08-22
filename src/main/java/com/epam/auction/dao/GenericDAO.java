@@ -17,8 +17,6 @@ public interface GenericDAO<T extends Entity> {
 
     boolean delete(int id) throws DAOLayerException, MethodNotSupportedException;
 
-    boolean delete(T entity) throws DAOLayerException, MethodNotSupportedException;
-
     boolean create(T entity) throws DAOLayerException;
 
     boolean update(T entity) throws DAOLayerException, MethodNotSupportedException;
