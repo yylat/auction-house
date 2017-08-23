@@ -2,6 +2,8 @@
 <html>
 <head></head>
 <body>
-<jsp:forward page="/jsp/item/active_items.jsp"/>
+<jsp:forward page="${pageContext.request.contextPath}/controller">
+    <jsp:param name="command" value="load-active-items"/>
+</jsp:forward>
 </body>
 </html>

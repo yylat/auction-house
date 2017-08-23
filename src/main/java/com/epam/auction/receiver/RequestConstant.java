@@ -29,10 +29,13 @@ public final class RequestConstant {
 
     public static final String ITEMS = "items";
     public static final String LAST_ITEM_ID = "lastItemId";
+    public static final String FIRST_ITEM_ID = "firstItemId";
     public static final String HAS_NEXT = "hasNext";
+    public static final String HAS_PREV = "hasPrev";
 
     public static final String BIDS = "bids";
     public static final String BID_ITEM_MAP = "bidItemMap";
+    public static final String NOTIFICATION_ITEM_MAP = "notificationItemMap";
 
     public static final String TITLE = "title";
     public static final String DESCRIPTION = "description";

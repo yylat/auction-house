@@ -16,6 +16,7 @@
 <fmt:message bundle="${msg}" key="form.photos" var="photos"/>
 <fmt:message bundle="${msg}" key="form.messageFilesSelected" var="messageFilesSelected"/>
 <fmt:message bundle="${msg}" key="form.photosRule" var="photosRule"/>
+<fmt:message bundle="${msg}" key="form.photosSizeRule" var="photosSizeRule"/>
 <fmt:message bundle="${msg}" key="form.chooseFiles" var="chooseFiles"/>
 <fmt:message bundle="${msg}" key="form.addButton" var="addButton"/>
 
@@ -102,10 +103,11 @@
                     <div class="w3-container bottom-padding">
                         <label><b>${photos}</b></label>
                         <input name="file" type="file" id="fileInput" class="inputfile"
+                               title="${photosRule}"
                                data-multiple-caption="{count} ${messageFilesSelected}"
+                               data-size-message="${photosSizeRule}"
                                data-rule-message="${photosRule}" multiple/>
-                        <label for="fileInput"><img
-                                src="${pageContext.request.contextPath}/img/file.svg"/>
+                        <label for="fileInput"><img src="${pageContext.request.contextPath}/img/file.svg"/>
                             <span>${chooseFiles}</span></label>
                     </div>
                 </div>

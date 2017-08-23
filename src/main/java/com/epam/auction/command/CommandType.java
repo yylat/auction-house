@@ -3,6 +3,7 @@ package com.epam.auction.command;
 import com.epam.auction.command.admin.ApproveItemCommand;
 import com.epam.auction.command.admin.DiscardItemCommand;
 import com.epam.auction.command.admin.LoadItemsForCheckCommand;
+import com.epam.auction.command.notification.LoadNotificationsCommand;
 import com.epam.auction.command.photo.LoadAllPhotosCommand;
 import com.epam.auction.command.photo.LoadPhotoCommand;
 import com.epam.auction.command.admin.LoadUsersCommand;
@@ -117,6 +118,12 @@ public enum CommandType {
         @Override
         public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
             ((AdminReceiver) getCommand().getReceiver()).discardItem(requestContent);
+        }
+    },
+    LOAD_NOTIFICATIONS(new LoadNotificationsCommand(new NotificationReceiverImpl())) {
+        @Override
+        public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
+            ((NotificationReceiver) getCommand().getReceiver()).loadNotifications(requestContent);
         }
     };
 

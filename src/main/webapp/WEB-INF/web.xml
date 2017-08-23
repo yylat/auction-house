@@ -3,11 +3,6 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
 
-    <absolute-ordering>
-        <name>log4j2</name>
-        <others/>
-    </absolute-ordering>
-
     <error-page>
         <location>/jsp/error.jsp</location>
     </error-page>
@@ -15,7 +10,7 @@
     <jsp-config>
         <taglib>
             <taglib-uri>customtags</taglib-uri>
-            <taglib-location>WEB-INF/tld/custom.tld</taglib-location>
+            <taglib-location>/WEB-INF/tld/custom.tld</taglib-location>
         </taglib>
     </jsp-config>
 

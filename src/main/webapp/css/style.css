@@ -491,6 +491,18 @@ b, strong {
     cursor: pointer;
 }
 
+.link-button {
+    color: #50394c;
+    background: inherit;
+    cursor: pointer;
+    border: 0;
+    border-bottom: 1px dashed #50394c;
+}
+
+.notification {
+    border-bottom: 1px solid #b2c2bf;
+}
+
 @media (max-width: 993px) {
 
     main {

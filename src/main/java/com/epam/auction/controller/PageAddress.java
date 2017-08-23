@@ -10,5 +10,6 @@ public final class PageAddress {
     public final static String ITEM = "/jsp/item/item.jsp";
     public final static String ACTIVE_ITEMS = "/jsp/item/active_items.jsp";
     public final static String USER_BIDS = "/jsp/bid/user_bids.jsp";
+    public final static String NOTIFICATIONS = "/jsp/notification/notifications.jsp";
 
 }

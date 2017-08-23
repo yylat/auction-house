@@ -14,13 +14,13 @@
 
 <fmt:message bundle="${msg}" key="form.addButton" var="addButton"/>
 
-<fmt:message bundle="${msg}" key="form.itemTitle" var="itemTitle"/>
+<fmt:message bundle="${msg}" key="form.item" var="item"/>
 <fmt:message bundle="${msg}" key="item.actualPrice" var="actualPrice"/>
 <fmt:message bundle="${msg}" key="form.yourBid" var="yourBid"/>
 
 <c:if test="${requestScope.bidItemMap == null}">
     <jsp:forward page="${pageContext.request.contextPath}/controller">
-        <jsp:param name="command" value="load-user-bids"/>
+        <jsp:param name="command" value="load-bids"/>
     </jsp:forward>
 </c:if>
 
@@ -66,11 +66,11 @@
                     <c:otherwise>
 
                         <div class="w3-responsive">
-                            <table>
+                            <table class="w3-table w3-bordered">
                                 <thead>
                                 <tr class="pro-green">
                                     <th>
-                                            ${itemTitle}
+                                            ${item}
                                     </th>
                                     <th>
                                             ${actualPrice}
@@ -81,23 +81,45 @@
                                 </tr>
                                 </thead>
 
-                                <c:forEach items="${requestScope.itemBidMap}" var="entry">
+                                <c:forEach var="entry" items="${requestScope.bidItemMap}">
                                     <tr>
                                         <td>
                                             <form action="${pageContext.request.contextPath}/controller">
                                                 <input type="hidden" name="command" value="load-item"/>
-                                                <input type="hidden" name="item-id"
-                                                       value="${requestScope.itemBidMap.value.id}"/>
-                                                    ${requestScope.itemBidMap.value.name}
+                                                <input type="hidden" name="itemId"
+                                                       value="${entry.value.id}"/>
+                                                <button class="link-button">
+                                                        ${entry.value.name}
+                                                </button>
                                             </form>
                                         </td>
-                                        <td>${requestScope.itemBidMap.value.actualPrice}</td>
-                                        <td>${requestScope.itemBidMap.key.bidValue}</td>
+                                        <td>
+                                            <div class="text-on-color money">
+                                                    ${entry.value.actualPrice}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="text-on-color money">
+                                                    ${entry.key.bidValue}
+                                            </div>
+                                        </td>
                                     </tr>
 
                                 </c:forEach>
 
                             </table>
+                        </div>
+
+                        <div class="w3-row-padding w3-margin-top">
+
+                            <button ${requestScope.firstItemId == null ? 'disabled' : ''}
+                                    class="nav-button w3-col s6 w3-button">
+                                <<
+                            </button>
+                            <button ${requestScope.lastItemId == null ? 'disabled' : ''}
+                                    class="nav-button w3-col s6 w3-button">
+                                >>
+                            </button>
                         </div>
 
                     </c:otherwise>
@@ -111,11 +133,7 @@
 
 </main>
 
-<script src="${pageContext.request.contextPath}/js/load-img.js"></script>
-
 <%@ include file="/jsp/jspf/footer.jsp" %>
-
-<%@ include file="/jsp/jspf/item_modal.jsp" %>
 
 <script src="${pageContext.request.contextPath}/js/event.js"></script>
 

@@ -59,25 +59,6 @@ public class ItemDAOImpl extends GenericDAOImpl<Item> implements ItemDAO {
     }
 
     @Override
-    public List<Item> findAll(int userId) throws DAOLayerException {
-        List<Item> items;
-
-        try (PreparedStatement statement = connection.prepareStatement(TableConstant.ITEM_QUERY_FIND_ALL_FOR_USER)) {
-            statement.setInt(1, userId);
-            ResultSet resultSet = statement.executeQuery();
-
-            items = new ArrayList<>();
-            while (resultSet.next()) {
-                items.add(extractEntity(resultSet));
-            }
-        } catch (SQLException e) {
-            throw new DAOLayerException(e.getMessage(), e);
-        }
-
-        return items;
-    }
-
-    @Override
     public List<Item> findCertain(List<Integer> statusesId) throws DAOLayerException {
         List<Item> items;
 
@@ -99,102 +80,84 @@ public class ItemDAOImpl extends GenericDAOImpl<Item> implements ItemDAO {
 
     @Override
     public boolean updateItemStatus(int itemId, ItemStatus itemStatus) throws DAOLayerException {
-        boolean result = false;
 
-        try (PreparedStatement statement = connection.prepareStatement(TableConstant.ITEM_QUERY_UPDATE_STATUS)) {
+        return executeUpdate(TableConstant.ITEM_QUERY_UPDATE_STATUS, statement -> {
             statement.setInt(1, itemStatus.ordinal());
             statement.setInt(2, itemId);
+        });
 
-            if (statement.executeUpdate() != 0) {
-                result = true;
-            }
-        } catch (SQLException e) {
-            throw new DAOLayerException(e.getMessage(), e);
-        }
-
-        return result;
+//        boolean result = false;
+//
+//        try (PreparedStatement statement = connection.prepareStatement(TableConstant.ITEM_QUERY_UPDATE_STATUS)) {
+//            statement.setInt(1, itemStatus.ordinal());
+//            statement.setInt(2, itemId);
+//
+//            if (statement.executeUpdate() != 0) {
+//                result = true;
+//            }
+//        } catch (SQLException e) {
+//            throw new DAOLayerException(e.getMessage(), e);
+//        }
+//
+//        return result;
     }
 
     @Override
-    public List<Item> findItems(int userId, int limit) throws DAOLayerException {
-        List<Item> items;
-
-        try (PreparedStatement statement = connection.prepareStatement(TableConstant.ITEM_QUERY_FIND_FOR_USER)) {
-            statement.setInt(1, userId);
-            statement.setInt(2, limit);
-            ResultSet resultSet = statement.executeQuery();
-
-            items = new ArrayList<>();
-            while (resultSet.next()) {
-                items.add(extractEntity(resultSet));
-            }
-        } catch (SQLException e) {
-            throw new DAOLayerException(e.getMessage(), e);
-        }
-
-        return items;
+    public List<Item> findUserItems(int userId, int limit) throws DAOLayerException {
+        return findSpecificList(TableConstant.ITEM_QUERY_FIND_FOR_USER,
+                statement -> defineQuery(statement, userId, limit));
     }
 
     @Override
-    public List<Item> findNextItems(int userId, int lastItemId, int limit) throws DAOLayerException {
-        List<Item> items;
+    public List<Item> findNextUserItems(int userId, int lastItemId, int limit) throws DAOLayerException {
+        return findSpecificList(TableConstant.ITEM_QUERY_FIND_NEXT_FOR_USER,
+                statement -> defineQuery(statement, userId, lastItemId, limit));
+    }
 
-        try (PreparedStatement statement = connection.prepareStatement(TableConstant.ITEM_QUERY_FIND_NEXT_FOR_USER)) {
-            statement.setInt(1, userId);
-            statement.setInt(2, lastItemId);
-            statement.setInt(3, limit);
-            ResultSet resultSet = statement.executeQuery();
-
-            items = new ArrayList<>();
-            while (resultSet.next()) {
-                items.add(extractEntity(resultSet));
-            }
-        } catch (SQLException e) {
-            throw new DAOLayerException(e.getMessage(), e);
-        }
-
-        return items;
+    @Override
+    public List<Item> findPrevUserItems(int userId, int firstItemId, int limit) throws DAOLayerException {
+        return findSpecificList(TableConstant.ITEM_QUERY_FIND_PREV_FOR_USER,
+                statement -> defineQuery(statement, userId, firstItemId, limit));
     }
 
     @Override
     public List<Item> findItems(ItemStatus itemStatus, int limit) throws DAOLayerException {
-        List<Item> items;
-
-        try (PreparedStatement statement = connection.prepareStatement(TableConstant.ITEM_QUERY_FIND_SEEK)) {
-            statement.setInt(1, itemStatus.ordinal());
-            statement.setInt(2, limit);
-            ResultSet resultSet = statement.executeQuery();
-
-            items = new ArrayList<>();
-            while (resultSet.next()) {
-                items.add(extractEntity(resultSet));
-            }
-        } catch (SQLException e) {
-            throw new DAOLayerException(e.getMessage(), e);
-        }
-
-        return items;
+        return findSpecificList(TableConstant.ITEM_QUERY_FIND_SEEK,
+                statement -> defineQuery(statement, itemStatus, limit));
     }
 
     @Override
     public List<Item> findNextItems(ItemStatus itemStatus, int lastItemId, int limit) throws DAOLayerException {
-        List<Item> items;
+        return findSpecificList(TableConstant.ITEM_QUERY_FIND_SEEK_NEXT,
+                statement -> defineQuery(statement, itemStatus, lastItemId, limit));
+    }
 
-        try (PreparedStatement statement = connection.prepareStatement(TableConstant.ITEM_QUERY_FIND_SEEK_NEXT)) {
-            statement.setInt(1, itemStatus.ordinal());
-            statement.setInt(2, lastItemId);
-            statement.setInt(3, limit);
-            ResultSet resultSet = statement.executeQuery();
+    @Override
+    public List<Item> findPrevItems(ItemStatus itemStatus, int firstItemId, int limit) throws DAOLayerException {
+        return findSpecificList(TableConstant.ITEM_QUERY_FIND_SEEK_PREV,
+                statement -> defineQuery(statement, itemStatus, firstItemId, limit));
+    }
 
-            items = new ArrayList<>();
-            while (resultSet.next()) {
-                items.add(extractEntity(resultSet));
-            }
-        } catch (SQLException e) {
-            throw new DAOLayerException(e.getMessage(), e);
-        }
+    private void defineQuery(PreparedStatement statement, int userId, int limit) throws SQLException {
+        statement.setInt(1, userId);
+        statement.setInt(2, limit);
+    }
 
-        return items;
+    private void defineQuery(PreparedStatement statement, int userId, int moreItemId, int limit) throws SQLException {
+        statement.setInt(1, userId);
+        statement.setInt(2, moreItemId);
+        statement.setInt(3, limit);
+    }
+
+    private void defineQuery(PreparedStatement statement, ItemStatus itemStatus, int limit) throws SQLException {
+        statement.setInt(1, itemStatus.ordinal());
+        statement.setInt(2, limit);
+    }
+
+    private void defineQuery(PreparedStatement statement, ItemStatus itemStatus, int moreItemId, int limit) throws SQLException {
+        statement.setInt(1, itemStatus.ordinal());
+        statement.setInt(2, moreItemId);
+        statement.setInt(3, limit);
     }
 
 }

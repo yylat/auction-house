@@ -34,3 +34,8 @@
 
 </c:forEach>
 
+<div class="w3-row-padding w3-margin-top">
+
+    <button ${requestScope.firstItemId == null ? 'disabled' : ''} class="nav-button w3-col s6 w3-button"> <<</button>
+    <button ${requestScope.lastItemId == null ? 'disabled' : ''} class="nav-button w3-col s6 w3-button"> >></button>
+</div>

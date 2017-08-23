@@ -1,3 +1,7 @@
+<fmt:message bundle="${msg}" key="auction.active" var="activeAuctions"/>
+<fmt:message bundle="${msg}" key="auction.coming" var="comingAuctions"/>
+<fmt:message bundle="${msg}" key="auction.past" var="pastAuctions"/>
+
 <div class="w3-sidebar w3-bar-block w3-collapse w3-animate-opacity sidebar right-separator" id="sidebar">
 
     <button class="w3-bar-item w3-button w3-large w3-hide-large" id="sidebarCloseButton">
@@ -9,8 +13,31 @@
     </div>
 
     <a href="${pageContext.request.contextPath}/jsp/item/active_items.jsp"
-       class="w3-bar-item pro-bottom-button">${homePage}</a>
-    <a href="#" class="w3-bar-item pro-bottom-button">${auctionPage}</a>
+       class="w3-bar-item pro-bottom-button">${homePage}
+    </a>
+
+    <div class="w3-bar-item">
+        <div class="capitalize">
+            ${auctionPage}
+        </div>
+        <div class="w3-margin-left">
+            <form action="${pageContext.request.contextPath}/controller">
+                <input type="hidden" name="command" value="load-active-items">
+                <button class="button-reset w3-bar-item pro-bottom-button">${activeAuctions}</button>
+            </form>
+        </div>
+        <div class="w3-margin-left">
+            <a href="${pageContext.request.contextPath}/jsp/item/coming_items.jsp"
+               class="w3-bar-item pro-bottom-button">${comingAuctions}
+            </a>
+        </div>
+        <div class="w3-margin-left">
+            <a href="${pageContext.request.contextPath}/jsp/item/past_items.jsp"
+               class="w3-bar-item pro-bottom-button">${pastAuctions}
+            </a>
+        </div>
+    </div>
+
     <a href="#" class="w3-bar-item pro-bottom-button">${contactPage}</a>
 
     <div id="langSwitch" class="w3-bar-item lang-button w3-margin-bottom">

@@ -39,7 +39,6 @@
                     </c:when>
                     <c:otherwise>
                         <p>${pageContext.exception}</p>
-                        <p>${pageContext.exception.message}</p>
                     </c:otherwise>
                 </c:choose>
             </div>

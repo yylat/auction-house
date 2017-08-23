@@ -38,6 +38,15 @@
 
 <fmt:message bundle="${msg}" key="label.makeBid" var="makeBid"/>
 
+<fmt:message bundle="${msg}" key="status.title" var="statusTitle"/>
+<fmt:message bundle="${msg}" key="status.created" var="created"/>
+<fmt:message bundle="${msg}" key="status.confirmed" var="confirmed"/>
+<fmt:message bundle="${msg}" key="status.active" var="active"/>
+<fmt:message bundle="${msg}" key="status.sold" var="sold"/>
+<fmt:message bundle="${msg}" key="status.canceled" var="canceled"/>
+<fmt:message bundle="${msg}" key="status.ended" var="ended"/>
+<fmt:message bundle="${msg}" key="status.not_confirmed" var="not_confirmed"/>
+
 
 <c:if test="${requestScope.item == null}">
     <c:choose>
@@ -121,6 +130,10 @@
 
             <div class="w3-container w3-margin middle-title uppercase">
                 <b>${requestScope.item.name}</b>
+            </div>
+
+            <div class="w3-container w3-margin">
+                ${statusTitle}: ${pageScope[requestScope.item.status.toString().toLowerCase()]}
             </div>
 
             <div class="w3-container w3-margin middle-title">

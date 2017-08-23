@@ -41,11 +41,11 @@ public final class TableConstant {
 
     //    Bid table
 
-    public final static String BID_COLUMN_ID = "user_id";
+    public final static String BID_COLUMN_ID = "bid_id";
     public final static String BID_COLUMN_ITEM_ID = "item_id";
     public final static String BID_COLUMN_BIDDER_ID = "bidder_id";
-    public final static String BID_COLUMN_BID_VALUE = "bid_value_id";
-    public final static String BID_COLUMN_IS_WINNING = "bid_status_id";
+    public final static String BID_COLUMN_BID_VALUE = "bid_value";
+    public final static String BID_COLUMN_IS_WINNING = "is_winning";
 
     public final static String BID_QUERY_FIND_ALL =
             "SELECT `bid_id`, `item_id`, `bidder_id`, `bid_value`, `is_winning` FROM `bid`";
@@ -56,6 +56,13 @@ public final class TableConstant {
 
     public final static String BID_QUERY_FIND_ALL_FOR_USER =
             "SELECT `bid_id`, `item_id`, `bidder_id`, `bid_value`, `is_winning` FROM `bid` WHERE `bidder_id` = ? ORDER BY `bid_id` DESC";
+
+    public final static String BID_QUERY_FIND_FOR_USER =
+            BID_QUERY_FIND_ALL + " WHERE `bidder_id` = ? ORDER BY `bid_id` DESC LIMIT ?";
+    public final static String BID_QUERY_FIND_NEXT_FOR_USER =
+            BID_QUERY_FIND_ALL + " WHERE `bidder_id` = ? AND `bid_id` < ? ORDER BY `bid_id` DESC LIMIT ?";
+    public final static String BID_QUERY_FIND_PREV_FOR_USER =
+            BID_QUERY_FIND_ALL + " WHERE `bidder_id` = ? AND `bid_id` > ? ORDER BY `bid_id` DESC LIMIT ?";
 
 
     //    ItemCategory table
@@ -110,11 +117,15 @@ public final class TableConstant {
     public final static String ITEM_QUERY_FIND_FOR_USER =
             ITEM_QUERY_FIND_ALL + " WHERE `seller_id` = ? ORDER BY `item_id` DESC LIMIT ?";
     public final static String ITEM_QUERY_FIND_NEXT_FOR_USER =
-            ITEM_QUERY_FIND_ALL + " WHERE `seller_id` = ? AND `item_id` <= ? ORDER BY `item_id` DESC LIMIT ?";
+            ITEM_QUERY_FIND_ALL + " WHERE `seller_id` = ? AND `item_id` < ? ORDER BY `item_id` DESC LIMIT ?";
+    public final static String ITEM_QUERY_FIND_PREV_FOR_USER =
+            ITEM_QUERY_FIND_ALL + " WHERE `seller_id` = ? AND `item_id` > ? ORDER BY `item_id` DESC LIMIT ?";
     public final static String ITEM_QUERY_FIND_SEEK =
             ITEM_QUERY_FIND_ALL + " WHERE `item_status_id` = ? ORDER BY `item_id` DESC LIMIT ?";
     public final static String ITEM_QUERY_FIND_SEEK_NEXT =
-            ITEM_QUERY_FIND_ALL + " WHERE `item_status_id` = ? AND `item_id` <= ? ORDER BY `item_id` DESC LIMIT ?";
+            ITEM_QUERY_FIND_ALL + " WHERE `item_status_id` = ? AND `item_id` < ? ORDER BY `item_id` DESC LIMIT ?";
+    public final static String ITEM_QUERY_FIND_SEEK_PREV =
+            ITEM_QUERY_FIND_ALL + " WHERE `item_status_id` = ? AND `item_id` > ? ORDER BY `item_id` DESC LIMIT ?";
 
 
     //    Notification table
@@ -135,6 +146,13 @@ public final class TableConstant {
             "INSERT INTO `notification`(`notification_type_id`, `user_id`, `item_id`, `date_time`) VALUES (?, ?, ?, ?)";
     public final static String NOTIFICATION_QUERY_UPDATE =
             "UPDATE `notification` SET `notification_type_id` = ?, `user_id` = ?, `item_id` = ?, `date_time` = ? WHERE `notification_id` = ?";
+
+    public final static String NOTIFICATION_QUERY_FOR_USER =
+            NOTIFICATION_QUERY_FIND_ALL + " WHERE `user_id` = ? ORDER BY `notification_id` DESC LIMIT ?";
+    public final static String NOTIFICATION_QUERY_FIND_NEXT_FOR_USER =
+            NOTIFICATION_QUERY_FIND_ALL + " WHERE `user_id` = ? AND `notification_id` < ? ORDER BY `notification_id` DESC LIMIT ?";
+    public final static String NOTIFICATION_QUERY_FIND_PREV_FOR_USER =
+            NOTIFICATION_QUERY_FIND_ALL + " WHERE `user_id` = ? AND `notification_id` > ? ORDER BY `notification_id` DESC LIMIT ?";
 
 
     //    Photo table
