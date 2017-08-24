@@ -1,13 +1,12 @@
 package com.epam.auction.dao.impl;
 
-import com.epam.auction.dao.TableConstant;
 import com.epam.auction.dao.BidDAO;
+import com.epam.auction.dao.TableConstant;
 import com.epam.auction.entity.Bid;
 import com.epam.auction.exception.DAOLayerException;
 import com.epam.auction.exception.MethodNotSupportedException;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 public class BidDAOImpl extends GenericDAOImpl<Bid> implements BidDAO {
@@ -66,87 +65,37 @@ public class BidDAOImpl extends GenericDAOImpl<Bid> implements BidDAO {
     }
 
     @Override
-    public List<Bid> findAll(int userId) throws DAOLayerException {
-        List<Bid> bids;
+    public List<Bid> findUsersBids(int userId, int offset, int limit) throws DAOLayerException {
+        return findSpecificList(TableConstant.BID_QUERY_FIND_FOR_USER_LIMIT,
+                statement -> {
+                    statement.setInt(1, userId);
+                    statement.setInt(2, offset);
+                    statement.setInt(3, limit);
+                });
+    }
 
-        try (PreparedStatement statement = connection.prepareStatement(TableConstant.BID_QUERY_FIND_ALL_FOR_USER)) {
+    @Override
+    public int countRows(int userId) throws DAOLayerException {
+        int rows = 0;
+
+        try (PreparedStatement statement = connection.prepareStatement(TableConstant.BID_QUERY_FIND_NUMBER_FOR_USER)) {
             statement.setInt(1, userId);
             ResultSet resultSet = statement.executeQuery();
 
-            bids = new ArrayList<>();
-            while (resultSet.next()) {
-                bids.add(extractEntity(resultSet));
+            if (resultSet.next()) {
+                rows = resultSet.getInt(1);
             }
         } catch (SQLException e) {
             throw new DAOLayerException(e.getMessage(), e);
         }
 
-        return bids;
+        return rows;
     }
 
     @Override
-    public List<Bid> findUserBids(int userId, int limit) throws DAOLayerException {
-
-        return findSpecificList(TableConstant.BID_QUERY_FIND_FOR_USER,
-                statement -> {
-                    statement.setInt(1, userId);
-                    statement.setInt(2, limit);
-                });
-
-//        List<Bid> bids;
-//
-//        try (PreparedStatement statement = connection.prepareStatement(TableConstant.BID_QUERY_FIND_FOR_USER)) {
-//            statement.setInt(1, userId);
-//            statement.setInt(2, limit);
-//            ResultSet resultSet = statement.executeQuery();
-//
-//            bids = new ArrayList<>();
-//            while (resultSet.next()) {
-//                bids.add(extractEntity(resultSet));
-//            }
-//        } catch (SQLException e) {
-//            throw new DAOLayerException(e.getMessage(), e);
-//        }
-//
-//        return bids;
+    public Bid findWinning(int itemId) throws DAOLayerException {
+        return findEntity(TableConstant.BID_QUERY_FIND_WINNING,
+                statement -> statement.setInt(1, itemId));
     }
 
-    @Override
-    public List<Bid> findNextUserBids(int userId, int lastBidsId, int limit) throws DAOLayerException {
-
-        return findSpecificList(TableConstant.BID_QUERY_FIND_NEXT_FOR_USER,
-                statement -> {
-                    statement.setInt(1, userId);
-                    statement.setInt(2, lastBidsId);
-                    statement.setInt(3, limit);
-                });
-
-//        List<Bid> bids;
-//
-//        try (PreparedStatement statement = connection.prepareStatement(TableConstant.BID_QUERY_FIND_NEXT_FOR_USER)) {
-//            statement.setInt(1, userId);
-//            statement.setInt(2, lastBidsId);
-//            statement.setInt(3, limit);
-//            ResultSet resultSet = statement.executeQuery();
-//
-//            bids = new ArrayList<>();
-//            while (resultSet.next()) {
-//                bids.add(extractEntity(resultSet));
-//            }
-//        } catch (SQLException e) {
-//            throw new DAOLayerException(e.getMessage(), e);
-//        }
-//
-//        return bids;
-    }
-
-    @Override
-    public List<Bid> findPrevUserBids(int userId, int firstBidsId, int limit) throws DAOLayerException {
-        return findSpecificList(TableConstant.BID_QUERY_FIND_PREV_FOR_USER,
-                statement -> {
-                    statement.setInt(1, userId);
-                    statement.setInt(2, firstBidsId);
-                    statement.setInt(3, limit);
-                });
-    }
 }

@@ -1,4 +1,4 @@
-package com.epam.auction.command.item;
+package com.epam.auction.command.user;
 
 import com.epam.auction.command.AbstractCommand;
 import com.epam.auction.command.RequestContent;
@@ -7,32 +7,26 @@ import com.epam.auction.controller.PageGuide;
 import com.epam.auction.controller.TransferMethod;
 import com.epam.auction.exception.ReceiverLayerException;
 import com.epam.auction.receiver.Receiver;
-import com.epam.auction.receiver.RequestConstant;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class LoadItemCommand extends AbstractCommand {
+public class ReplenishBalanceCommand extends AbstractCommand {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-    public LoadItemCommand(Receiver receiver) {
+    public ReplenishBalanceCommand(Receiver receiver) {
         super(receiver);
     }
 
     @Override
     public PageGuide execute(RequestContent requestContent) {
-
-        if (requestContent.getSessionAttribute(RequestConstant.CURRENT_PAGE) != PageAddress.ITEM) {
-            requestContent.removeSessionAttribute(RequestConstant.MESSAGE);
-        }
-
-        PageGuide pageGuide = new PageGuide(PageAddress.ITEM, TransferMethod.FORWARD);
+        PageGuide pageGuide = new PageGuide(PageAddress.BALANCE, TransferMethod.REDIRECT);
 
         try {
             doAction(requestContent);
         } catch (ReceiverLayerException e) {
-            LOGGER.log(Level.ERROR, e.getMessage(), e);
+            LOGGER.log(Level.ERROR, e);
         }
 
         return pageGuide;

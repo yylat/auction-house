@@ -1,4 +1,4 @@
-package com.epam.auction.command.item;
+package com.epam.auction.command.bid;
 
 import com.epam.auction.command.AbstractCommand;
 import com.epam.auction.command.RequestContent;
@@ -7,27 +7,23 @@ import com.epam.auction.controller.PageGuide;
 import com.epam.auction.controller.TransferMethod;
 import com.epam.auction.exception.ReceiverLayerException;
 import com.epam.auction.receiver.Receiver;
-import com.epam.auction.receiver.RequestConstant;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class LoadItemCommand extends AbstractCommand {
+public class MakeBidCommand extends AbstractCommand {
 
-    private static final Logger LOGGER = LogManager.getLogger();
+    private final static Logger LOGGER = LogManager.getLogger();
 
-    public LoadItemCommand(Receiver receiver) {
+    public MakeBidCommand(Receiver receiver) {
         super(receiver);
     }
 
     @Override
     public PageGuide execute(RequestContent requestContent) {
+        PageGuide pageGuide = new PageGuide(PageAddress.ITEM, TransferMethod.REDIRECT);
 
-        if (requestContent.getSessionAttribute(RequestConstant.CURRENT_PAGE) != PageAddress.ITEM) {
-            requestContent.removeSessionAttribute(RequestConstant.MESSAGE);
-        }
 
-        PageGuide pageGuide = new PageGuide(PageAddress.ITEM, TransferMethod.FORWARD);
 
         try {
             doAction(requestContent);

@@ -54,15 +54,13 @@ public final class TableConstant {
     public final static String BID_QUERY_CREATE =
             "{? = CALL insert_bid (?, ?, ?)}";
 
-    public final static String BID_QUERY_FIND_ALL_FOR_USER =
-            "SELECT `bid_id`, `item_id`, `bidder_id`, `bid_value`, `is_winning` FROM `bid` WHERE `bidder_id` = ? ORDER BY `bid_id` DESC";
+    public final static String BID_QUERY_FIND_FOR_USER_LIMIT =
+            BID_QUERY_FIND_ALL + " WHERE `bidder_id` = ? ORDER BY `bid_id` DESC LIMIT ?, ?";
+    public final static String BID_QUERY_FIND_NUMBER_FOR_USER =
+            "SELECT COUNT(*) FROM `bid` WHERE `bidder_id` = ?";
 
-    public final static String BID_QUERY_FIND_FOR_USER =
-            BID_QUERY_FIND_ALL + " WHERE `bidder_id` = ? ORDER BY `bid_id` DESC LIMIT ?";
-    public final static String BID_QUERY_FIND_NEXT_FOR_USER =
-            BID_QUERY_FIND_ALL + " WHERE `bidder_id` = ? AND `bid_id` < ? ORDER BY `bid_id` DESC LIMIT ?";
-    public final static String BID_QUERY_FIND_PREV_FOR_USER =
-            BID_QUERY_FIND_ALL + " WHERE `bidder_id` = ? AND `bid_id` > ? ORDER BY `bid_id` DESC LIMIT ?";
+    public final static String BID_QUERY_FIND_WINNING =
+            BID_QUERY_FIND_ALL + " WHERE `item_id` = ? AND `is_winning` = 1";
 
 
     //    ItemCategory table
@@ -112,20 +110,15 @@ public final class TableConstant {
     public final static String ITEM_QUERY_UPDATE_STATUS =
             "UPDATE `item` SET `item_status_id` = ? WHERE `item_id` = ?";
 
-    public final static String ITEM_QUERY_FIND_ALL_FOR_USER =
-            ITEM_QUERY_FIND_ALL + " WHERE `seller_id` = ? ORDER BY `item_id` DESC LIMIT ?";
-    public final static String ITEM_QUERY_FIND_FOR_USER =
-            ITEM_QUERY_FIND_ALL + " WHERE `seller_id` = ? ORDER BY `item_id` DESC LIMIT ?";
-    public final static String ITEM_QUERY_FIND_NEXT_FOR_USER =
-            ITEM_QUERY_FIND_ALL + " WHERE `seller_id` = ? AND `item_id` < ? ORDER BY `item_id` DESC LIMIT ?";
-    public final static String ITEM_QUERY_FIND_PREV_FOR_USER =
-            ITEM_QUERY_FIND_ALL + " WHERE `seller_id` = ? AND `item_id` > ? ORDER BY `item_id` DESC LIMIT ?";
-    public final static String ITEM_QUERY_FIND_SEEK =
-            ITEM_QUERY_FIND_ALL + " WHERE `item_status_id` = ? ORDER BY `item_id` DESC LIMIT ?";
-    public final static String ITEM_QUERY_FIND_SEEK_NEXT =
-            ITEM_QUERY_FIND_ALL + " WHERE `item_status_id` = ? AND `item_id` < ? ORDER BY `item_id` DESC LIMIT ?";
-    public final static String ITEM_QUERY_FIND_SEEK_PREV =
-            ITEM_QUERY_FIND_ALL + " WHERE `item_status_id` = ? AND `item_id` > ? ORDER BY `item_id` DESC LIMIT ?";
+    public final static String ITEM_QUERY_FIND_WITH_STATUS_LIMIT =
+            ITEM_QUERY_FIND_ALL + " WHERE `item_status_id` = ? ORDER BY `item_id` DESC LIMIT ?, ?";
+    public final static String ITEM_QUERY_FIND_NUMBER_WITH_STATUS =
+            "SELECT COUNT(*) FROM `item` WHERE `item_status_id` = ?";
+
+    public final static String ITEM_QUERY_FIND_FOR_USER_LIMIT =
+            ITEM_QUERY_FIND_ALL + " WHERE `seller_id` = ? ORDER BY `item_id` DESC LIMIT ?, ?";
+    public final static String ITEM_QUERY_FIND_NUMBER_FOR_USER =
+            "SELECT COUNT(*) FROM `item` WHERE `seller_id` = ?";
 
 
     //    Notification table
@@ -154,6 +147,10 @@ public final class TableConstant {
     public final static String NOTIFICATION_QUERY_FIND_PREV_FOR_USER =
             NOTIFICATION_QUERY_FIND_ALL + " WHERE `user_id` = ? AND `notification_id` > ? ORDER BY `notification_id` DESC LIMIT ?";
 
+    public final static String NOTIFICATION_QUERY_FIND_FOR_USER_LIMIT =
+            NOTIFICATION_QUERY_FIND_ALL + " WHERE `user_id` = ? ORDER BY `notification_id` DESC LIMIT ?, ?";
+    public final static String NOTIFICATION_QUERY_FIND_NUMBER_FOR_USER =
+            "SELECT COUNT(*) FROM `notification` WHERE `user_id` = ?";
 
     //    Photo table
 
@@ -176,5 +173,6 @@ public final class TableConstant {
             "SELECT `photo_id`, `photo_file`, `item_id` FROM `photo` WHERE `item_id` = ? LIMIT 1";
     public final static String PHOTO_QUERY_FIND_ALL_FOR_ITEM =
             "SELECT `photo_id`, `photo_file`, `item_id` FROM `photo` WHERE `item_id` = ?";
+
 
 }

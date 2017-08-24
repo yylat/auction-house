@@ -16,6 +16,7 @@ import com.epam.auction.exception.DAOLayerException;
 import com.epam.auction.exception.ReceiverLayerException;
 import com.epam.auction.receiver.ItemReceiver;
 import com.epam.auction.receiver.RequestConstant;
+import com.epam.auction.util.Converter;
 import com.epam.auction.validator.ItemValidator;
 
 import java.io.InputStream;
@@ -33,7 +34,7 @@ public class ItemReceiverImpl implements ItemReceiver {
         ItemCategoryDAO itemCategoryDAO = new ItemCategoryDAOImpl();
 
         try (DAOManager daoManager = new DAOManager(itemCategoryDAO)) {
-            requestContent.setAjaxResponse(itemCategoryDAO.findAll());
+            requestContent.setAjaxResponse(Converter.objectToJson(itemCategoryDAO.findAll()));
         } catch (DAOLayerException e) {
             throw new ReceiverLayerException(e.getMessage(), e);
         }
@@ -82,12 +83,12 @@ public class ItemReceiverImpl implements ItemReceiver {
 
     @Override
     public void loadItemsForCheck(RequestContent requestContent) throws ReceiverLayerException {
-        loadItems(requestContent, ItemStatus.CREATED);
+        loadItemsWithStatus(requestContent, ItemStatus.CREATED);
     }
 
     @Override
     public void loadActiveItems(RequestContent requestContent) throws ReceiverLayerException {
-        loadItems(requestContent, ItemStatus.ACTIVE);
+        loadItemsWithStatus(requestContent, ItemStatus.ACTIVE);
     }
 
     @Override
@@ -108,91 +109,33 @@ public class ItemReceiverImpl implements ItemReceiver {
     @Override
     public void loadUserItems(RequestContent requestContent) throws ReceiverLayerException {
         User user = (User) requestContent.getSessionAttribute(RequestConstant.USER);
+        String[] pages = requestContent.getRequestParameter(RequestConstant.PAGES);
+
+        int pageToGo;
+        String[] page = requestContent.getRequestParameter(RequestConstant.PAGE);
+        if (page != null) {
+            pageToGo = Integer.valueOf(page[0]);
+        } else {
+            pageToGo = 1;
+        }
 
         if (user != null) {
             ItemDAO itemDAO = new ItemDAOImpl();
 
             try (DAOManager daoManager = new DAOManager(itemDAO)) {
-                List<Item> items;
-
-                String[] lastItemIdOb = requestContent.getRequestParameter(RequestConstant.LAST_ITEM_ID);
-                String[] firstItemIdOb = requestContent.getRequestParameter(RequestConstant.FIRST_ITEM_ID);
-
-                if (lastItemIdOb != null) {
-                    items = itemDAO.findNextUserItems(user.getId(), Integer.valueOf(lastItemIdOb[0]), itemsForPage + 1);
-                    requestContent.setRequestAttribute(RequestConstant.FIRST_ITEM_ID, items.get(0).getId());
-                    requestContent.setRequestAttribute(RequestConstant.LAST_ITEM_ID,
-                            hasMore(requestContent, items));
-                } else if (firstItemIdOb != null) {
-                    items = itemDAO.findPrevUserItems(user.getId(), Integer.valueOf(firstItemIdOb[0]), itemsForPage + 1);
-                    requestContent.setRequestAttribute(RequestConstant.FIRST_ITEM_ID,
-                            hasMore(requestContent, items));
-                    requestContent.setRequestAttribute(RequestConstant.HAS_NEXT, true);
-                } else {
-                    items = itemDAO.findUserItems(user.getId(), itemsForPage + 1);
-                    requestContent.setRequestAttribute(RequestConstant.FIRST_ITEM_ID, null);
-                    requestContent.setRequestAttribute(RequestConstant.LAST_ITEM_ID,
-                            hasMore(requestContent, items));
+                if (pages == null) {
+                    requestContent.setRequestAttribute(RequestConstant.PAGES,
+                            (itemDAO.countRows(user.getId()) / itemsForPage) + 1);
                 }
 
+                List<Item> items = itemDAO.findUsersItemsLimit(user.getId(), (pageToGo - 1) * itemsForPage, itemsForPage);
+
+                requestContent.setRequestAttribute(RequestConstant.ITEMS, items);
             } catch (DAOLayerException e) {
                 throw new ReceiverLayerException(e.getMessage(), e);
             }
         }
     }
-
-    private void loadItems(RequestContent requestContent, ItemStatus itemStatus) throws ReceiverLayerException {
-        ItemDAO itemDAO = new ItemDAOImpl();
-
-        try (DAOManager daoManager = new DAOManager(itemDAO)) {
-            List<Item> items;
-
-            String[] lastItemIdOb = requestContent.getRequestParameter(RequestConstant.LAST_ITEM_ID);
-            String[] firstItemIdOb = requestContent.getRequestParameter(RequestConstant.FIRST_ITEM_ID);
-
-            if (lastItemIdOb != null) {
-                items = itemDAO.findNextItems(itemStatus, Integer.valueOf(lastItemIdOb[0]), itemsForPage + 1);
-                requestContent.setRequestAttribute(RequestConstant.FIRST_ITEM_ID, items.get(0).getId());
-                requestContent.setRequestAttribute(RequestConstant.LAST_ITEM_ID,
-                        hasMore(requestContent, items));
-            } else if (firstItemIdOb != null) {
-                items = itemDAO.findPrevItems(itemStatus, Integer.valueOf(firstItemIdOb[0]), itemsForPage + 1);
-                requestContent.setRequestAttribute(RequestConstant.FIRST_ITEM_ID,
-                        hasMore(requestContent, items));
-                requestContent.setRequestAttribute(RequestConstant.HAS_NEXT, true);
-            } else {
-                items = itemDAO.findItems(itemStatus, itemsForPage + 1);
-                requestContent.setRequestAttribute(RequestConstant.FIRST_ITEM_ID, null);
-                requestContent.setRequestAttribute(RequestConstant.LAST_ITEM_ID,
-                        hasMore(requestContent, items));
-            }
-
-        } catch (DAOLayerException e) {
-            throw new ReceiverLayerException(e.getMessage(), e);
-        }
-    }
-
-    private Integer hasMore(RequestContent requestContent, List<Item> items) {
-        if ((itemsForPage + 1) == items.size()) {
-            requestContent.setRequestAttribute(RequestConstant.ITEMS, items.subList(0, itemsForPage));
-            return items.get(itemsForPage + 1).getId();
-        } else {
-            requestContent.setRequestAttribute(RequestConstant.ITEMS, items);
-            return null;
-        }
-    }
-
-//    private String formAjaxResponse(List<Item> items) {
-//        JsonObject jsonObject = new JsonObject();
-//        if ((itemsForPage + 1) == items.size()) {
-//            jsonObject.addProperty(RequestConstant.HAS_NEXT, true);
-//            jsonObject.addProperty(RequestConstant.ITEMS, Converter.objectToJson(items.subList(0, itemsForPage)));
-//        } else {
-//            jsonObject.addProperty(RequestConstant.HAS_NEXT, false);
-//            jsonObject.addProperty(RequestConstant.ITEMS, Converter.objectToJson(items));
-//        }
-//        return jsonObject.toString();
-//    }
 
     private boolean savePhotos(PhotoDAO photoDAO, List<InputStream> files, int itemId) throws DAOLayerException {
         boolean result = false;
@@ -207,6 +150,33 @@ public class ItemReceiverImpl implements ItemReceiver {
             }
         }
         return result;
+    }
+
+    private void loadItemsWithStatus(RequestContent requestContent, ItemStatus itemStatus) throws ReceiverLayerException {
+        String[] pages = requestContent.getRequestParameter(RequestConstant.PAGES);
+
+        int pageToGo;
+        String[] page = requestContent.getRequestParameter(RequestConstant.PAGE);
+        if (page != null) {
+            pageToGo = Integer.valueOf(page[0]);
+        } else {
+            pageToGo = 1;
+        }
+
+        ItemDAO itemDAO = new ItemDAOImpl();
+
+        try (DAOManager daoManager = new DAOManager(itemDAO)) {
+            if (pages == null) {
+                requestContent.setRequestAttribute(RequestConstant.PAGES,
+                        (itemDAO.countRows(itemStatus) / itemsForPage) + 1);
+            }
+
+            List<Item> items = itemDAO.findItemsWithStatusLimit(itemStatus, (pageToGo - 1) * itemsForPage, itemsForPage);
+
+            requestContent.setRequestAttribute(RequestConstant.ITEMS, items);
+        } catch (DAOLayerException e) {
+            throw new ReceiverLayerException(e.getMessage(), e);
+        }
     }
 
 }

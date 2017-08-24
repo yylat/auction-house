@@ -49,31 +49,31 @@ public class NotificationDAOImpl extends GenericDAOImpl<Notification> implements
     }
 
     @Override
-    public List<Notification> findUserNotifications(int userId, int limit) throws DAOLayerException {
-        return findSpecificList(TableConstant.NOTIFICATION_QUERY_FOR_USER,
+    public List<Notification> findUsersNotifications(int userId, int offset, int limit) throws DAOLayerException {
+        return findSpecificList(TableConstant.NOTIFICATION_QUERY_FIND_FOR_USER_LIMIT,
                 statement -> {
                     statement.setInt(1, userId);
-                    statement.setInt(2, limit);
-                });
-    }
-
-    @Override
-    public List<Notification> findNextUserNotifications(int userId, int lastNotificationsId, int limit) throws DAOLayerException {
-        return findSpecificList(TableConstant.NOTIFICATION_QUERY_FIND_NEXT_FOR_USER,
-                statement -> {
-                    statement.setInt(1, userId);
-                    statement.setInt(2, lastNotificationsId);
+                    statement.setInt(2, offset);
                     statement.setInt(3, limit);
                 });
     }
 
     @Override
-    public List<Notification> findPrevUserNotifications(int userId, int firstNotificationsId, int limit) throws DAOLayerException {
-        return findSpecificList(TableConstant.NOTIFICATION_QUERY_FIND_PREV_FOR_USER,
-                statement -> {
-                    statement.setInt(1, userId);
-                    statement.setInt(2, firstNotificationsId);
-                    statement.setInt(3, limit);
-                });
+    public int countRows(int userId) throws DAOLayerException {
+        int rows = 0;
+
+        try (PreparedStatement statement = connection.prepareStatement(TableConstant.NOTIFICATION_QUERY_FIND_NUMBER_FOR_USER)) {
+            statement.setInt(1, userId);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                rows = resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            throw new DAOLayerException(e.getMessage(), e);
+        }
+
+        return rows;
     }
+
 }

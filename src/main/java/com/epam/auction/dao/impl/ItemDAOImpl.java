@@ -103,61 +103,59 @@ public class ItemDAOImpl extends GenericDAOImpl<Item> implements ItemDAO {
     }
 
     @Override
-    public List<Item> findUserItems(int userId, int limit) throws DAOLayerException {
-        return findSpecificList(TableConstant.ITEM_QUERY_FIND_FOR_USER,
-                statement -> defineQuery(statement, userId, limit));
+    public List<Item> findUsersItemsLimit(int userId, int offset, int limit) throws DAOLayerException {
+        return findSpecificList(TableConstant.ITEM_QUERY_FIND_FOR_USER_LIMIT,
+                statement -> {
+                    statement.setInt(1, userId);
+                    statement.setInt(2, offset);
+                    statement.setInt(3, limit);
+                });
     }
 
     @Override
-    public List<Item> findNextUserItems(int userId, int lastItemId, int limit) throws DAOLayerException {
-        return findSpecificList(TableConstant.ITEM_QUERY_FIND_NEXT_FOR_USER,
-                statement -> defineQuery(statement, userId, lastItemId, limit));
+    public List<Item> findItemsWithStatusLimit(ItemStatus itemStatus, int offset, int limit) throws DAOLayerException {
+        return findSpecificList(TableConstant.ITEM_QUERY_FIND_WITH_STATUS_LIMIT,
+                statement -> {
+                    statement.setInt(1, itemStatus.ordinal());
+                    statement.setInt(2, offset);
+                    statement.setInt(3, limit);
+                });
     }
 
     @Override
-    public List<Item> findPrevUserItems(int userId, int firstItemId, int limit) throws DAOLayerException {
-        return findSpecificList(TableConstant.ITEM_QUERY_FIND_PREV_FOR_USER,
-                statement -> defineQuery(statement, userId, firstItemId, limit));
+    public int countRows(int userId) throws DAOLayerException {
+        int rows = 0;
+
+        try (PreparedStatement statement = connection.prepareStatement(TableConstant.ITEM_QUERY_FIND_NUMBER_FOR_USER)) {
+            statement.setInt(1, userId);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                rows = resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            throw new DAOLayerException(e.getMessage(), e);
+        }
+
+        return rows;
     }
 
     @Override
-    public List<Item> findItems(ItemStatus itemStatus, int limit) throws DAOLayerException {
-        return findSpecificList(TableConstant.ITEM_QUERY_FIND_SEEK,
-                statement -> defineQuery(statement, itemStatus, limit));
-    }
+    public int countRows(ItemStatus itemStatus) throws DAOLayerException {
+        int rows = 0;
 
-    @Override
-    public List<Item> findNextItems(ItemStatus itemStatus, int lastItemId, int limit) throws DAOLayerException {
-        return findSpecificList(TableConstant.ITEM_QUERY_FIND_SEEK_NEXT,
-                statement -> defineQuery(statement, itemStatus, lastItemId, limit));
-    }
+        try (PreparedStatement statement = connection.prepareStatement(TableConstant.ITEM_QUERY_FIND_NUMBER_WITH_STATUS)) {
+            statement.setInt(1, itemStatus.ordinal());
+            ResultSet resultSet = statement.executeQuery();
 
-    @Override
-    public List<Item> findPrevItems(ItemStatus itemStatus, int firstItemId, int limit) throws DAOLayerException {
-        return findSpecificList(TableConstant.ITEM_QUERY_FIND_SEEK_PREV,
-                statement -> defineQuery(statement, itemStatus, firstItemId, limit));
-    }
+            if (resultSet.next()) {
+                rows = resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            throw new DAOLayerException(e.getMessage(), e);
+        }
 
-    private void defineQuery(PreparedStatement statement, int userId, int limit) throws SQLException {
-        statement.setInt(1, userId);
-        statement.setInt(2, limit);
-    }
-
-    private void defineQuery(PreparedStatement statement, int userId, int moreItemId, int limit) throws SQLException {
-        statement.setInt(1, userId);
-        statement.setInt(2, moreItemId);
-        statement.setInt(3, limit);
-    }
-
-    private void defineQuery(PreparedStatement statement, ItemStatus itemStatus, int limit) throws SQLException {
-        statement.setInt(1, itemStatus.ordinal());
-        statement.setInt(2, limit);
-    }
-
-    private void defineQuery(PreparedStatement statement, ItemStatus itemStatus, int moreItemId, int limit) throws SQLException {
-        statement.setInt(1, itemStatus.ordinal());
-        statement.setInt(2, moreItemId);
-        statement.setInt(3, limit);
+        return rows;
     }
 
 }

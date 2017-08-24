@@ -11,4 +11,6 @@ public interface UserReceiver extends Receiver {
 
     void logOut(RequestContent requestContent);
 
+    void replenishBalance(RequestContent requestContent) throws ReceiverLayerException;
+
 }

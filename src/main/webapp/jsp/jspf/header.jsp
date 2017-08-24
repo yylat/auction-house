@@ -14,6 +14,7 @@
 <fmt:message bundle="${msg}" key="menu.bids" var="bids"/>
 <fmt:message bundle="${msg}" key="menu.items" var="lots"/>
 <fmt:message bundle="${msg}" key="menu.logOut" var="logOut"/>
+<fmt:message bundle="${msg}" key="menu.balanceReplenishment" var="balanceReplenishment"/>
 
 <fmt:message bundle="${msg}" key="menu.management" var="management"/>
 
@@ -33,7 +34,11 @@
         <div class="w3-col w3-right-align s2">
             <div class="w3-dropdown-hover w3-right">
                 <button class="back-color w3-button w3-xlarge">
-                    <img class="menu-button-icon" src="${pageContext.request.contextPath}/img/ic_person_black_24px.svg"
+                    <c:if test="${sessionScope.user != null}">
+                        ${requestScope.user.username}
+                    </c:if>
+                    <img class="menu-button-icon"
+                         src="${pageContext.request.contextPath}/img/ic_person_black_24px.svg"
                          alt=""/>
                 </button>
 
@@ -56,6 +61,9 @@
                                 <input type="hidden" name="command" value="load-notifications">
                                 <button class="w3-bar-item w3-button pro-hover-green w3-ripple">${notifications}</button>
                             </form>
+                            <a href="${pageContext.request.contextPath}/jsp/user/balance.jsp" class="w3-bar-item w3-button pro-hover-green w3-ripple">
+                                    ${balanceReplenishment}
+                            </a>
                             <form action="${pageContext.request.contextPath}/controller">
                                 <input type="hidden" name="command" value="load-bids">
                                 <button class="w3-bar-item w3-button pro-hover-green w3-ripple">${bids}</button>

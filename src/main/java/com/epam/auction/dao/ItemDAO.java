@@ -12,16 +12,12 @@ public interface ItemDAO extends GenericDAO<Item> {
 
     boolean updateItemStatus(int itemId, ItemStatus itemStatus) throws DAOLayerException;
 
-    List<Item> findUserItems(int userId, int limit) throws DAOLayerException;
+    List<Item> findUsersItemsLimit(int userId, int offset, int limit) throws DAOLayerException;
 
-    List<Item> findNextUserItems(int userId, int lastItemId, int limit) throws DAOLayerException;
+    List<Item> findItemsWithStatusLimit(ItemStatus itemStatus, int offset, int limit) throws DAOLayerException;
 
-    List<Item> findPrevUserItems(int userId, int lastItemId, int limit) throws DAOLayerException;
+    int countRows(int userId) throws DAOLayerException;
 
-    List<Item> findItems(ItemStatus itemStatus, int limit) throws DAOLayerException;
-
-    List<Item> findNextItems(ItemStatus itemStatus, int lastItemId, int limit) throws DAOLayerException;
-
-    List<Item> findPrevItems(ItemStatus itemStatus, int lastItemId, int limit) throws DAOLayerException;
+    int countRows(ItemStatus itemStatus) throws DAOLayerException;
 
 }

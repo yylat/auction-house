@@ -130,17 +130,7 @@
     </div>
 </div>
 
-<c:if test="${sessionScope.successfulRegistration == true}">
-    <div id="registrationMessage" class="w3-modal open-modal">
-        <div class="w3-modal-content w3-card-4 w3-animate-zoom modal-content">
-            <div class="w3-center w3-padding-16 pro-purple">
-            <span onclick="document.getElementById('registrationMessage').style.display='none'"
-                  class="w3-button w3-display-topright">&times;</span>
-                <p>${successfulRegistration}</p>
-            </div>
-        </div>
-    </div>
-</c:if>
+<%@ include file="/jsp/jspf/message.jsp" %>
 
 <c:if test="${(sessionScope.usernameAlreadyExist == true) || (sessionScope.emailAlreadyExist == true)}">
     <script>

@@ -13,67 +13,89 @@ import com.epam.auction.exception.DAOLayerException;
 import com.epam.auction.exception.ReceiverLayerException;
 import com.epam.auction.receiver.BidReceiver;
 import com.epam.auction.receiver.RequestConstant;
+import com.epam.auction.util.MessageProvider;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.math.BigDecimal;
+import java.util.*;
 
 public class BidReceiverImpl implements BidReceiver {
 
     private final static int bidsForPage = 20;
 
     @Override
+    public void makeBid(RequestContent requestContent) throws ReceiverLayerException {
+        User user = (User) requestContent.getSessionAttribute(RequestConstant.USER);
+        if (user != null) {
+            int itemId = Integer.valueOf(requestContent.getRequestParameter(RequestConstant.ITEM_ID)[0]);
+            BigDecimal bidValue = new BigDecimal(requestContent.getRequestParameter(RequestConstant.BID_VALUE)[0]);
+
+            BidDAO bidDAO = new BidDAOImpl();
+            DAOManager daoManager = new DAOManager(true, bidDAO);
+
+            daoManager.beginTransaction();
+            try {
+                MessageProvider messageProvider = new MessageProvider((Locale) requestContent.getSessionAttribute(RequestConstant.LOCALE));
+
+                if (bidDAO.findWinning(itemId).getBidderId() != user.getId()) {
+                    if (bidValue.compareTo(user.getBalance()) <= 0) {
+                        Bid bid = new Bid(itemId, user.getId(), bidValue);
+                        bidDAO.create(bid);
+                        requestContent.setSessionAttribute(RequestConstant.MESSAGE,
+                                messageProvider.getMessage(MessageProvider.BID_MADE_SUCCESSFULLY));
+                    } else {
+                        requestContent.setSessionAttribute(RequestConstant.MESSAGE,
+                                messageProvider.getMessage(MessageProvider.NOT_ENOUGH_MONEY));
+                    }
+                } else {
+                    requestContent.setSessionAttribute(RequestConstant.MESSAGE,
+                            messageProvider.getMessage(MessageProvider.YOUR_BID_IS_WINNING));
+                }
+                requestContent.setSessionAttribute(RequestConstant.WAS_SHOWN, false);
+
+                daoManager.commit();
+            } catch (DAOLayerException e) {
+                daoManager.rollback();
+                throw new ReceiverLayerException(e.getMessage(), e);
+            } finally {
+                daoManager.endTransaction();
+            }
+        }
+    }
+
+    @Override
     public void loadBids(RequestContent requestContent) throws ReceiverLayerException {
         User user = (User) requestContent.getSessionAttribute(RequestConstant.USER);
+        String[] pages = requestContent.getRequestParameter(RequestConstant.PAGES);
+
+        int pageToGo;
+        String[] page = requestContent.getRequestParameter(RequestConstant.PAGE);
+        if (page != null) {
+            pageToGo = Integer.valueOf(page[0]);
+        } else {
+            pageToGo = 1;
+        }
 
         if (user != null) {
             BidDAO bidDAO = new BidDAOImpl();
             ItemDAO itemDAO = new ItemDAOImpl();
 
             try (DAOManager daoManager = new DAOManager(bidDAO, itemDAO)) {
-                List<Bid> bids;
-
-                String[] lastBidIdOb = requestContent.getRequestParameter(RequestConstant.LAST_ITEM_ID);
-                String[] firstBidOb = requestContent.getRequestParameter(RequestConstant.FIRST_ITEM_ID);
-
-                if (lastBidIdOb != null) {
-                    bids = bidDAO.findNextUserBids(user.getId(), Integer.valueOf(lastBidIdOb[0]), bidsForPage + 1);
-                    requestContent.setRequestAttribute(RequestConstant.FIRST_ITEM_ID, bids.get(0).getId());
-                    requestContent.setRequestAttribute(RequestConstant.LAST_ITEM_ID,
-                            hasMore(requestContent, bids));
-                } else if (firstBidOb != null) {
-                    bids = bidDAO.findPrevUserBids(user.getId(), Integer.valueOf(firstBidOb[0]), bidsForPage + 1);
-                    requestContent.setRequestAttribute(RequestConstant.FIRST_ITEM_ID,
-                            hasMore(requestContent, bids));
-                    requestContent.setRequestAttribute(RequestConstant.HAS_NEXT, true);
-                } else {
-                    bids = bidDAO.findUserBids(user.getId(), bidsForPage + 1);
-                    requestContent.setRequestAttribute(RequestConstant.FIRST_ITEM_ID, null);
-                    requestContent.setRequestAttribute(RequestConstant.LAST_ITEM_ID,
-                            hasMore(requestContent, bids));
+                if (pages == null) {
+                    requestContent.setRequestAttribute(RequestConstant.PAGES,
+                            (bidDAO.countRows(user.getId()) / bidsForPage) + 1);
                 }
 
-                Map<Bid, Item> bidItemMap = new LinkedHashMap<>();
+                List<Bid> bids = bidDAO.findUsersBids(user.getId(), (pageToGo - 1) * bidsForPage, bidsForPage);
 
+                Map<Bid, Item> bidItemMap = new LinkedHashMap<>();
                 for (Bid bid : bids) {
-                    bidItemMap.put(bid,
-                            itemDAO.findEntityById(bid.getItemId()));
+                    bidItemMap.put(bid, itemDAO.findEntityById(bid.getItemId()));
                 }
 
                 requestContent.setRequestAttribute(RequestConstant.BID_ITEM_MAP, bidItemMap);
             } catch (DAOLayerException e) {
                 throw new ReceiverLayerException(e.getMessage(), e);
             }
-        }
-    }
-
-
-    private Integer hasMore(RequestContent requestContent, List<Bid> bids) {
-        if ((bidsForPage + 1) == bids.size()) {
-            bids = bids.subList(0, bidsForPage);
-            return bids.get(bidsForPage + 1).getId();
-        } else {
-            return null;
         }
     }
 

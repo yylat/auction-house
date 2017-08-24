@@ -7,10 +7,8 @@ import java.util.List;
 
 public interface NotificationDAO extends GenericDAO<Notification> {
 
-    List<Notification> findUserNotifications(int userId, int limit) throws DAOLayerException;
+    List<Notification> findUsersNotifications(int userId, int offset, int limit) throws DAOLayerException;
 
-    List<Notification> findNextUserNotifications(int userId, int lastNotificationsId, int limit) throws DAOLayerException;
-
-    List<Notification> findPrevUserNotifications(int userId, int firstNotificationsId, int limit) throws DAOLayerException;
+    int countRows(int userId) throws DAOLayerException;
 
 }

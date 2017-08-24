@@ -10,6 +10,10 @@ public enum LocaleType {
 
     private Locale locale;
 
+    public Locale getLocale() {
+        return locale;
+    }
+
     LocaleType(String language, String country) {
         this.locale = new Locale(language, country);
     }

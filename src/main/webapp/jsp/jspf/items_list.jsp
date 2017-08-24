@@ -34,8 +34,13 @@
 
 </c:forEach>
 
-<div class="w3-row-padding w3-margin-top">
+<div class="w3-center">
+    <div id="pageBar" class="w3-bar w3-small w3-margin-top" data-command="load-bids"
+         data-page="${requestScope.page}" data-pages="${requestScope.pages}">
+        <a id="prevLink" class="w3-button">&laquo;</a>
 
-    <button ${requestScope.firstItemId == null ? 'disabled' : ''} class="nav-button w3-col s6 w3-button"> <<</button>
-    <button ${requestScope.lastItemId == null ? 'disabled' : ''} class="nav-button w3-col s6 w3-button"> >></button>
+        <a id="nextLink" class="w3-button">&raquo;</a>
+    </div>
 </div>
+
+<script src="${pageContext.request.contextPath}/js/pagination.js"></script>

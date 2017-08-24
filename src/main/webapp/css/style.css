@@ -500,6 +500,7 @@ b, strong {
 }
 
 .notification {
+    padding-bottom: 5px;
     border-bottom: 1px solid #b2c2bf;
 }
 

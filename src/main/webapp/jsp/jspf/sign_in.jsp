@@ -58,7 +58,7 @@
     </div>
 </div>
 
-<c:if test="${requestScope.openSignIn == true}">
+<c:if test="${requestScope.wrongUsernamePassword == true}">
     <script>
         document.getElementById("signInModal").style.display = "block";
     </script>

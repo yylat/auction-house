@@ -145,7 +145,8 @@
                 <div class="w3-container w3-margin">
                     <form action="${pageContext.request.contextPath}/controller" method="post">
                         <input type="hidden" name="command" value="make-bid"/>
-                        <input name="bid-value" class="w3-input back-back-color w3-col m3 s4" type="number" step="0.001"
+                        <input type="hidden" name="itemId" value="${requestScope.item.id}"/>
+                        <input name="bidValue" class="w3-input back-back-color w3-col m3 s4" type="number" step="0.001"
                                min="${requestScope.item.actualPrice}"
                                max="99999999999999999999.999" value="${requestScope.item.actualPrice + 1}" required
                                title="${priceRule}"/>
@@ -210,6 +211,8 @@
 
 
 </main>
+
+<%@ include file="/jsp/jspf/message.jsp" %>
 
 <%@ include file="/jsp/jspf/footer.jsp" %>
 

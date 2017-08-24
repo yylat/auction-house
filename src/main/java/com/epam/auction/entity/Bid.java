@@ -12,6 +12,12 @@ public class Bid extends Entity {
     public Bid() {
     }
 
+    public Bid(int itemId, int bidderId, BigDecimal bidValue) {
+        this.itemId = itemId;
+        this.bidderId = bidderId;
+        this.bidValue = bidValue;
+    }
+
     public Bid(int id, int itemId, int bidderId, BigDecimal bidValue) {
         super(id);
         this.itemId = itemId;

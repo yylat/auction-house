@@ -1,9 +1,6 @@
 package com.epam.auction.command;
 
-import com.epam.auction.util.Converter;
-
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -68,6 +65,10 @@ public class RequestContent {
         sessionAttributes.put(key, value);
     }
 
+    public void removeSessionAttribute(String key){
+        sessionAttributes.remove(key);
+    }
+
     public void destroySessionAttributes() {
         sessionAttributes.clear();
     }
@@ -76,16 +77,8 @@ public class RequestContent {
         return ajaxResponse;
     }
 
-    public void setAjaxResponse(String json){
+    public void setAjaxResponse(String json) {
         this.ajaxResponse = json;
-    }
-
-    public void setAjaxResponse(Object object) {
-        this.ajaxResponse = Converter.objectToJson(object);
-    }
-
-    public void setAjaxFile(InputStream file) throws IOException {
-        this.ajaxResponse = Converter.inputStreamToString(file);
     }
 
     public List<InputStream> getFiles() {

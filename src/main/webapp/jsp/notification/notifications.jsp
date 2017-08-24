@@ -20,7 +20,7 @@
 <fmt:message bundle="${msg}" key="notification.no_bids_for_item" var="no_bids_for_item"/>
 <fmt:message bundle="${msg}" key="notification.seller_canceled_auction" var="seller_canceled_auction"/>
 <fmt:message bundle="${msg}" key="notification.bid_win" var="bid_win"/>
-<fmt:message bundle="${msg}" key="notification.item_confirmed" var="bid_beaten"/>
+<fmt:message bundle="${msg}" key="notification.bid_beaten" var="bid_beaten"/>
 
 
 <c:if test="${requestScope.notificationItemMap == null}">
@@ -89,16 +89,13 @@
                                 </form>
                             </div>
 
-                            <div class="w3-row-padding w3-margin-top">
+                            <div class="w3-center">
+                                <div id="pageBar" class="w3-bar w3-small w3-margin-top" data-command="load-bids"
+                                     data-page="${requestScope.page}" data-pages="${requestScope.pages}">
+                                    <a id="prevLink" class="w3-button">&laquo;</a>
 
-                                <button ${requestScope.firstItemId == null ? 'disabled' : ''}
-                                        class="nav-button w3-col s6 w3-button">
-                                    <<
-                                </button>
-                                <button ${requestScope.lastItemId == null ? 'disabled' : ''}
-                                        class="nav-button w3-col s6 w3-button">
-                                    >>
-                                </button>
+                                    <a id="nextLink" class="w3-button">&raquo;</a>
+                                </div>
                             </div>
 
                         </c:forEach>
@@ -113,6 +110,8 @@
 </main>
 
 <%@ include file="/jsp/jspf/footer.jsp" %>
+
+<script src="${pageContext.request.contextPath}/js/pagination.js"></script>
 
 <c:if test="${sessionScope.user == null}">
     <%@ include file="/jsp/jspf/sign_in.jsp" %>

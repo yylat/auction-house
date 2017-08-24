@@ -25,54 +25,37 @@ public class NotificationReceiverImpl implements NotificationReceiver {
     @Override
     public void loadNotifications(RequestContent requestContent) throws ReceiverLayerException {
         User user = (User) requestContent.getSessionAttribute(RequestConstant.USER);
+        String[] pages = requestContent.getRequestParameter(RequestConstant.PAGES);
+
+        int pageToGo;
+        String[] page = requestContent.getRequestParameter(RequestConstant.PAGE);
+        if (page != null) {
+            pageToGo = Integer.valueOf(page[0]);
+        } else {
+            pageToGo = 1;
+        }
 
         if (user != null) {
             NotificationDAO notificationDAO = new NotificationDAOImpl();
             ItemDAO itemDAO = new ItemDAOImpl();
 
             try (DAOManager daoManager = new DAOManager(notificationDAO, itemDAO)) {
-                List<Notification> notifications;
-
-                String[] lastNotificationIdOb = requestContent.getRequestParameter(RequestConstant.LAST_ITEM_ID);
-                String[] firstNotificationOb = requestContent.getRequestParameter(RequestConstant.FIRST_ITEM_ID);
-
-                if (lastNotificationIdOb != null) {
-                    notifications = notificationDAO.findNextUserNotifications(user.getId(), Integer.valueOf(lastNotificationIdOb[0]), notificationsForPage + 1);
-                    requestContent.setRequestAttribute(RequestConstant.FIRST_ITEM_ID, notifications.get(0).getId());
-                    requestContent.setRequestAttribute(RequestConstant.LAST_ITEM_ID,
-                            hasMore(requestContent, notifications));
-                } else if (firstNotificationOb != null) {
-                    notifications = notificationDAO.findPrevUserNotifications(user.getId(), Integer.valueOf(firstNotificationOb[0]), notificationsForPage + 1);
-                    requestContent.setRequestAttribute(RequestConstant.FIRST_ITEM_ID,
-                            hasMore(requestContent, notifications));
-                    requestContent.setRequestAttribute(RequestConstant.HAS_NEXT, true);
-                } else {
-                    notifications = notificationDAO.findUserNotifications(user.getId(), notificationsForPage + 1);
-                    requestContent.setRequestAttribute(RequestConstant.FIRST_ITEM_ID, null);
-                    requestContent.setRequestAttribute(RequestConstant.LAST_ITEM_ID,
-                            hasMore(requestContent, notifications));
+                if (pages == null) {
+                    requestContent.setRequestAttribute(RequestConstant.PAGES,
+                            (notificationDAO.countRows(user.getId()) / notificationsForPage) + 1);
                 }
 
-                Map<Notification, Item> notificationItemMap = new LinkedHashMap<>();
+                List<Notification> notifications = notificationDAO.findUsersNotifications(user.getId(), (pageToGo - 1) * notificationsForPage, notificationsForPage);
 
+                Map<Notification, Item> notificationItemMap = new LinkedHashMap<>();
                 for (Notification notification : notifications) {
-                    notificationItemMap.put(notification,
-                            itemDAO.findEntityById(notification.getItemId()));
+                    notificationItemMap.put(notification, itemDAO.findEntityById(notification.getItemId()));
                 }
 
                 requestContent.setRequestAttribute(RequestConstant.NOTIFICATION_ITEM_MAP, notificationItemMap);
             } catch (DAOLayerException e) {
                 throw new ReceiverLayerException(e.getMessage(), e);
             }
-        }
-    }
-
-    private Integer hasMore(RequestContent requestContent, List<Notification> notifications) {
-        if ((notificationsForPage + 1) == notifications.size()) {
-            notifications = notifications.subList(0, notificationsForPage);
-            return notifications.get(notificationsForPage + 1).getId();
-        } else {
-            return null;
         }
     }
 

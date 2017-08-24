@@ -25,7 +25,7 @@ public class PhotoReceiverImpl implements PhotoReceiver {
 
         try (DAOManager daoManager = new DAOManager(photoDAO)) {
             photo = photoDAO.findItemPhoto(itemId);
-            requestContent.setAjaxFile(photo.getPhotoFile());
+            requestContent.setAjaxResponse(Converter.inputStreamToString(photo.getPhotoFile()));
         } catch (DAOLayerException | IOException e) {
             throw new ReceiverLayerException(e.getMessage(), e);
         }

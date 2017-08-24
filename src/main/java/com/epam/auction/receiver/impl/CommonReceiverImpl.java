@@ -14,7 +14,7 @@ public class CommonReceiverImpl implements CommonReceiver {
 
         Locale locale = LocaleType.getLocale(requestContent.getRequestParameter(RequestConstant.LOCALE_LANG)[0]);
 
-        requestContent.setSessionAttribute("locale", locale);
+        requestContent.setSessionAttribute(RequestConstant.LOCALE, locale);
 
     }
 

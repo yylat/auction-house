@@ -7,12 +7,10 @@ import java.util.List;
 
 public interface BidDAO extends GenericDAO<Bid> {
 
-    List<Bid> findAll(int userId) throws DAOLayerException;
+    List<Bid> findUsersBids(int userId, int offset, int limit) throws DAOLayerException;
 
-    List<Bid> findUserBids(int userId, int limit) throws DAOLayerException;
+    int countRows(int userId) throws DAOLayerException;
 
-    List<Bid> findNextUserBids(int userId, int lastBidsId, int limit) throws DAOLayerException;
-
-    List<Bid> findPrevUserBids(int userId, int firstBidsId, int limit) throws DAOLayerException;
+    Bid findWinning(int itemId) throws DAOLayerException;
 
 }
