@@ -39,42 +39,10 @@ public abstract class GenericDAOImpl<T extends Entity> implements GenericDAO<T> 
 
     public List<T> findAll() throws DAOLayerException {
         return findList(queryFindAll);
-
-//        List<T> entities;
-//
-//        try (PreparedStatement statement = connection.prepareStatement(queryFindAll)) {
-//            ResultSet resultSet = statement.executeQuery();
-//            entities = new ArrayList<>();
-//            while (resultSet.next()) {
-//                entities.add(extractEntity(resultSet));
-//            }
-//
-//        } catch (SQLException e) {
-//            throw new DAOLayerException(e.getMessage(), e);
-//        }
-//
-//        return entities;
     }
 
     public T findEntityById(int id) throws DAOLayerException {
-
         return findEntity(queryFindById, statement -> statement.setInt(1, id));
-
-//        T entity = null;
-//
-//        try (PreparedStatement statement = connection.prepareStatement(queryFindById)) {
-//            statement.setInt(1, id);
-//
-//            ResultSet resultSet = statement.executeQuery();
-//            if (resultSet.next()) {
-//                entity = extractEntity(resultSet);
-//            }
-//
-//        } catch (SQLException e) {
-//            throw new DAOLayerException(e.getMessage(), e);
-//        }
-//
-//        return entity;
     }
 
     public boolean delete(int id) throws DAOLayerException, MethodNotSupportedException {
@@ -94,23 +62,6 @@ public abstract class GenericDAOImpl<T extends Entity> implements GenericDAO<T> 
 
     public boolean create(T entity) throws DAOLayerException {
         return executeCreate(queryCreate, entity, this::defineQueryAttributes);
-
-//        boolean result = false;
-//
-//        try (PreparedStatement statement = connection.prepareStatement(queryCreate, Statement.RETURN_GENERATED_KEYS)) {
-//            defineQueryAttributes(entity, statement);
-//            if (statement.executeUpdate() != 0) {
-//                ResultSet keys = statement.getGeneratedKeys();
-//                if (keys.next()) {
-//                    entity.setId(keys.getInt(1));
-//                    result = true;
-//                }
-//            }
-//        } catch (SQLException e) {
-//            throw new DAOLayerException(e.getMessage(), e);
-//        }
-//
-//        return result;
     }
 
     public boolean update(T entity) throws DAOLayerException, MethodNotSupportedException {
@@ -118,20 +69,6 @@ public abstract class GenericDAOImpl<T extends Entity> implements GenericDAO<T> 
             defineQueryAttributes(en, st);
             st.setInt(en.getFieldsNumber(), en.getId());
         });
-
-//        boolean result = false;
-//
-//        try (PreparedStatement statement = connection.prepareStatement(queryUpdate)) {
-//            defineQueryAttributes(entity, statement);
-//            statement.setInt(entity.getFieldsNumber(), entity.getId());
-//            if (statement.executeUpdate() != 0) {
-//                result = true;
-//            }
-//        } catch (SQLException e) {
-//            throw new DAOLayerException(e.getMessage(), e);
-//        }
-//
-//        return result;
     }
 
     abstract T extractEntity(ResultSet resultSet) throws SQLException;

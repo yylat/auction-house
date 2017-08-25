@@ -7,15 +7,10 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.servlet.DispatcherType;
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebFilter(dispatcherTypes = {DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.INCLUDE},
@@ -32,12 +27,16 @@ public class AdminForwardFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
-        User user = (User) httpRequest.getSession().getAttribute(RequestConstant.USER);
+//        String uri = httpRequest.getRequestURI();
+//        LOGGER.log(Level.INFO, "Requested resourse: " + uri);
+        HttpSession session = httpRequest.getSession(false);
+        User user = (User) session.getAttribute(RequestConstant.USER);
         if (user == null || !user.getRole().equals(User.UserRole.ADMIN)) {
             LOGGER.log(Level.INFO, "Attempt to access admin page from user with non admin role. Forwarding to index page.");
             httpRequest.getRequestDispatcher(PageAddress.ACTIVE_ITEMS).forward(servletRequest, servletResponse);
+        } else {
+            filterChain.doFilter(servletRequest, servletResponse);
         }
-        filterChain.doFilter(servletRequest, servletResponse);
     }
 
     @Override

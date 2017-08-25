@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib prefix="ctg" uri="customtags" %>
+<%@ taglib prefix="ctg" uri="/customtags" %>
 
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 <fmt:setBundle basename="/localization/message" var="msg"/>
@@ -83,22 +83,23 @@
                                     </div>
                                     <div class="w3-container w3-cell">
                                         <button class="link-button">
-                                                (${entry.value.name})
+                                            (${entry.value.name})
                                         </button>
                                     </div>
                                 </form>
                             </div>
 
-                            <div class="w3-center">
-                                <div id="pageBar" class="w3-bar w3-small w3-margin-top" data-command="load-bids"
-                                     data-page="${requestScope.page}" data-pages="${requestScope.pages}">
-                                    <a id="prevLink" class="w3-button">&laquo;</a>
-
-                                    <a id="nextLink" class="w3-button">&raquo;</a>
-                                </div>
-                            </div>
-
                         </c:forEach>
+
+                        <div class="w3-center">
+                            <div id="pageBar" class="w3-bar w3-small w3-margin-top" data-command="load-bids"
+                                 data-page="${requestScope.page}" data-pages="${requestScope.pages}">
+                                <a id="prevLink" class="w3-button">&laquo;</a>
+
+                                <a id="nextLink" class="w3-button">&raquo;</a>
+                            </div>
+                        </div>
+
                     </c:otherwise>
                 </c:choose>
             </div>

@@ -80,10 +80,13 @@ public class BidReceiverImpl implements BidReceiver {
             ItemDAO itemDAO = new ItemDAOImpl();
 
             try (DAOManager daoManager = new DAOManager(bidDAO, itemDAO)) {
-                if (pages == null) {
+                if (pages != null) {
+                    requestContent.setRequestAttribute(RequestConstant.PAGES, pages[0]);
+                } else {
                     requestContent.setRequestAttribute(RequestConstant.PAGES,
-                            (bidDAO.countRows(user.getId()) / bidsForPage) + 1);
+                            (itemDAO.countRows(user.getId()) / bidsForPage) + 1);
                 }
+                requestContent.setRequestAttribute(RequestConstant.PAGE, pageToGo);
 
                 List<Bid> bids = bidDAO.findUsersBids(user.getId(), (pageToGo - 1) * bidsForPage, bidsForPage);
 

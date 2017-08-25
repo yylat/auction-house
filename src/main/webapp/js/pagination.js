@@ -7,21 +7,23 @@
 
     var basicUrl = "/controller?command=" + pageBar.getAttribute("data-command");
 
-    var pages = pageBar.getAttribute("data-pages");
+    var pages = parseInt(pageBar.getAttribute("data-pages"));
     basicUrl += "&pages=" + pages;
 
-    var page = pageBar.getAttribute("data-page");
+    var page = parseInt(pageBar.getAttribute("data-page"));
 
     if (!page) {
         page = 1;
     }
 
     if (page != 1) {
-        prevLink.href = basicUrl + "&page=" + page - 1;
+        var prevPage = page - 1;
+        prevLink.href = basicUrl + "&page=" + prevPage;
     }
 
     if (page != pages) {
-        nextLink.href = basicUrl + "&page=" + page + 1;
+        var nextPage = page + 1;
+        nextLink.href = basicUrl + "&page=" + nextPage;
     }
 
     var fragment = document.createDocumentFragment();

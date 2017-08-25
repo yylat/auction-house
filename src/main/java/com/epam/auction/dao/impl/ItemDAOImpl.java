@@ -2,6 +2,8 @@ package com.epam.auction.dao.impl;
 
 import com.epam.auction.dao.TableConstant;
 import com.epam.auction.dao.ItemDAO;
+import com.epam.auction.dao.filter.FilterCriteria;
+import com.epam.auction.dao.filter.OrderCriteria;
 import com.epam.auction.entity.Item;
 import com.epam.auction.entity.ItemStatus;
 import com.epam.auction.exception.DAOLayerException;
@@ -80,26 +82,10 @@ public class ItemDAOImpl extends GenericDAOImpl<Item> implements ItemDAO {
 
     @Override
     public boolean updateItemStatus(int itemId, ItemStatus itemStatus) throws DAOLayerException {
-
         return executeUpdate(TableConstant.ITEM_QUERY_UPDATE_STATUS, statement -> {
             statement.setInt(1, itemStatus.ordinal());
             statement.setInt(2, itemId);
         });
-
-//        boolean result = false;
-//
-//        try (PreparedStatement statement = connection.prepareStatement(TableConstant.ITEM_QUERY_UPDATE_STATUS)) {
-//            statement.setInt(1, itemStatus.ordinal());
-//            statement.setInt(2, itemId);
-//
-//            if (statement.executeUpdate() != 0) {
-//                result = true;
-//            }
-//        } catch (SQLException e) {
-//            throw new DAOLayerException(e.getMessage(), e);
-//        }
-//
-//        return result;
     }
 
     @Override
@@ -157,5 +143,26 @@ public class ItemDAOImpl extends GenericDAOImpl<Item> implements ItemDAO {
 
         return rows;
     }
+
+    @Override
+    public List<Item> findItemsWithFilter(ItemStatus itemStatus, FilterCriteria filterCriteria, OrderCriteria orderCriteria,
+                                          int offset, int limit) throws DAOLayerException {
+        String query = TableConstant.ITEM_QUERY_FIND_WITH_STATUS +
+                filterCriteria.buildWhereClause() +
+                orderCriteria.getQueryPart() + " LIMIT ?, ?";
+        return findSpecificList(query, statement -> defineQuery(statement, itemStatus, filterCriteria, offset, limit));
+    }
+
+    private void defineQuery(PreparedStatement statement, ItemStatus itemStatus, FilterCriteria filterCriteria,
+                             int offset, int limit) throws SQLException {
+        int i = 0;
+        statement.setInt(++i, itemStatus.ordinal());
+        for (Object value : filterCriteria.getValues()) {
+            statement.setObject(++i, value);
+        }
+        statement.setInt(++i, offset);
+        statement.setInt(++i, limit);
+    }
+
 
 }

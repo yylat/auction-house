@@ -70,24 +70,34 @@
                 }
                 else {
 
-                    var i;
+                    var imgContainer;
 
-                    var row = document.createElement("div");
-                    row.className = "w3-row-padding w3-padding w3-border w3-margin-top photo-row";
-                    var col = 12 / photos.length;
-                    for (i = 0; i < length; i++) {
-                        var imgContainer = createImgContainer(photos[i]);
+                    if (length == 1) {
+                        imgContainer = createImgContainer(photos[0]);
+                        imgContainer.style.display = "block";
                         photosContainer.insertBefore(imgContainer, null);
-
-                        var column = document.createElement("div");
-                        column.className = "w3-col s" + col;
-
-                        var smallImgContainer = createImgContainer(photos[i], i + 1);
-                        column.appendChild(smallImgContainer);
-                        row.appendChild(column);
                     }
-                    photosContainer.insertBefore(row, null);
-                    showDivs(slideIndex);
+
+                    else {
+                        var i;
+
+                        var row = document.createElement("div");
+                        row.className = "w3-row-padding w3-padding w3-border w3-margin-top photo-row";
+                        var col = 12 / photos.length;
+                        for (i = 0; i < length; i++) {
+                            imgContainer = createImgContainer(photos[i]);
+                            photosContainer.insertBefore(imgContainer, null);
+
+                            var column = document.createElement("div");
+                            column.className = "w3-col s" + col;
+
+                            var smallImgContainer = createImgContainer(photos[i], i + 1);
+                            column.appendChild(smallImgContainer);
+                            row.appendChild(column);
+                        }
+                        photosContainer.insertBefore(row, null);
+                        showDivs(slideIndex);
+                    }
                 }
             }
         };

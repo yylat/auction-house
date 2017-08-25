@@ -60,4 +60,7 @@ public final class RequestConstant {
 
     public static final String MONEY_AMOUNT = "moneyAmount";
 
+    public final static String ORDER_BY = "order-by";
+    public final static String ORDER_TYPE = "order-type";
+
 }

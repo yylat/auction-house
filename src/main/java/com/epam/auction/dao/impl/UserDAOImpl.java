@@ -44,8 +44,8 @@ public class UserDAOImpl extends GenericDAOImpl<User> implements UserDAO {
         statement.setString(5, entity.getFirstName());
         statement.setString(6, entity.getPhoneNumber());
         statement.setString(7, entity.getEmail());
-        statement.setBoolean(8, entity.isDeleted());
-        statement.setBigDecimal(9, entity.getBalance());
+        statement.setBigDecimal(8, entity.getBalance());
+        statement.setBoolean(9, entity.isDeleted());
         statement.setInt(10, entity.getRole().ordinal());
     }
 

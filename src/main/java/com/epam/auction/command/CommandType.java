@@ -15,6 +15,7 @@ import com.epam.auction.command.item.LoadActiveItemsCommand;
 import com.epam.auction.command.item.LoadItemCommand;
 import com.epam.auction.command.item.LoadUserItemsCommand;
 import com.epam.auction.command.user.LogOutCommand;
+import com.epam.auction.command.user.ReplenishBalanceCommand;
 import com.epam.auction.command.user.SignInCommand;
 import com.epam.auction.command.user.SignUpCommand;
 import com.epam.auction.exception.ReceiverLayerException;
@@ -131,6 +132,12 @@ public enum CommandType {
         @Override
         public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
             ((BidReceiver) getCommand().getReceiver()).makeBid(requestContent);
+        }
+    },
+    REPLENISH_BALANCE(new ReplenishBalanceCommand(new UserReceiverImpl())) {
+        @Override
+        public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
+            ((UserReceiver) getCommand().getReceiver()).replenishBalance(requestContent);
         }
     };
 

@@ -88,7 +88,7 @@ public class UserReceiverImpl implements UserReceiver {
 
     @Override
     public void logOut(RequestContent requestContent) {
-        requestContent.destroySessionAttributes();
+        requestContent.destroySession();
     }
 
     @Override

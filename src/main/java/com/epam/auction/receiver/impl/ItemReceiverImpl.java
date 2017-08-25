@@ -4,6 +4,9 @@ import com.epam.auction.command.RequestContent;
 import com.epam.auction.dao.ItemCategoryDAO;
 import com.epam.auction.dao.ItemDAO;
 import com.epam.auction.dao.PhotoDAO;
+import com.epam.auction.dao.filter.FilterCriteria;
+import com.epam.auction.dao.filter.FilterQueryParameter;
+import com.epam.auction.dao.filter.OrderCriteria;
 import com.epam.auction.dao.impl.ItemCategoryDAOImpl;
 import com.epam.auction.dao.impl.ItemDAOImpl;
 import com.epam.auction.dao.impl.PhotoDAOImpl;
@@ -123,10 +126,13 @@ public class ItemReceiverImpl implements ItemReceiver {
             ItemDAO itemDAO = new ItemDAOImpl();
 
             try (DAOManager daoManager = new DAOManager(itemDAO)) {
-                if (pages == null) {
+                if (pages != null && pages[0] != null) {
+                    requestContent.setRequestAttribute(RequestConstant.PAGES, pages[0]);
+                } else {
                     requestContent.setRequestAttribute(RequestConstant.PAGES,
                             (itemDAO.countRows(user.getId()) / itemsForPage) + 1);
                 }
+                requestContent.setRequestAttribute(RequestConstant.PAGE, pageToGo);
 
                 List<Item> items = itemDAO.findUsersItemsLimit(user.getId(), (pageToGo - 1) * itemsForPage, itemsForPage);
 
@@ -137,22 +143,37 @@ public class ItemReceiverImpl implements ItemReceiver {
         }
     }
 
-    private boolean savePhotos(PhotoDAO photoDAO, List<InputStream> files, int itemId) throws DAOLayerException {
-        boolean result = false;
-        List<Photo> photos = files.stream()
-                .map(file -> new Photo(file, itemId))
-                .collect(Collectors.toList());
+    private void loadItemsWithStatus(RequestContent requestContent, ItemStatus itemStatus) throws ReceiverLayerException {
+        String[] pages = requestContent.getRequestParameter(RequestConstant.PAGES);
 
-        for (Photo photo : photos) {
-            result = photoDAO.create(photo);
-            if (!result) {
-                return false;
-            }
+        int pageToGo;
+        String[] page = requestContent.getRequestParameter(RequestConstant.PAGE);
+        if (page != null) {
+            pageToGo = Integer.valueOf(page[0]);
+        } else {
+            pageToGo = 1;
         }
-        return result;
+
+        ItemDAO itemDAO = new ItemDAOImpl();
+
+        try (DAOManager daoManager = new DAOManager(itemDAO)) {
+            if (pages != null && pages[0] != null) {
+                requestContent.setRequestAttribute(RequestConstant.PAGES, pages[0]);
+            } else {
+                requestContent.setRequestAttribute(RequestConstant.PAGES,
+                        (itemDAO.countRows(itemStatus) / itemsForPage) + 1);
+            }
+            requestContent.setRequestAttribute(RequestConstant.PAGE, pageToGo);
+
+            List<Item> items = itemDAO.findItemsWithStatusLimit(itemStatus, (pageToGo - 1) * itemsForPage, itemsForPage);
+
+            requestContent.setRequestAttribute(RequestConstant.ITEMS, items);
+        } catch (DAOLayerException e) {
+            throw new ReceiverLayerException(e.getMessage(), e);
+        }
     }
 
-    private void loadItemsWithStatus(RequestContent requestContent, ItemStatus itemStatus) throws ReceiverLayerException {
+    private void loadItems(RequestContent requestContent, ItemStatus itemStatus) throws ReceiverLayerException {
         String[] pages = requestContent.getRequestParameter(RequestConstant.PAGES);
 
         int pageToGo;
@@ -171,12 +192,62 @@ public class ItemReceiverImpl implements ItemReceiver {
                         (itemDAO.countRows(itemStatus) / itemsForPage) + 1);
             }
 
-            List<Item> items = itemDAO.findItemsWithStatusLimit(itemStatus, (pageToGo - 1) * itemsForPage, itemsForPage);
+            FilterCriteria filterCriteria = extractFilterParameters(requestContent);
+            OrderCriteria orderCriteria = extractOrderParameters(requestContent);
+
+            List<Item> items = itemDAO.findItemsWithFilter(itemStatus, filterCriteria, orderCriteria,
+                    (pageToGo - 1) * itemsForPage, itemsForPage);
 
             requestContent.setRequestAttribute(RequestConstant.ITEMS, items);
         } catch (DAOLayerException e) {
             throw new ReceiverLayerException(e.getMessage(), e);
         }
+
+    }
+
+    private FilterCriteria extractFilterParameters(RequestContent requestContent) {
+        FilterCriteria filterCriteria = new FilterCriteria();
+
+        for (FilterQueryParameter filterQueryParameter : FilterQueryParameter.values()) {
+            String[] requestParameter = requestContent.getRequestParameter(filterQueryParameter.name());
+            if (requestParameter != null && requestParameter[0] != null) {
+                filterCriteria.put(filterQueryParameter, requestParameter[0]);
+            }
+        }
+
+        return filterCriteria;
+    }
+
+    private OrderCriteria extractOrderParameters(RequestContent requestContent) {
+        OrderCriteria orderCriteria;
+
+        String[] orderBy = requestContent.getRequestParameter(RequestConstant.ORDER_BY);
+        String[] orderType = requestContent.getRequestParameter(RequestConstant.ORDER_TYPE);
+
+        if (orderBy != null && orderType != null) {
+            orderCriteria = new OrderCriteria(orderBy[0], orderType[0]);
+        } else if (orderBy != null) {
+            orderCriteria = new OrderCriteria(orderBy[0]);
+        } else {
+            orderCriteria = new OrderCriteria();
+        }
+
+        return orderCriteria;
+    }
+
+    private boolean savePhotos(PhotoDAO photoDAO, List<InputStream> files, int itemId) throws DAOLayerException {
+        boolean result = false;
+        List<Photo> photos = files.stream()
+                .map(file -> new Photo(file, itemId))
+                .collect(Collectors.toList());
+
+        for (Photo photo : photos) {
+            result = photoDAO.create(photo);
+            if (!result) {
+                return false;
+            }
+        }
+        return result;
     }
 
 }

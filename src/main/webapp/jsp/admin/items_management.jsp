@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib prefix="ctg" uri="customtags" %>
+<%@ taglib prefix="ctg" uri="/customtags" %>
 
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 <fmt:setBundle basename="/localization/message" var="msg"/>
@@ -53,14 +53,25 @@
 
             </div>
 
-            <div class="w3-row-padding" id="itemsList"">
+            <div class="w3-row-padding" id="itemsList">
 
                 <c:choose>
                     <c:when test="${empty requestScope.items}">
                         <p>${noItemsForCheck}</p>
                     </c:when>
                     <c:otherwise>
+
                         <%@ include file="/jsp/jspf/items_list.jsp" %>
+
+                        <div class="w3-center">
+                            <div id="pageBar" class="w3-bar w3-small w3-margin-top" data-command="load-items-for-check"
+                                 data-page="${requestScope.page}" data-pages="${requestScope.pages}">
+                                <a id="prevLink" class="w3-button">&laquo;</a>
+
+                                <a id="nextLink" class="w3-button">&raquo;</a>
+                            </div>
+                        </div>
+
                     </c:otherwise>
                 </c:choose>
 
@@ -75,7 +86,9 @@
 
 <%@ include file="/jsp/jspf/footer.jsp" %>
 
-<script src="${pageContext.request.contextPath}/js/load_img.js"></script>
+<script src="${pageContext.request.contextPath}/js/pagination.js"></script>
+
+<script src="${pageContext.request.contextPath}/js/load-img.js"></script>
 
 </body>
 

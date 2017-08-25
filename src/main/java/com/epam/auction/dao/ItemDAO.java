@@ -1,5 +1,7 @@
 package com.epam.auction.dao;
 
+import com.epam.auction.dao.filter.FilterCriteria;
+import com.epam.auction.dao.filter.OrderCriteria;
 import com.epam.auction.entity.Item;
 import com.epam.auction.entity.ItemStatus;
 import com.epam.auction.exception.DAOLayerException;
@@ -19,5 +21,8 @@ public interface ItemDAO extends GenericDAO<Item> {
     int countRows(int userId) throws DAOLayerException;
 
     int countRows(ItemStatus itemStatus) throws DAOLayerException;
+
+    List<Item> findItemsWithFilter(ItemStatus itemStatus, FilterCriteria filterCriteria, OrderCriteria orderCriteria,
+                                   int offset, int limit) throws DAOLayerException;
 
 }

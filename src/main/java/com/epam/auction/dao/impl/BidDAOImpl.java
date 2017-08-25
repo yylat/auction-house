@@ -29,10 +29,8 @@ public class BidDAOImpl extends GenericDAOImpl<Bid> implements BidDAO {
         boolean result = false;
 
         try (CallableStatement statement = connection.prepareCall(TableConstant.BID_QUERY_CREATE)) {
-            statement.registerOutParameter(1, Types.INTEGER);
             defineQueryAttributes(entity, statement);
             if (statement.execute()) {
-                entity.setId(statement.getInt(1));
                 result = true;
             }
         } catch (SQLException e) {
@@ -59,9 +57,9 @@ public class BidDAOImpl extends GenericDAOImpl<Bid> implements BidDAO {
 
     @Override
     void defineQueryAttributes(Bid entity, PreparedStatement statement) throws SQLException {
-        statement.setInt(2, entity.getItemId());
-        statement.setInt(3, entity.getBidderId());
-        statement.setBigDecimal(4, entity.getBidValue());
+        statement.setInt(1, entity.getItemId());
+        statement.setInt(2, entity.getBidderId());
+        statement.setBigDecimal(3, entity.getBidValue());
     }
 
     @Override

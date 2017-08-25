@@ -52,7 +52,7 @@ public final class TableConstant {
     public final static String BID_QUERY_FIND_BY_ID =
             "SELECT `bid_id`, `item_id`, `bidder_id`, `bid_value`, `is_winning` FROM `bid` WHERE `bid_id` = ?";
     public final static String BID_QUERY_CREATE =
-            "{? = CALL insert_bid (?, ?, ?)}";
+            "{CALL insert_bid (?, ?, ?)}";
 
     public final static String BID_QUERY_FIND_FOR_USER_LIMIT =
             BID_QUERY_FIND_ALL + " WHERE `bidder_id` = ? ORDER BY `bid_id` DESC LIMIT ?, ?";
@@ -110,8 +110,11 @@ public final class TableConstant {
     public final static String ITEM_QUERY_UPDATE_STATUS =
             "UPDATE `item` SET `item_status_id` = ? WHERE `item_id` = ?";
 
+    public final static String ITEM_QUERY_FIND_WITH_STATUS =
+            ITEM_QUERY_FIND_ALL + " WHERE `item_status_id` = ?";
+
     public final static String ITEM_QUERY_FIND_WITH_STATUS_LIMIT =
-            ITEM_QUERY_FIND_ALL + " WHERE `item_status_id` = ? ORDER BY `item_id` DESC LIMIT ?, ?";
+            ITEM_QUERY_FIND_WITH_STATUS + " ORDER BY `item_id` DESC LIMIT ?, ?";
     public final static String ITEM_QUERY_FIND_NUMBER_WITH_STATUS =
             "SELECT COUNT(*) FROM `item` WHERE `item_status_id` = ?";
 

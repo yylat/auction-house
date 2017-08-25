@@ -11,7 +11,9 @@ public class RequestContent {
 
     private Map<String, Object> requestAttributes = new HashMap<>();
     private Map<String, String[]> requestParameters = new HashMap<>();
+
     private Map<String, Object> sessionAttributes = new HashMap<>();
+    private boolean invalidateSession = false;
 
     private String ajaxResponse;
 
@@ -38,7 +40,12 @@ public class RequestContent {
 
     public void insertAttributes(HttpServletRequest request) {
         requestAttributes.forEach(request::setAttribute);
-        sessionAttributes.forEach(request.getSession()::setAttribute);
+
+        if (invalidateSession) {
+            request.getSession().invalidate();
+        } else {
+            sessionAttributes.forEach(request.getSession()::setAttribute);
+        }
     }
 
     public Object getRequestAttribute(String key) {
@@ -65,12 +72,12 @@ public class RequestContent {
         sessionAttributes.put(key, value);
     }
 
-    public void removeSessionAttribute(String key){
+    public void removeSessionAttribute(String key) {
         sessionAttributes.remove(key);
     }
 
-    public void destroySessionAttributes() {
-        sessionAttributes.clear();
+    public void destroySession() {
+        invalidateSession = true;
     }
 
     public String getAjaxResponse() {

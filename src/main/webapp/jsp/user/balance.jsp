@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib prefix="ctg" uri="customtags" %>
+<%@ taglib prefix="ctg" uri="/customtags" %>
 
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 <fmt:setBundle basename="/localization/message" var="msg"/>
@@ -41,14 +41,14 @@
         <div class="content">
 
             <div class="w3-container w3-center">
-                <div class="w3-card w3-center">
-                    <div class="w3-container w3-margin middle-title uppercase w3-border-bottom">
+                <div class="w3-card w3-center card-in-center">
+                    <div class="w3-container w3-margin w3-padding middle-title uppercase w3-border-bottom">
                         <b>${balanceReplenishment}</b>
                     </div>
 
                     <form class="w3-container bottom-padding" action="${pageContext.request.contextPath}/controller"
                           method="post">
-                        <input type="hidden" name="command" value="balance-replenishment"/>
+                        <input type="hidden" name="command" value="replenish-balance"/>
 
                         <div class="w3-section">
 

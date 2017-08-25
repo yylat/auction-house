@@ -81,7 +81,7 @@
                 <div class="w3-container bottom-padding">
                     <label><b>${lastName}</b></label>
                     <input class="w3-input" placeholder="${lastName} *" name="lastName" required
-                           pattern="[A-Za-z]{2,45}"
+                           pattern="[A-Za-zА-Яа-яЁё]{2,45}"
                            title="${nameRule}"/>
                 </div>
 
@@ -90,13 +90,13 @@
                         <label><b>${firstName}</b></label>
                         <input class="w3-input" placeholder="${firstName} *" name="firstName"
                                required
-                               pattern="[A-Za-z]{2,45}"
+                               pattern="[A-Za-zА-Яа-яЁё]{2,45}"
                                title="${nameRule}"/>
                     </div>
                     <div class="w3-col bottom-padding m6">
                         <label><b>${middleName}</b></label>
                         <input class="w3-input" placeholder="${middleName}" name="middleName"
-                               pattern="[A-Za-z]{2,45}"
+                               pattern="[A-Za-zА-Яа-яЁё]{2,45}"
                                title="${nameRule}"/>
                     </div>
                 </div>

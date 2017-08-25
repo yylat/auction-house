@@ -40,10 +40,13 @@ public class NotificationReceiverImpl implements NotificationReceiver {
             ItemDAO itemDAO = new ItemDAOImpl();
 
             try (DAOManager daoManager = new DAOManager(notificationDAO, itemDAO)) {
-                if (pages == null) {
+                if (pages != null) {
+                    requestContent.setRequestAttribute(RequestConstant.PAGES, pages[0]);
+                } else {
                     requestContent.setRequestAttribute(RequestConstant.PAGES,
-                            (notificationDAO.countRows(user.getId()) / notificationsForPage) + 1);
+                            (itemDAO.countRows(user.getId()) / notificationsForPage) + 1);
                 }
+                requestContent.setRequestAttribute(RequestConstant.PAGE, pageToGo);
 
                 List<Notification> notifications = notificationDAO.findUsersNotifications(user.getId(), (pageToGo - 1) * notificationsForPage, notificationsForPage);
 

@@ -41,7 +41,7 @@
         var fileName = "";
         var maxFileSize = 2.1;
         var i = 0;
-        while (!fileName || i < files.length) {
+        while (!fileName && i < files.length) {
             if ((files[i].size / 1024 / 1024) > maxFileSize) {
                 fileName = (rule || "File size must be <= 2MB.");
             }

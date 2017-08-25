@@ -61,7 +61,8 @@
                                 <input type="hidden" name="command" value="load-notifications">
                                 <button class="w3-bar-item w3-button pro-hover-green w3-ripple">${notifications}</button>
                             </form>
-                            <a href="${pageContext.request.contextPath}/jsp/user/balance.jsp" class="w3-bar-item w3-button pro-hover-green w3-ripple">
+                            <a href="${pageContext.request.contextPath}/jsp/user/balance.jsp"
+                               class="w3-bar-item w3-button pro-hover-green w3-ripple">
                                     ${balanceReplenishment}
                             </a>
                             <form action="${pageContext.request.contextPath}/controller">
