@@ -7,7 +7,6 @@ import com.epam.auction.controller.PageGuide;
 import com.epam.auction.controller.TransferMethod;
 import com.epam.auction.exception.ReceiverLayerException;
 import com.epam.auction.receiver.Receiver;
-import com.epam.auction.receiver.RequestConstant;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,11 +21,6 @@ public class LoadItemCommand extends AbstractCommand {
 
     @Override
     public PageGuide execute(RequestContent requestContent) {
-
-        if (requestContent.getSessionAttribute(RequestConstant.CURRENT_PAGE) != PageAddress.ITEM) {
-            requestContent.removeSessionAttribute(RequestConstant.MESSAGE);
-        }
-
         PageGuide pageGuide = new PageGuide(PageAddress.ITEM, TransferMethod.FORWARD);
 
         try {

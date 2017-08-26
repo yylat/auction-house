@@ -63,4 +63,8 @@ public final class RequestConstant {
     public final static String ORDER_BY = "order-by";
     public final static String ORDER_TYPE = "order-type";
 
+    public static final String FILTER_CRITERIA = "filterCriteria";
+    public static final String ORDER_CRITERIA = "orderCriteria";
+    public static final String NOT_INITIAL = "not-initial";
+
 }

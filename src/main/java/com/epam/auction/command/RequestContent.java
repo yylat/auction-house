@@ -33,7 +33,6 @@ public class RequestContent {
         while (sessionAttributesNames.hasMoreElements()) {
             String sessionAttributeName = sessionAttributesNames.nextElement();
             sessionAttributes.put(sessionAttributeName, request.getSession().getAttribute(sessionAttributeName));
-            request.getSession().removeAttribute(sessionAttributeName);
         }
 
     }

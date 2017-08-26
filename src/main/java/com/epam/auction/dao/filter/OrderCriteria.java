@@ -28,6 +28,7 @@ public class OrderCriteria {
     }
 
     public OrderCriteria(String column) {
+        column = column.toLowerCase().replaceAll("-", "_");
         if (orderedColumns.contains(column)) {
             queryPart += column;
         } else {
@@ -37,7 +38,7 @@ public class OrderCriteria {
 
     public OrderCriteria(String column, String type) {
         this(column);
-        if (TYPE_ASC.equalsIgnoreCase(type)) {
+        if (TYPE_ASC.equalsIgnoreCase(type.toLowerCase())) {
             queryPart += " " + TYPE_ASC;
         } else {
             queryPart += " " + TYPE_DESC;

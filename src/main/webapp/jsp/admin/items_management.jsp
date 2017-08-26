@@ -61,6 +61,20 @@
                     </c:when>
                     <c:otherwise>
 
+                        <div class="w3-dropdown-click w3-right">
+                            <button class="w3-button" onclick="openDropdown()">
+                                <img src="${pageContext.request.contextPath}/img/ic_menu_black_24px.svg">
+                            </button>
+                            <div id="filterDropdownContent"
+                                 class="w3-dropdown-content right-dropdown-content pro-dropdown w3-bar-block w3-border">
+                                <form class="w3-container"
+                                      action="${pageContext.request.contextPath}/controller" method="post">
+                                    <input type="hidden" name="command" value="load-items-for-check"/>
+                                    <%@include file="/jsp/jspf/filters.jsp" %>
+                                </form>
+                            </div>
+                        </div>
+
                         <%@ include file="/jsp/jspf/items_list.jsp" %>
 
                         <div class="w3-center">
@@ -85,6 +99,19 @@
 </main>
 
 <%@ include file="/jsp/jspf/footer.jsp" %>
+
+<script>
+    function openDropdown() {
+        var dropdown = document.getElementById("filterDropdownContent");
+        if (dropdown.className.indexOf("w3-show") == -1) {
+            dropdown.className += " w3-show";
+        } else {
+            dropdown.className = dropdown.className.replace(" w3-show", "");
+        }
+    }
+</script>
+
+<script src="${pageContext.request.contextPath}/js/load-categories.js"></script>
 
 <script src="${pageContext.request.contextPath}/js/pagination.js"></script>
 

@@ -31,11 +31,6 @@
                class="w3-bar-item pro-bottom-button">${comingAuctions}
             </a>
         </div>
-        <div class="w3-margin-left">
-            <a href="${pageContext.request.contextPath}/jsp/item/past_items.jsp"
-               class="w3-bar-item pro-bottom-button">${pastAuctions}
-            </a>
-        </div>
     </div>
 
     <a href="#" class="w3-bar-item pro-bottom-button">${contactPage}</a>

@@ -1,19 +1,22 @@
-package com.epam.auction.receiver.util;
+package com.epam.auction.dao.filter;
 
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.function.Function;
 
-public class StringTransformerType {
+class StringTransformerType {
 
     private static final Function<String, BigDecimal> toBigDecimal = BigDecimal::new;
     private static final Function<String, Date> toDate = Date::valueOf;
+    private static final Function<String, Integer> toInt = Integer::valueOf;
 
-    public static Function<String, ?> get(Class clazz) {
+    static Function<String, ?> get(Class clazz) {
         if (clazz.equals(BigDecimal.class)) {
             return toBigDecimal;
         } else if (clazz.equals(Date.class)) {
             return toDate;
+        } else if (clazz.equals(Integer.class)) {
+            return toInt;
         }
         return null;
     }

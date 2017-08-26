@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebFilter(dispatcherTypes = {DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.INCLUDE},
+@WebFilter(dispatcherTypes = {DispatcherType.REQUEST, DispatcherType.FORWARD},
         urlPatterns = {"/jsp/admin/*"})
 public class AdminForwardFilter implements Filter {
 
@@ -27,8 +27,7 @@ public class AdminForwardFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
-//        String uri = httpRequest.getRequestURI();
-//        LOGGER.log(Level.INFO, "Requested resourse: " + uri);
+
         HttpSession session = httpRequest.getSession(false);
         User user = (User) session.getAttribute(RequestConstant.USER);
         if (user == null || !user.getRole().equals(User.UserRole.ADMIN)) {

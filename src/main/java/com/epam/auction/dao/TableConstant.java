@@ -104,24 +104,16 @@ public final class TableConstant {
     public final static String ITEM_QUERY_UPDATE =
             "UPDATE `item` SET `name` = ?, `description` = ?, `start_price` = ?, `blitz_price` = ?, `actual_price` = ?, `start_date` = ?, `close_date` = ?, `item_status_id` = ?, `item_category_id` = ?, `seller_id` = ? WHERE `item_id` = ?";
 
-    public final static String ITEM_QUERY_FIND_CERTAIN_ITEMS =
-            "SELECT `item_id`, `name`, `description`, `start_price`, `blitz_price`, `actual_price`, `start_date`, `close_date`, `item_status_id`, `item_category_id`, `seller_id` FROM `item` WHERE `item_status_id` IN(?)";
-
     public final static String ITEM_QUERY_UPDATE_STATUS =
             "UPDATE `item` SET `item_status_id` = ? WHERE `item_id` = ?";
+;
+    public final static String ITEM_QUERY_FIND_ROWS_COUNT =
+            "SELECT COUNT(*) FROM `item`";
 
-    public final static String ITEM_QUERY_FIND_WITH_STATUS =
-            ITEM_QUERY_FIND_ALL + " WHERE `item_status_id` = ?";
-
-    public final static String ITEM_QUERY_FIND_WITH_STATUS_LIMIT =
-            ITEM_QUERY_FIND_WITH_STATUS + " ORDER BY `item_id` DESC LIMIT ?, ?";
-    public final static String ITEM_QUERY_FIND_NUMBER_WITH_STATUS =
-            "SELECT COUNT(*) FROM `item` WHERE `item_status_id` = ?";
-
-    public final static String ITEM_QUERY_FIND_FOR_USER_LIMIT =
-            ITEM_QUERY_FIND_ALL + " WHERE `seller_id` = ? ORDER BY `item_id` DESC LIMIT ?, ?";
     public final static String ITEM_QUERY_FIND_NUMBER_FOR_USER =
             "SELECT COUNT(*) FROM `item` WHERE `seller_id` = ?";
+
+    public final static String ITEM_QUERY_LIMIT = " LIMIT ?, ?";
 
 
     //    Notification table

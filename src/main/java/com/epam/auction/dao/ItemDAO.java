@@ -10,19 +10,13 @@ import java.util.List;
 
 public interface ItemDAO extends GenericDAO<Item> {
 
-    List<Item> findCertain(List<Integer> statusesId) throws DAOLayerException;
-
     boolean updateItemStatus(int itemId, ItemStatus itemStatus) throws DAOLayerException;
-
-    List<Item> findUsersItemsLimit(int userId, int offset, int limit) throws DAOLayerException;
-
-    List<Item> findItemsWithStatusLimit(ItemStatus itemStatus, int offset, int limit) throws DAOLayerException;
 
     int countRows(int userId) throws DAOLayerException;
 
-    int countRows(ItemStatus itemStatus) throws DAOLayerException;
+    int countRows(FilterCriteria filterCriteria) throws DAOLayerException;
 
-    List<Item> findItemsWithFilter(ItemStatus itemStatus, FilterCriteria filterCriteria, OrderCriteria orderCriteria,
+    List<Item> findItemsWithFilter(FilterCriteria filterCriteria, OrderCriteria orderCriteria,
                                    int offset, int limit) throws DAOLayerException;
 
 }

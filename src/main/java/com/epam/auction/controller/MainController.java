@@ -1,9 +1,9 @@
 package com.epam.auction.controller;
 
 import com.epam.auction.command.AbstractCommand;
-import com.epam.auction.receiver.RequestConstant;
-import com.epam.auction.command.RequestContent;
 import com.epam.auction.command.CommandFactory;
+import com.epam.auction.command.RequestContent;
+import com.epam.auction.receiver.RequestConstant;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

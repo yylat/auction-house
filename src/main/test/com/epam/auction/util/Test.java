@@ -25,8 +25,7 @@ public class Test {
             }
         }
 
-
-
+        System.out.println(filterCriteria.buildWhereClause());
 
     }
 

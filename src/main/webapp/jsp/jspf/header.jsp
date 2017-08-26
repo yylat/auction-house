@@ -33,9 +33,9 @@
 
         <div class="w3-col w3-right-align s2">
             <div class="w3-dropdown-hover w3-right">
-                <button class="back-color w3-button w3-xlarge">
+                <button class="back-color w3-button">
                     <c:if test="${sessionScope.user != null}">
-                        ${requestScope.user.username}
+                        ${sessionScope.user.username}
                     </c:if>
                     <img class="menu-button-icon"
                          src="${pageContext.request.contextPath}/img/ic_person_black_24px.svg"

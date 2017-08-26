@@ -1,7 +1,7 @@
 package com.epam.auction.dao.impl;
 
-import com.epam.auction.dao.TableConstant;
 import com.epam.auction.dao.ItemDAO;
+import com.epam.auction.dao.TableConstant;
 import com.epam.auction.dao.filter.FilterCriteria;
 import com.epam.auction.dao.filter.OrderCriteria;
 import com.epam.auction.entity.Item;
@@ -9,11 +9,9 @@ import com.epam.auction.entity.ItemStatus;
 import com.epam.auction.exception.DAOLayerException;
 import com.epam.auction.exception.MethodNotSupportedException;
 
-import java.sql.Array;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ItemDAOImpl extends GenericDAOImpl<Item> implements ItemDAO {
@@ -61,51 +59,11 @@ public class ItemDAOImpl extends GenericDAOImpl<Item> implements ItemDAO {
     }
 
     @Override
-    public List<Item> findCertain(List<Integer> statusesId) throws DAOLayerException {
-        List<Item> items;
-
-        try (PreparedStatement statement = connection.prepareStatement(TableConstant.ITEM_QUERY_FIND_CERTAIN_ITEMS)) {
-            Array statusIdArray = connection.createArrayOf("INT", statusesId.toArray());
-            statement.setArray(1, statusIdArray);
-
-            ResultSet resultSet = statement.executeQuery();
-            items = new ArrayList<>();
-            while (resultSet.next()) {
-                items.add(extractEntity(resultSet));
-            }
-        } catch (SQLException e) {
-            throw new DAOLayerException(e.getMessage(), e);
-        }
-
-        return items;
-    }
-
-    @Override
     public boolean updateItemStatus(int itemId, ItemStatus itemStatus) throws DAOLayerException {
         return executeUpdate(TableConstant.ITEM_QUERY_UPDATE_STATUS, statement -> {
             statement.setInt(1, itemStatus.ordinal());
             statement.setInt(2, itemId);
         });
-    }
-
-    @Override
-    public List<Item> findUsersItemsLimit(int userId, int offset, int limit) throws DAOLayerException {
-        return findSpecificList(TableConstant.ITEM_QUERY_FIND_FOR_USER_LIMIT,
-                statement -> {
-                    statement.setInt(1, userId);
-                    statement.setInt(2, offset);
-                    statement.setInt(3, limit);
-                });
-    }
-
-    @Override
-    public List<Item> findItemsWithStatusLimit(ItemStatus itemStatus, int offset, int limit) throws DAOLayerException {
-        return findSpecificList(TableConstant.ITEM_QUERY_FIND_WITH_STATUS_LIMIT,
-                statement -> {
-                    statement.setInt(1, itemStatus.ordinal());
-                    statement.setInt(2, offset);
-                    statement.setInt(3, limit);
-                });
     }
 
     @Override
@@ -127,11 +85,17 @@ public class ItemDAOImpl extends GenericDAOImpl<Item> implements ItemDAO {
     }
 
     @Override
-    public int countRows(ItemStatus itemStatus) throws DAOLayerException {
+    public int countRows(FilterCriteria filterCriteria) throws DAOLayerException {
+        String query = TableConstant.ITEM_QUERY_FIND_ROWS_COUNT +
+                filterCriteria.buildWhereClause();
+
         int rows = 0;
 
-        try (PreparedStatement statement = connection.prepareStatement(TableConstant.ITEM_QUERY_FIND_NUMBER_WITH_STATUS)) {
-            statement.setInt(1, itemStatus.ordinal());
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            int i = 0;
+            for (Object value : filterCriteria.getValues()) {
+                statement.setObject(++i, value);
+            }
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
@@ -145,18 +109,18 @@ public class ItemDAOImpl extends GenericDAOImpl<Item> implements ItemDAO {
     }
 
     @Override
-    public List<Item> findItemsWithFilter(ItemStatus itemStatus, FilterCriteria filterCriteria, OrderCriteria orderCriteria,
+    public List<Item> findItemsWithFilter(FilterCriteria filterCriteria, OrderCriteria orderCriteria,
                                           int offset, int limit) throws DAOLayerException {
-        String query = TableConstant.ITEM_QUERY_FIND_WITH_STATUS +
+        String query = TableConstant.ITEM_QUERY_FIND_ALL +
                 filterCriteria.buildWhereClause() +
-                orderCriteria.getQueryPart() + " LIMIT ?, ?";
-        return findSpecificList(query, statement -> defineQuery(statement, itemStatus, filterCriteria, offset, limit));
+                orderCriteria.getQueryPart() +
+                TableConstant.ITEM_QUERY_LIMIT;
+        return findSpecificList(query, statement -> defineQuery(statement, filterCriteria, offset, limit));
     }
 
-    private void defineQuery(PreparedStatement statement, ItemStatus itemStatus, FilterCriteria filterCriteria,
+    private void defineQuery(PreparedStatement statement, FilterCriteria filterCriteria,
                              int offset, int limit) throws SQLException {
         int i = 0;
-        statement.setInt(++i, itemStatus.ordinal());
         for (Object value : filterCriteria.getValues()) {
             statement.setObject(++i, value);
         }

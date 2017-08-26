@@ -1,11 +1,14 @@
 package com.epam.auction.dao.filter;
 
+import com.epam.auction.exception.WrongFilterParameterException;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 public class FilterCriteria {
 
+    private final static String WHERE = "WHERE";
     private final static String SEPARATOR = " ";
     private final static String AND = "AND";
 
@@ -22,25 +25,32 @@ public class FilterCriteria {
         this.values.add(filterQueryParameter.transform(value));
     }
 
-    public String buildWhereClause() {
-        StringBuilder stringBuilder = new StringBuilder();
+    public <T> void put(FilterQueryParameter filterQueryParameter, T value) throws WrongFilterParameterException {
+        this.filterQueryParameters.add(filterQueryParameter);
+        if(filterQueryParameter.getParameterClass().equals(value.getClass())){
+            this.values.add(value);
+        }
+        else{
+            throw new WrongFilterParameterException();
+        }
+    }
 
-        Iterator<FilterQueryParameter> parameterIterator = filterQueryParameters.iterator();
-        while (parameterIterator.hasNext()) {
-            stringBuilder.append(SEPARATOR).append(parameterIterator.next().getQueryPart());
-            if (parameterIterator.hasNext()) {
-                stringBuilder.append(SEPARATOR).append(AND);
+    public String buildWhereClause() {
+        StringBuilder whereClause = new StringBuilder(WHERE).append(SEPARATOR);
+
+        Iterator<FilterQueryParameter> iterator = filterQueryParameters.iterator();
+        while(iterator.hasNext()){
+            whereClause.append(iterator.next().getQueryPart()).append(SEPARATOR);
+            if(iterator.hasNext()){
+                whereClause.append(AND).append(SEPARATOR);
             }
         }
 
-        return stringBuilder.toString();
+        return whereClause.toString();
     }
 
     public List<Object> getValues() {
         return values;
     }
 
-    public int getValuesSize() {
-        return values.size();
-    }
 }

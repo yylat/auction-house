@@ -504,6 +504,10 @@ b, strong {
     border-bottom: 1px solid #b2c2bf;
 }
 
+.pro-dropdown {
+    z-index: 10;
+}
+
 @media (max-width: 993px) {
 
     main {

@@ -17,6 +17,7 @@ import com.epam.auction.entity.Photo;
 import com.epam.auction.entity.User;
 import com.epam.auction.exception.DAOLayerException;
 import com.epam.auction.exception.ReceiverLayerException;
+import com.epam.auction.exception.WrongFilterParameterException;
 import com.epam.auction.receiver.ItemReceiver;
 import com.epam.auction.receiver.RequestConstant;
 import com.epam.auction.util.Converter;
@@ -112,38 +113,30 @@ public class ItemReceiverImpl implements ItemReceiver {
     @Override
     public void loadUserItems(RequestContent requestContent) throws ReceiverLayerException {
         User user = (User) requestContent.getSessionAttribute(RequestConstant.USER);
-        String[] pages = requestContent.getRequestParameter(RequestConstant.PAGES);
-
-        int pageToGo;
-        String[] page = requestContent.getRequestParameter(RequestConstant.PAGE);
-        if (page != null) {
-            pageToGo = Integer.valueOf(page[0]);
-        } else {
-            pageToGo = 1;
-        }
-
         if (user != null) {
-            ItemDAO itemDAO = new ItemDAOImpl();
-
-            try (DAOManager daoManager = new DAOManager(itemDAO)) {
-                if (pages != null && pages[0] != null) {
-                    requestContent.setRequestAttribute(RequestConstant.PAGES, pages[0]);
-                } else {
-                    requestContent.setRequestAttribute(RequestConstant.PAGES,
-                            (itemDAO.countRows(user.getId()) / itemsForPage) + 1);
-                }
-                requestContent.setRequestAttribute(RequestConstant.PAGE, pageToGo);
-
-                List<Item> items = itemDAO.findUsersItemsLimit(user.getId(), (pageToGo - 1) * itemsForPage, itemsForPage);
-
-                requestContent.setRequestAttribute(RequestConstant.ITEMS, items);
-            } catch (DAOLayerException e) {
-                throw new ReceiverLayerException(e.getMessage(), e);
+            FilterCriteria filterCriteria = new FilterCriteria();
+            try {
+                filterCriteria.put(FilterQueryParameter.SELLER_ID, user.getId());
+                loadItems(requestContent, filterCriteria);
+            } catch (WrongFilterParameterException e) {
+                throw new ReceiverLayerException(e);
             }
         }
     }
 
     private void loadItemsWithStatus(RequestContent requestContent, ItemStatus itemStatus) throws ReceiverLayerException {
+        FilterCriteria filterCriteria = new FilterCriteria();
+        try {
+            filterCriteria.put(FilterQueryParameter.STATUS, itemStatus.ordinal());
+            loadItems(requestContent, filterCriteria);
+        } catch (WrongFilterParameterException e) {
+            throw new ReceiverLayerException(e);
+        }
+    }
+
+
+    private void loadItems(RequestContent requestContent, FilterCriteria filterCriteria)
+            throws ReceiverLayerException {
         String[] pages = requestContent.getRequestParameter(RequestConstant.PAGES);
 
         int pageToGo;
@@ -153,49 +146,22 @@ public class ItemReceiverImpl implements ItemReceiver {
         } else {
             pageToGo = 1;
         }
+        requestContent.setRequestAttribute(RequestConstant.PAGE, pageToGo);
 
         ItemDAO itemDAO = new ItemDAOImpl();
 
         try (DAOManager daoManager = new DAOManager(itemDAO)) {
+            extractFilterParameters(requestContent, filterCriteria);
+            OrderCriteria orderCriteria = extractOrderParameters(requestContent);
+
             if (pages != null && pages[0] != null) {
                 requestContent.setRequestAttribute(RequestConstant.PAGES, pages[0]);
             } else {
                 requestContent.setRequestAttribute(RequestConstant.PAGES,
-                        (itemDAO.countRows(itemStatus) / itemsForPage) + 1);
-            }
-            requestContent.setRequestAttribute(RequestConstant.PAGE, pageToGo);
-
-            List<Item> items = itemDAO.findItemsWithStatusLimit(itemStatus, (pageToGo - 1) * itemsForPage, itemsForPage);
-
-            requestContent.setRequestAttribute(RequestConstant.ITEMS, items);
-        } catch (DAOLayerException e) {
-            throw new ReceiverLayerException(e.getMessage(), e);
-        }
-    }
-
-    private void loadItems(RequestContent requestContent, ItemStatus itemStatus) throws ReceiverLayerException {
-        String[] pages = requestContent.getRequestParameter(RequestConstant.PAGES);
-
-        int pageToGo;
-        String[] page = requestContent.getRequestParameter(RequestConstant.PAGE);
-        if (page != null) {
-            pageToGo = Integer.valueOf(page[0]);
-        } else {
-            pageToGo = 1;
-        }
-
-        ItemDAO itemDAO = new ItemDAOImpl();
-
-        try (DAOManager daoManager = new DAOManager(itemDAO)) {
-            if (pages == null) {
-                requestContent.setRequestAttribute(RequestConstant.PAGES,
-                        (itemDAO.countRows(itemStatus) / itemsForPage) + 1);
+                        (itemDAO.countRows(filterCriteria) / itemsForPage) + 1);
             }
 
-            FilterCriteria filterCriteria = extractFilterParameters(requestContent);
-            OrderCriteria orderCriteria = extractOrderParameters(requestContent);
-
-            List<Item> items = itemDAO.findItemsWithFilter(itemStatus, filterCriteria, orderCriteria,
+            List<Item> items = itemDAO.findItemsWithFilter(filterCriteria, orderCriteria,
                     (pageToGo - 1) * itemsForPage, itemsForPage);
 
             requestContent.setRequestAttribute(RequestConstant.ITEMS, items);
@@ -205,31 +171,37 @@ public class ItemReceiverImpl implements ItemReceiver {
 
     }
 
-    private FilterCriteria extractFilterParameters(RequestContent requestContent) {
-        FilterCriteria filterCriteria = new FilterCriteria();
-
-        for (FilterQueryParameter filterQueryParameter : FilterQueryParameter.values()) {
-            String[] requestParameter = requestContent.getRequestParameter(filterQueryParameter.name());
-            if (requestParameter != null && requestParameter[0] != null) {
-                filterCriteria.put(filterQueryParameter, requestParameter[0]);
+    private void extractFilterParameters(RequestContent requestContent, FilterCriteria filterCriteria) {
+        if (requestContent.getRequestParameter(RequestConstant.NOT_INITIAL) == null) {
+            for (FilterQueryParameter filterQueryParameter : FilterQueryParameter.values()) {
+                String[] requestParameter = requestContent.getRequestParameter(filterQueryParameter.name().toLowerCase().replaceAll("_", "-"));
+                if (requestParameter != null && !requestParameter[0].isEmpty()) {
+                    filterCriteria.put(filterQueryParameter, requestParameter[0]);
+                }
             }
+            requestContent.setSessionAttribute(RequestConstant.FILTER_CRITERIA, filterCriteria);
+        } else {
+            filterCriteria = (FilterCriteria) requestContent.getSessionAttribute(RequestConstant.FILTER_CRITERIA);
         }
-
-        return filterCriteria;
     }
 
     private OrderCriteria extractOrderParameters(RequestContent requestContent) {
         OrderCriteria orderCriteria;
 
-        String[] orderBy = requestContent.getRequestParameter(RequestConstant.ORDER_BY);
-        String[] orderType = requestContent.getRequestParameter(RequestConstant.ORDER_TYPE);
+        if (requestContent.getRequestParameter(RequestConstant.NOT_INITIAL) == null) {
+            String[] orderBy = requestContent.getRequestParameter(RequestConstant.ORDER_BY);
+            String[] orderType = requestContent.getRequestParameter(RequestConstant.ORDER_TYPE);
 
-        if (orderBy != null && orderType != null) {
-            orderCriteria = new OrderCriteria(orderBy[0], orderType[0]);
-        } else if (orderBy != null) {
-            orderCriteria = new OrderCriteria(orderBy[0]);
+            if (orderBy != null && orderType != null) {
+                orderCriteria = new OrderCriteria(orderBy[0], orderType[0]);
+            } else if (orderBy != null) {
+                orderCriteria = new OrderCriteria(orderBy[0]);
+            } else {
+                orderCriteria = new OrderCriteria();
+            }
+            requestContent.setSessionAttribute(RequestConstant.ORDER_CRITERIA, orderCriteria);
         } else {
-            orderCriteria = new OrderCriteria();
+            orderCriteria = (OrderCriteria) requestContent.getSessionAttribute(RequestConstant.ORDER_CRITERIA);
         }
 
         return orderCriteria;
