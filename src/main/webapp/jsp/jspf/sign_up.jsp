@@ -20,6 +20,8 @@
 <fmt:message bundle="${msg}" key="error.usernameAlreadyExist" var="usernameAlreadyExist"/>
 <fmt:message bundle="${msg}" key="error.emailAlreadyExist" var="emailAlreadyExist"/>
 
+<fmt:message bundle="${msg}" key="error.repeatedPassword" var="repeatedPasswordError"/>
+
 <div id="signUpModal" class="w3-modal pro-modal">
     <div class="w3-modal-content w3-card-4 w3-animate-zoom modal-content">
 
@@ -71,6 +73,7 @@
                                placeholder="${repeatPassword} *"
                                name="repeatedPassword" required
                                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,30}"
+                               data-repeated-error="${repeatedPasswordError}"
                                title="${passwordRule}"/>
                     </div>
                 </div>

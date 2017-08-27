@@ -8,7 +8,7 @@
 
 <fmt:message bundle="${msg}" key="label.projectTitle" var="projectTitle"/>
 
-<fmt:message bundle="${msg}" key="menu.items" var="items"/>
+<fmt:message bundle="${msg}" key="menu.comingItems" var="comingItems"/>
 
 <fmt:message bundle="${msg}" key="message.noItemsYet" var="noItemsYet"/>
 
@@ -16,7 +16,7 @@
 
 <c:if test="${requestScope.items == null}">
     <jsp:forward page="${pageContext.request.contextPath}/controller">
-        <jsp:param name="command" value="load-user-items"/>
+        <jsp:param name="command" value="load-coming-items"/>
     </jsp:forward>
 </c:if>
 
@@ -43,17 +43,11 @@
 
         <div class="content">
 
-            <div class="w3-container w3-right w3-margin-top">
+            <div class="w3-row-padding w3-margin-top">
 
-                <button id="addItemOpenButton" class="w3-button pro-green w3-ripple">
-                    ${addButton}
-                </button>
-            </div>
-
-            <div class="w3-row-padding">
                 <div class="w3-col s8 w3-margin-top">
                     <div class="middle-title uppercase">
-                        ${items}
+                        ${comingItems}
                     </div>
                 </div>
 
@@ -66,12 +60,14 @@
                              class="w3-dropdown-content right-dropdown-content pro-dropdown w3-bar-block w3-border">
                             <form class="w3-container"
                                   action="${pageContext.request.contextPath}/controller" method="post">
-                                <input type="hidden" name="command" value="load-user-items"/>
+                                <input type="hidden" name="command" value="load-coming-items"/>
                                 <%@include file="/jsp/jspf/filters.jsp" %>
                             </form>
                         </div>
                     </div>
                 </div>
+
+
             </div>
 
             <div class="w3-row-padding" id="itemsList">
@@ -84,7 +80,7 @@
                         <%@ include file="/jsp/jspf/items_list.jsp" %>
 
                         <div class="w3-center">
-                            <div id="pageBar" class="w3-bar w3-small w3-margin-top" data-command="load-user-items"
+                            <div id="pageBar" class="w3-bar w3-small w3-margin-top" data-command="load-coming-items"
                                  data-page="${requestScope.page}" data-pages="${requestScope.pages}">
                                 <a id="prevLink" class="w3-button">&laquo;</a>
 
@@ -105,11 +101,17 @@
 
 <%@ include file="/jsp/jspf/footer.jsp" %>
 
-<%@ include file="/jsp/jspf/item_modal.jsp" %>
+<script src="${pageContext.request.contextPath}/js/filter-dropdown.js"></script>
+
+<script src="${pageContext.request.contextPath}/js/load-img.js"></script>
 
 <script src="${pageContext.request.contextPath}/js/pagination.js"></script>
 
-<script src="${pageContext.request.contextPath}/js/load-img.js"></script>
+<c:if test="${sessionScope.user == null}">
+    <%@ include file="/jsp/jspf/sign_in.jsp" %>
+    <%@ include file="/jsp/jspf/sign_up.jsp" %>
+    <script src="${pageContext.request.contextPath}/js/sign.js"></script>
+</c:if>
 
 </body>
 

@@ -18,6 +18,8 @@
 
 <fmt:message bundle="${msg}" key="menu.management" var="management"/>
 
+<fmt:message bundle="${msg}" key="label.hi" var="hi"/>
+
 <header>
     <div class="w3-row bottom-separator back-color">
 
@@ -33,10 +35,7 @@
 
         <div class="w3-col w3-right-align s2">
             <div class="w3-dropdown-hover w3-right">
-                <button class="back-color w3-button">
-                    <c:if test="${sessionScope.user != null}">
-                        ${sessionScope.user.username}
-                    </c:if>
+                <button class="back-color w3-button hi-title">
                     <img class="menu-button-icon"
                          src="${pageContext.request.contextPath}/img/ic_person_black_24px.svg"
                          alt=""/>
@@ -47,6 +46,9 @@
 
                     <c:choose>
                         <c:when test="${sessionScope.user != null}">
+                            <div class="w3-container w3-right-align">
+                                    ${hi},<br> ${sessionScope.user.username}
+                            </div>
                             <c:if test="${sessionScope.user.role == 'ADMIN'}">
                                 <form action="${pageContext.request.contextPath}/controller">
                                     <input type="hidden" name="command" value="load-items-for-check">

@@ -45,11 +45,28 @@
 
             <div class="w3-row-padding w3-margin-top">
 
-                <div class="w3-col s6 w3-margin-top">
+                <div class="w3-col s8 w3-margin-top">
                     <div class="middle-title uppercase">
                         ${activeItems}
                     </div>
                 </div>
+
+                <div class="w3-col s4 w3-right">
+                    <div class="w3-dropdown-click w3-right">
+                        <button id="filterDropdownSwitch" class="w3-button">
+                            <img src="${pageContext.request.contextPath}/img/ic_menu_black_24px.svg">
+                        </button>
+                        <div id="filterDropdownContent"
+                             class="w3-dropdown-content right-dropdown-content pro-dropdown w3-bar-block w3-border">
+                            <form class="w3-container"
+                                  action="${pageContext.request.contextPath}/controller" method="post">
+                                <input type="hidden" name="command" value="load-active-items"/>
+                                <%@include file="/jsp/jspf/filters.jsp" %>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
 
             </div>
 
@@ -83,6 +100,8 @@
 </main>
 
 <%@ include file="/jsp/jspf/footer.jsp" %>
+
+<script src="${pageContext.request.contextPath}/js/filter-dropdown.js"></script>
 
 <script src="${pageContext.request.contextPath}/js/load-img.js"></script>
 

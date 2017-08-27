@@ -96,6 +96,11 @@ public class ItemReceiverImpl implements ItemReceiver {
     }
 
     @Override
+    public void loadComingItems(RequestContent requestContent) throws ReceiverLayerException {
+        loadItemsWithStatus(requestContent, ItemStatus.CONFIRMED);
+    }
+
+    @Override
     public void loadItem(RequestContent requestContent) throws ReceiverLayerException {
         int itemId = Integer.valueOf(requestContent.getRequestParameter(RequestConstant.ITEM_ID)[0]);
         requestContent.setSessionAttribute(RequestConstant.ITEM_ID, itemId);

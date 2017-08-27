@@ -27,9 +27,10 @@
             </form>
         </div>
         <div class="w3-margin-left">
-            <a href="${pageContext.request.contextPath}/jsp/item/coming_items.jsp"
-               class="w3-bar-item pro-bottom-button">${comingAuctions}
-            </a>
+            <form action="${pageContext.request.contextPath}/controller">
+                <input type="hidden" name="command" value="load-coming-items">
+                <button class="button-reset w3-bar-item pro-bottom-button">${comingAuctions}</button>
+            </form>
         </div>
     </div>
 

@@ -508,6 +508,10 @@ b, strong {
     z-index: 10;
 }
 
+.hi-title{
+
+}
+
 @media (max-width: 993px) {
 
     main {
@@ -542,6 +546,10 @@ b, strong {
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
+    }
+
+    .hi-title{
+
     }
 }
 

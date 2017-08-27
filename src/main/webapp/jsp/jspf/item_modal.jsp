@@ -77,12 +77,12 @@
                     <div class="w3-row-padding">
                         <div class="w3-col m6">
                             <label><b>${startDate}</b></label>
-                            <input name="start-date" class="w3-input" type="date" required
+                            <input id="start-date" name="start-date" class="w3-input" type="date" required
                                    title="${startDateRule}"/>
                         </div>
                         <div class="w3-col m6">
                             <label><b>${closeDate}</b></label>
-                            <input name="close-date" class="w3-input" type="date" required
+                            <input id="close-date" name="close-date" class="w3-input" type="date" required
                                    title="${closeDateRule}"/>
                         </div>
                     </div>
@@ -127,4 +127,5 @@
 </div>
 
 <script src="${pageContext.request.contextPath}/js/add-item.js"></script>
+<script src="${pageContext.request.contextPath}/js/date-validation.js"></script>
 <script src="${pageContext.request.contextPath}/js/custom-file-inputs.js"></script>

@@ -4,16 +4,13 @@ import com.epam.auction.command.admin.ApproveItemCommand;
 import com.epam.auction.command.admin.DiscardItemCommand;
 import com.epam.auction.command.admin.LoadItemsForCheckCommand;
 import com.epam.auction.command.bid.MakeBidCommand;
+import com.epam.auction.command.item.*;
 import com.epam.auction.command.notification.LoadNotificationsCommand;
 import com.epam.auction.command.photo.LoadAllPhotosCommand;
 import com.epam.auction.command.photo.LoadPhotoCommand;
 import com.epam.auction.command.admin.LoadUsersCommand;
 import com.epam.auction.command.bid.LoadBidsCommand;
 import com.epam.auction.command.common.ChangeLocaleCommand;
-import com.epam.auction.command.item.CreateItemCommand;
-import com.epam.auction.command.item.LoadActiveItemsCommand;
-import com.epam.auction.command.item.LoadItemCommand;
-import com.epam.auction.command.item.LoadUserItemsCommand;
 import com.epam.auction.command.user.LogOutCommand;
 import com.epam.auction.command.user.ReplenishBalanceCommand;
 import com.epam.auction.command.user.SignInCommand;
@@ -138,6 +135,12 @@ public enum CommandType {
         @Override
         public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
             ((UserReceiver) getCommand().getReceiver()).replenishBalance(requestContent);
+        }
+    },
+    LOAD_COMING_ITEMS(new LoadComingItemsCommand(new ItemReceiverImpl())) {
+        @Override
+        public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
+            ((ItemReceiver) getCommand().getReceiver()).loadComingItems(requestContent);
         }
     };
 

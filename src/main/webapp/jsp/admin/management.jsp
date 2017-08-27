@@ -89,6 +89,4 @@
 
 <%@ include file="/jsp/jspf/footer.jsp" %>
 
-<script src="${pageContext.request.contextPath}/js/event.js"></script>
-
 </body>

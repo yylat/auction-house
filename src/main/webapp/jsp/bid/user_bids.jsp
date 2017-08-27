@@ -134,8 +134,6 @@
 
 <script src="${pageContext.request.contextPath}/js/pagination.js"></script>
 
-<script src="${pageContext.request.contextPath}/js/event.js"></script>
-
 </body>
 
 </html>
