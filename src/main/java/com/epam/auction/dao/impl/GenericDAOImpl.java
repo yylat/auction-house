@@ -54,7 +54,7 @@ public abstract class GenericDAOImpl<T extends Entity> implements GenericDAO<T> 
                 result = true;
             }
         } catch (SQLException e) {
-            throw new DAOLayerException(e.getMessage(), e);
+            throw new DAOLayerException(e);
         }
 
         return result;
@@ -86,7 +86,7 @@ public abstract class GenericDAOImpl<T extends Entity> implements GenericDAO<T> 
                 entities.add(extractEntity(resultSet));
             }
         } catch (SQLException e) {
-            throw new DAOLayerException(e.getMessage(), e);
+            throw new DAOLayerException(e);
         }
 
         return entities;
@@ -103,7 +103,7 @@ public abstract class GenericDAOImpl<T extends Entity> implements GenericDAO<T> 
             }
 
         } catch (SQLException e) {
-            throw new DAOLayerException(e.getMessage(), e);
+            throw new DAOLayerException(e);
         }
 
         return entities;
@@ -121,7 +121,7 @@ public abstract class GenericDAOImpl<T extends Entity> implements GenericDAO<T> 
             }
 
         } catch (SQLException e) {
-            throw new DAOLayerException(e.getMessage(), e);
+            throw new DAOLayerException(e);
         }
 
         return entity;
@@ -136,7 +136,7 @@ public abstract class GenericDAOImpl<T extends Entity> implements GenericDAO<T> 
                 result = true;
             }
         } catch (SQLException e) {
-            throw new DAOLayerException(e.getMessage(), e);
+            throw new DAOLayerException(e);
         }
 
         return result;
@@ -151,7 +151,7 @@ public abstract class GenericDAOImpl<T extends Entity> implements GenericDAO<T> 
                 result = true;
             }
         } catch (SQLException e) {
-            throw new DAOLayerException(e.getMessage(), e);
+            throw new DAOLayerException(e);
         }
 
         return result;
@@ -170,7 +170,7 @@ public abstract class GenericDAOImpl<T extends Entity> implements GenericDAO<T> 
                 }
             }
         } catch (SQLException e) {
-            throw new DAOLayerException(e.getMessage(), e);
+            throw new DAOLayerException(e);
         }
 
         return result;

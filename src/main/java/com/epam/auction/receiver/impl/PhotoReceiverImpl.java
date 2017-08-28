@@ -27,7 +27,7 @@ public class PhotoReceiverImpl implements PhotoReceiver {
             photo = photoDAO.findItemPhoto(itemId);
             requestContent.setAjaxResponse(Converter.inputStreamToString(photo.getPhotoFile()));
         } catch (DAOLayerException | IOException e) {
-            throw new ReceiverLayerException(e.getMessage(), e);
+            throw new ReceiverLayerException(e);
         }
     }
 
@@ -45,7 +45,7 @@ public class PhotoReceiverImpl implements PhotoReceiver {
 
             requestContent.setAjaxResponse(Converter.objectToJson(photos));
         } catch (DAOLayerException | IOException e) {
-            throw new ReceiverLayerException(e.getMessage(), e);
+            throw new ReceiverLayerException(e);
         }
     }
 }

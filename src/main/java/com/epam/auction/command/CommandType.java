@@ -11,10 +11,7 @@ import com.epam.auction.command.photo.LoadPhotoCommand;
 import com.epam.auction.command.admin.LoadUsersCommand;
 import com.epam.auction.command.bid.LoadBidsCommand;
 import com.epam.auction.command.common.ChangeLocaleCommand;
-import com.epam.auction.command.user.LogOutCommand;
-import com.epam.auction.command.user.ReplenishBalanceCommand;
-import com.epam.auction.command.user.SignInCommand;
-import com.epam.auction.command.user.SignUpCommand;
+import com.epam.auction.command.user.*;
 import com.epam.auction.exception.ReceiverLayerException;
 import com.epam.auction.receiver.*;
 import com.epam.auction.receiver.impl.*;
@@ -141,6 +138,30 @@ public enum CommandType {
         @Override
         public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
             ((ItemReceiver) getCommand().getReceiver()).loadComingItems(requestContent);
+        }
+    },
+    CHANGE_USERNAME(new ChangeUsernameCommand(new UserReceiverImpl())) {
+        @Override
+        public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
+            ((UserReceiver) getCommand().getReceiver()).changeUsername(requestContent);
+        }
+    },
+    CHANGE_EMAIL(new ChangeEmailCommand(new UserReceiverImpl())) {
+        @Override
+        public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
+            ((UserReceiver) getCommand().getReceiver()).changeEmail(requestContent);
+        }
+    },
+    CHANGE_PASSWORD(new ChangePasswordCommand(new UserReceiverImpl())) {
+        @Override
+        public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
+            ((UserReceiver) getCommand().getReceiver()).changePassword(requestContent);
+        }
+    },
+    UPDATE_PROFILE(new UpdateProfileCommand(new UserReceiverImpl())) {
+        @Override
+        public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
+            ((UserReceiver) getCommand().getReceiver()).updateProfile(requestContent);
         }
     };
 

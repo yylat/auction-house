@@ -78,7 +78,7 @@ public class ItemDAOImpl extends GenericDAOImpl<Item> implements ItemDAO {
                 rows = resultSet.getInt(1);
             }
         } catch (SQLException e) {
-            throw new DAOLayerException(e.getMessage(), e);
+            throw new DAOLayerException(e);
         }
 
         return rows;
@@ -102,7 +102,7 @@ public class ItemDAOImpl extends GenericDAOImpl<Item> implements ItemDAO {
                 rows = resultSet.getInt(1);
             }
         } catch (SQLException e) {
-            throw new DAOLayerException(e.getMessage(), e);
+            throw new DAOLayerException(e);
         }
 
         return rows;

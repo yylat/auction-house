@@ -13,5 +13,6 @@ public final class PageAddress {
     public final static String NOTIFICATIONS = "/jsp/notification/notifications.jsp";
     public final static String BALANCE = "/jsp/user/balance.jsp";
     public final static String COMING_ITEMS = "/jsp/item/coming_items.jsp";
+    public final static String ACCOUNT = "/jsp/user/account.jsp";
 
 }

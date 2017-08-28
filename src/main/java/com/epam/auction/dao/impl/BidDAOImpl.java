@@ -34,7 +34,7 @@ public class BidDAOImpl extends GenericDAOImpl<Bid> implements BidDAO {
                 result = true;
             }
         } catch (SQLException e) {
-            throw new DAOLayerException(e.getMessage(), e);
+            throw new DAOLayerException(e);
         }
 
         return result;
@@ -84,7 +84,7 @@ public class BidDAOImpl extends GenericDAOImpl<Bid> implements BidDAO {
                 rows = resultSet.getInt(1);
             }
         } catch (SQLException e) {
-            throw new DAOLayerException(e.getMessage(), e);
+            throw new DAOLayerException(e);
         }
 
         return rows;

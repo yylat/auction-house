@@ -23,7 +23,7 @@ public class AdminReceiverImpl implements AdminReceiver {
         try (DAOManager daoManager = new DAOManager(userDAO)) {
             requestContent.setRequestAttribute(USERS_ATTR, userDAO.findAll());
         } catch (DAOLayerException e) {
-            throw new ReceiverLayerException(e.getMessage(), e);
+            throw new ReceiverLayerException(e);
         }
     }
 
@@ -51,7 +51,7 @@ public class AdminReceiverImpl implements AdminReceiver {
             }
         } catch (DAOLayerException e) {
             daoManager.rollback();
-            throw new ReceiverLayerException(e.getMessage(), e);
+            throw new ReceiverLayerException(e);
         } finally {
             daoManager.endTransaction();
         }

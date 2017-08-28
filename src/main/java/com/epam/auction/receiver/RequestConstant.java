@@ -13,6 +13,8 @@ public final class RequestConstant {
 
     public static final String USERNAME = "username";
     public static final String PASSWORD = "password";
+    public static final String NEW_PASSWORD = "new-password";
+    public static final String OLD_PASSWORD = "old-password";
 
     public static final String LAST_NAME = "lastName";
     public static final String MIDDLE_NAME = "middleName";
@@ -20,6 +22,7 @@ public final class RequestConstant {
     public static final String PHONE_NUMBER = "phoneNumber";
     public static final String EMAIL = "email";
 
+    public static final String WRONG_PASSWORD = "wrongPassword";
     public static final String WRONG_USERNAME_PASSWORD = "wrongUsernamePassword";
     public static final String USER = "user";
 

@@ -34,7 +34,7 @@ public class UserReceiverImpl implements UserReceiver {
                 requestContent.setRequestAttribute(RequestConstant.WRONG_USERNAME_PASSWORD, true);
             }
         } catch (DAOLayerException e) {
-            throw new ReceiverLayerException(e.getMessage(), e);
+            throw new ReceiverLayerException(e);
         }
     }
 
@@ -69,13 +69,12 @@ public class UserReceiverImpl implements UserReceiver {
                             new MessageProvider((Locale) requestContent.getSessionAttribute(RequestConstant.LOCALE));
                     requestContent.setSessionAttribute(RequestConstant.MESSAGE,
                             messageProvider.getMessage(MessageProvider.SUCCESSFUL_REGISTRATION));
+                    requestContent.setSessionAttribute(RequestConstant.WAS_SHOWN, false);
                     daoManager.commit();
                 }
-
-                requestContent.setSessionAttribute(RequestConstant.WAS_SHOWN, false);
             } catch (DAOLayerException e) {
                 daoManager.rollback();
-                throw new ReceiverLayerException(e.getMessage(), e);
+                throw new ReceiverLayerException(e);
             } finally {
                 daoManager.endTransaction();
             }
@@ -108,13 +107,145 @@ public class UserReceiverImpl implements UserReceiver {
                 daoManager.commit();
             } catch (DAOLayerException | MethodNotSupportedException e) {
                 daoManager.rollback();
-                throw new ReceiverLayerException(e.getMessage(), e);
+                throw new ReceiverLayerException(e);
             } finally {
                 daoManager.endTransaction();
             }
-            requestContent.setSessionAttribute(RequestConstant.USER, user);
         }
 
+    }
+
+    @Override
+    public void changeUsername(RequestContent requestContent) throws ReceiverLayerException {
+        User user = (User) requestContent.getSessionAttribute(RequestConstant.USER);
+
+        if (user != null) {
+            String newUsername = requestContent.getRequestParameter(RequestConstant.USERNAME)[0];
+            UserValidator userValidator = new UserValidator();
+
+            if (userValidator.validateUsername(newUsername)) {
+                user.setUsername(newUsername);
+
+                UserDAO userDAO = new UserDAOImpl();
+                DAOManager daoManager = new DAOManager(true, userDAO);
+
+                daoManager.beginTransaction();
+                try {
+                    if (!userDAO.isUsernameAlreadyExist(newUsername)) {
+                        userDAO.update(user);
+                        daoManager.commit();
+                    } else {
+                        requestContent.setSessionAttribute(RequestConstant.USERNAME_ALREADY_EXIST, true);
+                    }
+                } catch (DAOLayerException | MethodNotSupportedException e) {
+                    daoManager.rollback();
+                    throw new ReceiverLayerException(e);
+                } finally {
+                    daoManager.endTransaction();
+                }
+            } else {
+                throw new ReceiverLayerException(userValidator.getValidationMessage());
+            }
+        }
+    }
+
+    @Override
+    public void changeEmail(RequestContent requestContent) throws ReceiverLayerException {
+        User user = (User) requestContent.getSessionAttribute(RequestConstant.USER);
+
+        if (user != null) {
+            String newEmail = requestContent.getRequestParameter(RequestConstant.EMAIL)[0];
+            UserValidator userValidator = new UserValidator();
+
+            if (userValidator.validateEmail(newEmail)) {
+                user.setUsername(newEmail);
+
+                UserDAO userDAO = new UserDAOImpl();
+                DAOManager daoManager = new DAOManager(true, userDAO);
+
+                daoManager.beginTransaction();
+                try {
+                    if (!userDAO.isEmailAlreadyExist(newEmail)) {
+                        userDAO.update(user);
+                        daoManager.commit();
+                    } else {
+                        requestContent.setSessionAttribute(RequestConstant.EMAIL_ALREADY_EXIST, true);
+                    }
+                } catch (DAOLayerException | MethodNotSupportedException e) {
+                    daoManager.rollback();
+                    throw new ReceiverLayerException(e);
+                } finally {
+                    daoManager.endTransaction();
+                }
+            } else {
+                throw new ReceiverLayerException(userValidator.getValidationMessage());
+            }
+        }
+    }
+
+    @Override
+    public void changePassword(RequestContent requestContent) throws ReceiverLayerException {
+        User user = (User) requestContent.getSessionAttribute(RequestConstant.USER);
+
+        if (user != null) {
+            String oldPassword = Encoder.encode(requestContent.getRequestParameter(RequestConstant.OLD_PASSWORD)[0]);
+
+            if (oldPassword.equals(user.getPassword())) {
+                String newPassword = requestContent.getRequestParameter(RequestConstant.NEW_PASSWORD)[0];
+
+                UserValidator userValidator = new UserValidator();
+                if (userValidator.validatePassword(newPassword)) {
+                    user.setPassword(Encoder.encode(newPassword));
+
+                    UserDAO userDAO = new UserDAOImpl();
+                    DAOManager daoManager = new DAOManager(true, userDAO);
+
+                    simpleUserUpdate(user, daoManager, userDAO);
+                }
+            } else {
+                requestContent.setSessionAttribute(RequestConstant.WRONG_PASSWORD, true);
+            }
+
+        }
+    }
+
+    @Override
+    public void updateProfile(RequestContent requestContent) throws ReceiverLayerException {
+        User user = (User) requestContent.getSessionAttribute(RequestConstant.USER);
+
+        if (user != null) {
+            String newLastName = requestContent.getRequestParameter(RequestConstant.LAST_NAME)[0];
+            String newMiddleName = requestContent.getRequestParameter(RequestConstant.MIDDLE_NAME)[0];
+            String newFirstName = requestContent.getRequestParameter(RequestConstant.FIRST_NAME)[0];
+            String newPhoneNumber = requestContent.getRequestParameter(RequestConstant.PHONE_NUMBER)[0];
+
+
+            UserValidator userValidator = new UserValidator();
+            if (userValidator.validateProfile(newLastName, newMiddleName, newFirstName, newPhoneNumber)) {
+                user.setLastName(newLastName);
+                user.setMiddleName(newMiddleName);
+                user.setFirstName(newFirstName);
+                user.setPhoneNumber(newPhoneNumber);
+
+                UserDAO userDAO = new UserDAOImpl();
+                DAOManager daoManager = new DAOManager(true, userDAO);
+
+                simpleUserUpdate(user, daoManager, userDAO);
+            }
+        }
+    }
+
+    private void simpleUserUpdate(User user, DAOManager daoManager, UserDAO userDAO) throws ReceiverLayerException {
+        daoManager.beginTransaction();
+        try {
+            userDAO.update(user);
+            daoManager.commit();
+        } catch (DAOLayerException | MethodNotSupportedException e) {
+            daoManager.rollback();
+            throw new ReceiverLayerException(e);
+        } finally {
+            daoManager.endTransaction();
+        }
     }
 
 }

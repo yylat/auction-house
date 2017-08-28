@@ -135,6 +135,8 @@
 
 <%@ include file="/jsp/jspf/message.jsp" %>
 
+<script src="${pageContext.request.contextPath}/js/repeat-password.js"></script>
+
 <c:if test="${(sessionScope.usernameAlreadyExist == true) || (sessionScope.emailAlreadyExist == true)}">
     <script>
         document.getElementById("signUpModal").style.display = "block";

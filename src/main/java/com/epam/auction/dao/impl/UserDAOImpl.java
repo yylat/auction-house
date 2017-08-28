@@ -72,7 +72,7 @@ public class UserDAOImpl extends GenericDAOImpl<User> implements UserDAO {
             }
 
         } catch (SQLException e) {
-            throw new DAOLayerException(e.getMessage(), e);
+            throw new DAOLayerException(e);
         }
         return result;
     }
@@ -95,7 +95,7 @@ public class UserDAOImpl extends GenericDAOImpl<User> implements UserDAO {
                 result = resultSet.getBoolean(1);
             }
         } catch (SQLException e) {
-            throw new DAOLayerException(e.getMessage(), e);
+            throw new DAOLayerException(e);
         }
         return result;
     }

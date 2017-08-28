@@ -40,7 +40,7 @@ public class ItemReceiverImpl implements ItemReceiver {
         try (DAOManager daoManager = new DAOManager(itemCategoryDAO)) {
             requestContent.setAjaxResponse(Converter.objectToJson(itemCategoryDAO.findAll()));
         } catch (DAOLayerException e) {
-            throw new ReceiverLayerException(e.getMessage(), e);
+            throw new ReceiverLayerException(e);
         }
     }
 
@@ -76,7 +76,7 @@ public class ItemReceiverImpl implements ItemReceiver {
                 }
             } catch (DAOLayerException e) {
                 daoManager.rollback();
-                throw new ReceiverLayerException(e.getMessage(), e);
+                throw new ReceiverLayerException(e);
             } finally {
                 daoManager.endTransaction();
             }
@@ -111,7 +111,7 @@ public class ItemReceiverImpl implements ItemReceiver {
             requestContent.setRequestAttribute(RequestConstant.ITEM,
                     itemDAO.findEntityById(itemId));
         } catch (DAOLayerException e) {
-            throw new ReceiverLayerException(e.getMessage(), e);
+            throw new ReceiverLayerException(e);
         }
     }
 
@@ -171,7 +171,7 @@ public class ItemReceiverImpl implements ItemReceiver {
 
             requestContent.setRequestAttribute(RequestConstant.ITEMS, items);
         } catch (DAOLayerException e) {
-            throw new ReceiverLayerException(e.getMessage(), e);
+            throw new ReceiverLayerException(e);
         }
 
     }

@@ -51,7 +51,7 @@ public class PhotoDAOImpl extends GenericDAOImpl<Photo> implements PhotoDAO {
 //            }
 //
 //        } catch (SQLException e) {
-//            throw new DAOLayerException(e.getMessage(), e);
+//            throw new DAOLayerException(e);
 //        }
 //
 //        return photo;
@@ -75,7 +75,7 @@ public class PhotoDAOImpl extends GenericDAOImpl<Photo> implements PhotoDAO {
 //            }
 //
 //        } catch (SQLException e) {
-//            throw new DAOLayerException(e.getMessage(), e);
+//            throw new DAOLayerException(e);
 //        }
 //
 //        return photos;

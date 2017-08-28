@@ -11,12 +11,11 @@
 <fmt:message bundle="${msg}" key="menu.contactPage" var="contactPage"/>
 
 <fmt:message bundle="${msg}" key="menu.account" var="account"/>
-<fmt:message bundle="${msg}" key="menu.bids" var="bids"/>
-<fmt:message bundle="${msg}" key="menu.items" var="lots"/>
 <fmt:message bundle="${msg}" key="menu.logOut" var="logOut"/>
 <fmt:message bundle="${msg}" key="menu.balanceReplenishment" var="balanceReplenishment"/>
 
 <fmt:message bundle="${msg}" key="menu.management" var="management"/>
+<fmt:message bundle="${msg}" key="menu.balance" var="balance"/>
 
 <fmt:message bundle="${msg}" key="label.hi" var="hi"/>
 
@@ -56,7 +55,12 @@
                                 </form>
                             </c:if>
 
-                            <a href="#" class="w3-bar-item w3-button pro-hover-green w3-ripple">
+                            <div class="w3-container w3-justify">
+                                <b>${balance}: ${sessionScope.user.balance}</b>
+                            </div>
+
+                            <a href="${pageContext.request.contextPath}/jsp/user/account.jsp"
+                               class="w3-bar-item w3-button pro-hover-green w3-ripple">
                                     ${account}
                             </a>
                             <form action="${pageContext.request.contextPath}/controller">
@@ -67,14 +71,6 @@
                                class="w3-bar-item w3-button pro-hover-green w3-ripple">
                                     ${balanceReplenishment}
                             </a>
-                            <form action="${pageContext.request.contextPath}/controller">
-                                <input type="hidden" name="command" value="load-bids">
-                                <button class="w3-bar-item w3-button pro-hover-green w3-ripple">${bids}</button>
-                            </form>
-                            <form action="${pageContext.request.contextPath}/controller">
-                                <input type="hidden" name="command" value="load-user-items">
-                                <button class="w3-bar-item w3-button pro-hover-green w3-ripple">${lots}</button>
-                            </form>
                             <form action="${pageContext.request.contextPath}/controller">
                                 <input type="hidden" name="command" value="log-out">
                                 <button class="w3-bar-item w3-button pro-hover-green w3-ripple">${logOut}</button>

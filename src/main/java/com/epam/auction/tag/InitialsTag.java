@@ -23,7 +23,7 @@ public class InitialsTag extends TagSupport {
         try {
             this.pageContext.getOut().write(result.toString());
         } catch (IOException e) {
-            throw new JspException(e.getMessage(), e);
+            throw new JspException(e);
         }
         return SKIP_BODY;
     }

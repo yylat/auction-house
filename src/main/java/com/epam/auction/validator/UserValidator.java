@@ -20,9 +20,23 @@ public class UserValidator extends Validator {
                 validate(user.getPhoneNumber(), PHONE_PATTERN);
     }
 
-    public boolean validateSingInParam(User user) {
-        return validate(user.getUsername(), USERNAME_PATTERN) &&
-                validate(user.getPassword(), PASSWORD_PATTERN);
+    public boolean validateUsername(String username) {
+        return validate(username, USERNAME_PATTERN);
+    }
+
+    public boolean validateEmail(String email) {
+        return validate(email, EMAIL_PATTERN);
+    }
+
+    public boolean validatePassword(String password) {
+        return validate(password, PASSWORD_PATTERN);
+    }
+
+    public boolean validateProfile(String lastName, String middleName, String firstName, String phoneNumber) {
+        return validate(lastName, NAME_PATTERN) &&
+                validate(middleName, NAME_PATTERN) &&
+                validate(firstName, NAME_PATTERN) &&
+                validate(phoneNumber, PHONE_PATTERN);
     }
 
 }

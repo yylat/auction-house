@@ -70,7 +70,7 @@ public class NotificationDAOImpl extends GenericDAOImpl<Notification> implements
                 rows = resultSet.getInt(1);
             }
         } catch (SQLException e) {
-            throw new DAOLayerException(e.getMessage(), e);
+            throw new DAOLayerException(e);
         }
 
         return rows;

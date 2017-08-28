@@ -13,4 +13,12 @@ public interface UserReceiver extends Receiver {
 
     void replenishBalance(RequestContent requestContent) throws ReceiverLayerException;
 
+    void changeUsername(RequestContent requestContent) throws ReceiverLayerException;
+
+    void changeEmail(RequestContent requestContent) throws ReceiverLayerException;
+
+    void changePassword(RequestContent requestContent) throws ReceiverLayerException;
+
+    void updateProfile(RequestContent requestContent) throws ReceiverLayerException;
+
 }

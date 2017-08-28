@@ -55,7 +55,7 @@ public class BidReceiverImpl implements BidReceiver {
                 daoManager.commit();
             } catch (DAOLayerException e) {
                 daoManager.rollback();
-                throw new ReceiverLayerException(e.getMessage(), e);
+                throw new ReceiverLayerException(e);
             } finally {
                 daoManager.endTransaction();
             }
@@ -97,7 +97,7 @@ public class BidReceiverImpl implements BidReceiver {
 
                 requestContent.setRequestAttribute(RequestConstant.BID_ITEM_MAP, bidItemMap);
             } catch (DAOLayerException e) {
-                throw new ReceiverLayerException(e.getMessage(), e);
+                throw new ReceiverLayerException(e);
             }
         }
     }

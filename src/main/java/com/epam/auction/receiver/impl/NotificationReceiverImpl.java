@@ -57,7 +57,7 @@ public class NotificationReceiverImpl implements NotificationReceiver {
 
                 requestContent.setRequestAttribute(RequestConstant.NOTIFICATION_ITEM_MAP, notificationItemMap);
             } catch (DAOLayerException e) {
-                throw new ReceiverLayerException(e.getMessage(), e);
+                throw new ReceiverLayerException(e);
             }
         }
     }
