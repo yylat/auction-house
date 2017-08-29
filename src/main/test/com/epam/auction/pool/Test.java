@@ -5,9 +5,9 @@ import com.epam.auction.db.ConnectionPool;
 public class Test {
 
     @org.junit.Test
-    public void test(){
+    public void test() {
         ConnectionPool.init();
-       ConnectionPool.getInstance().takeConnection();
+        ConnectionPool.getInstance().takeConnection();
         ConnectionPool.getInstance().destroy();
     }
 

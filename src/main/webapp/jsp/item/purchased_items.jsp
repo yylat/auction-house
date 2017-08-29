@@ -8,7 +8,7 @@
 
 <fmt:message bundle="${msg}" key="label.projectTitle" var="projectTitle"/>
 
-<fmt:message bundle="${msg}" key="menu.comingItems" var="comingItems"/>
+<fmt:message bundle="${msg}" key="menu.purchasedItems" var="purchasedItems"/>
 
 <fmt:message bundle="${msg}" key="message.noItemsYet" var="noItemsYet"/>
 
@@ -16,7 +16,7 @@
 
 <c:if test="${requestScope.items == null}">
     <jsp:forward page="${pageContext.request.contextPath}/controller">
-        <jsp:param name="command" value="load-coming-items"/>
+        <jsp:param name="command" value="load-purchased-items"/>
     </jsp:forward>
 </c:if>
 
@@ -25,7 +25,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${comingItems}</title>
+    <title>${purchasedItems}</title>
     <link rel="icon" href="${pageContext.request.contextPath}/img/ic_gavel_black.png">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/reset.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/w3.css">
@@ -34,15 +34,11 @@
 
 <body>
 
-<ctg:items command="load-coming-items" title="${comingItems}">
+<ctg:items command="load-purchased-items" title="${purchasedItems}">
     <%@include file="/jsp/jspf/items.jsp" %>
 </ctg:items>
 
-<c:if test="${sessionScope.user == null}">
-    <%@ include file="/jsp/jspf/sign_in.jsp" %>
-    <%@ include file="/jsp/jspf/sign_up.jsp" %>
-    <script src="${pageContext.request.contextPath}/js/sign.js"></script>
-</c:if>
+<%@ include file="/jsp/jspf/item_modal.jsp" %>
 
 </body>
 

@@ -19,6 +19,15 @@ public class Item extends Entity {
     public Item() {
     }
 
+    public Item(String name, String description, BigDecimal startPrice, BigDecimal blitzPrice, Date startDate, Date closeDate) {
+        this.name = name;
+        this.description = description;
+        this.startPrice = startPrice;
+        this.blitzPrice = blitzPrice;
+        this.startDate = startDate;
+        this.closeDate = closeDate;
+    }
+
     public Item(String name, String description, BigDecimal startPrice, BigDecimal blitzPrice, Date startDate, Date closeDate, int itemCategoryId, int sellerId) {
         this.name = name;
         this.description = description;

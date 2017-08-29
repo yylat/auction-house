@@ -5,8 +5,7 @@ import com.epam.auction.entity.Item;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.util.Calendar;
 import java.util.Date;
 
 public class ItemValidator extends Validator {
@@ -21,15 +20,26 @@ public class ItemValidator extends Validator {
     private final Date minCloseDate;
 
     public ItemValidator() {
-        this.minStartDate = Date.from(LocalDateTime.now().plusHours(36).toInstant(ZoneOffset.UTC));
-        this.minCloseDate = Date.from(LocalDateTime.now().plusDays(3).toInstant(ZoneOffset.UTC));
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, 2);
+        this.minStartDate = calendar.getTime();
+        calendar.add(Calendar.DATE, 2);
+        this.minCloseDate = calendar.getTime();
     }
 
-    public boolean validItemParam(Item item) {
-        return validate(item.getName(), NAME_PATTERN) &&
-                validatePrice(item.getStartPrice()) &&
-                validatePrice(item.getBlitzPrice()) &&
-                validateDate(item);
+    public boolean validateItemParam(Item item) {
+        return validateItemParam(item.getName(),
+                item.getStartPrice(), item.getBlitzPrice(),
+                item.getStartDate(), item.getCloseDate());
+    }
+
+    public boolean validateItemParam(String name, BigDecimal startPrice, BigDecimal blitzPrice,
+                                     Date startDate, Date closeDate) {
+        return validate(name, NAME_PATTERN) &&
+                validatePrice(startPrice) &&
+                validatePrice(blitzPrice) &&
+                validateStartDate(startDate) &&
+                validateCloseDate(closeDate);
     }
 
     private boolean validatePrice(BigDecimal value) {
@@ -41,13 +51,22 @@ public class ItemValidator extends Validator {
         }
     }
 
-    private boolean validateDate(Item item) {
-        if (minStartDate.compareTo(item.getStartDate()) <= 0 && minCloseDate.compareTo(item.getCloseDate()) <= 0) {
+    private boolean validateStartDate(Date startDate) {
+        if (minStartDate.compareTo(startDate) <= 0) {
             return true;
         } else {
             setValidationMessage("Start date can begin from: " + minStartDate +
-                    ". Close date can begin from: " + minCloseDate +
-                    ". Entered start and close dates: " + item.getStartDate() + ", " + item.getCloseDate() + ".");
+                    ". Entered start date: " + startDate);
+            return false;
+        }
+    }
+
+    private boolean validateCloseDate(Date closeDate) {
+        if (minCloseDate.compareTo(closeDate) <= 0) {
+            return true;
+        } else {
+            setValidationMessage("Close date can begin from: " + minStartDate +
+                    ". Entered close date: " + closeDate);
             return false;
         }
     }

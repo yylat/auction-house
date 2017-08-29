@@ -19,4 +19,8 @@ public interface ItemReceiver extends Receiver {
 
     void loadItem(RequestContent requestContent) throws ReceiverLayerException;
 
+    void loadPurchasedItems(RequestContent requestContent) throws ReceiverLayerException;
+
+    void updateItem(RequestContent requestContent) throws ReceiverLayerException;
+
 }

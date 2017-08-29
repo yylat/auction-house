@@ -109,23 +109,59 @@ public class ItemDAOImpl extends GenericDAOImpl<Item> implements ItemDAO {
     }
 
     @Override
+    public int countRows(int userId, FilterCriteria filterCriteria) throws DAOLayerException {
+        String query = TableConstant.ITEM_QUERY_PURCHASED_ROWS_COUNT +
+                filterCriteria.buildWhereClausePart();
+
+        int rows = 0;
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            int i = 0;
+            statement.setInt(++i, userId);
+            for (Object value : filterCriteria.getValues()) {
+                statement.setObject(++i, value);
+            }
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                rows = resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            throw new DAOLayerException(e);
+        }
+
+        return rows;
+    }
+
+    @Override
     public List<Item> findItemsWithFilter(FilterCriteria filterCriteria, OrderCriteria orderCriteria,
                                           int offset, int limit) throws DAOLayerException {
         String query = TableConstant.ITEM_QUERY_FIND_ALL +
                 filterCriteria.buildWhereClause() +
                 orderCriteria.getQueryPart() +
                 TableConstant.ITEM_QUERY_LIMIT;
-        return findSpecificList(query, statement -> defineQuery(statement, filterCriteria, offset, limit));
+        return findSpecificList(query, statement -> defineFilterLimit(statement, 0, filterCriteria, offset, limit));
     }
 
-    private void defineQuery(PreparedStatement statement, FilterCriteria filterCriteria,
-                             int offset, int limit) throws SQLException {
-        int i = 0;
+    @Override
+    public List<Item> findPurchasedItems(int userId, FilterCriteria filterCriteria, OrderCriteria orderCriteria, int offset, int limit) throws DAOLayerException {
+        String query = TableConstant.ITEM_QUERY_PURCHASED +
+                filterCriteria.buildWhereClausePart() +
+                orderCriteria.getQueryPart() +
+                TableConstant.ITEM_QUERY_LIMIT;
+        return findSpecificList(query, statement -> {
+            statement.setInt(1, userId);
+            defineFilterLimit(statement, 1, filterCriteria, offset, limit);
+        });
+    }
+
+    private void defineFilterLimit(PreparedStatement statement, int startParameterIndex,
+                                   FilterCriteria filterCriteria, int offset, int limit) throws SQLException {
         for (Object value : filterCriteria.getValues()) {
-            statement.setObject(++i, value);
+            statement.setObject(++startParameterIndex, value);
         }
-        statement.setInt(++i, offset);
-        statement.setInt(++i, limit);
+        statement.setInt(++startParameterIndex, offset);
+        statement.setInt(++startParameterIndex, limit);
     }
 
 

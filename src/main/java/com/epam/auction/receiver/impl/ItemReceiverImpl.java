@@ -16,6 +16,7 @@ import com.epam.auction.entity.ItemStatus;
 import com.epam.auction.entity.Photo;
 import com.epam.auction.entity.User;
 import com.epam.auction.exception.DAOLayerException;
+import com.epam.auction.exception.MethodNotSupportedException;
 import com.epam.auction.exception.ReceiverLayerException;
 import com.epam.auction.exception.WrongFilterParameterException;
 import com.epam.auction.receiver.ItemReceiver;
@@ -57,7 +58,7 @@ public class ItemReceiverImpl implements ItemReceiver {
                 ((User) requestContent.getSessionAttribute(RequestConstant.USER)).getId());
 
         ItemValidator itemValidator = new ItemValidator();
-        if (itemValidator.validItemParam(item)) {
+        if (itemValidator.validateItemParam(item)) {
             List<InputStream> files = requestContent.getFiles();
 
             ItemDAO itemDAO = new ItemDAOImpl();
@@ -103,16 +104,93 @@ public class ItemReceiverImpl implements ItemReceiver {
     @Override
     public void loadItem(RequestContent requestContent) throws ReceiverLayerException {
         int itemId = Integer.valueOf(requestContent.getRequestParameter(RequestConstant.ITEM_ID)[0]);
-        requestContent.setSessionAttribute(RequestConstant.ITEM_ID, itemId);
 
         ItemDAO itemDAO = new ItemDAOImpl();
 
         try (DAOManager daoManager = new DAOManager(itemDAO)) {
-            requestContent.setRequestAttribute(RequestConstant.ITEM,
+            requestContent.setSessionAttribute(RequestConstant.ITEM,
                     itemDAO.findEntityById(itemId));
         } catch (DAOLayerException e) {
             throw new ReceiverLayerException(e);
         }
+    }
+
+    @Override
+    public void loadPurchasedItems(RequestContent requestContent) throws ReceiverLayerException {
+        User user = (User) requestContent.getSessionAttribute(RequestConstant.USER);
+        if (user != null) {
+            String[] pages = requestContent.getRequestParameter(RequestConstant.PAGES);
+
+            int pageToGo;
+            String[] page = requestContent.getRequestParameter(RequestConstant.PAGE);
+            if (page != null) {
+                pageToGo = Integer.valueOf(page[0]);
+            } else {
+                pageToGo = 1;
+            }
+            requestContent.setRequestAttribute(RequestConstant.PAGE, pageToGo);
+
+            ItemDAO itemDAO = new ItemDAOImpl();
+
+            try (DAOManager daoManager = new DAOManager(itemDAO)) {
+                FilterCriteria filterCriteria = new FilterCriteria();
+                extractFilterParameters(requestContent, filterCriteria);
+                OrderCriteria orderCriteria = extractOrderParameters(requestContent);
+
+                if (pages != null && pages[0] != null) {
+                    requestContent.setRequestAttribute(RequestConstant.PAGES, pages[0]);
+                } else {
+                    requestContent.setRequestAttribute(RequestConstant.PAGES,
+                            (itemDAO.countRows(user.getId(), filterCriteria) / itemsForPage) + 1);
+                }
+
+                List<Item> items = itemDAO.findPurchasedItems(user.getId(), filterCriteria, orderCriteria,
+                        (pageToGo - 1) * itemsForPage, itemsForPage);
+
+                requestContent.setRequestAttribute(RequestConstant.ITEMS, items);
+            } catch (DAOLayerException e) {
+                throw new ReceiverLayerException(e);
+            }
+        }
+    }
+
+    @Override
+    public void updateItem(RequestContent requestContent) throws ReceiverLayerException {
+        String newTitle = requestContent.getRequestParameter(RequestConstant.TITLE)[0];
+        String newDescription = requestContent.getRequestParameter(RequestConstant.DESCRIPTION)[0];
+        BigDecimal newStartPrice = new BigDecimal(requestContent.getRequestParameter(RequestConstant.START_PRICE)[0]);
+        BigDecimal newBlitzPrice = new BigDecimal(requestContent.getRequestParameter(RequestConstant.BLITZ_PRICE)[0]);
+        Date newStartDate = Date.valueOf(requestContent.getRequestParameter(RequestConstant.START_DATE)[0]);
+        Date newCloseDate = Date.valueOf(requestContent.getRequestParameter(RequestConstant.CLOSE_DATE)[0]);
+
+        ItemValidator itemValidator = new ItemValidator();
+
+        if (itemValidator.validateItemParam(newTitle, newStartPrice, newBlitzPrice, newStartDate, newCloseDate)) {
+            Item item = (Item) requestContent.getSessionAttribute(RequestConstant.ITEM);
+            item.setName(newTitle);
+            item.setDescription(newDescription);
+            item.setStartPrice(newStartPrice);
+            item.setBlitzPrice(newBlitzPrice);
+            item.setStartDate(newStartDate);
+            item.setCloseDate(newCloseDate);
+
+            ItemDAO itemDAO = new ItemDAOImpl();
+            DAOManager daoManager = new DAOManager(true, itemDAO);
+
+            daoManager.beginTransaction();
+            try {
+                itemDAO.update(item);
+                daoManager.commit();
+            } catch (DAOLayerException | MethodNotSupportedException e) {
+                daoManager.rollback();
+                throw new ReceiverLayerException(e);
+            } finally {
+                daoManager.endTransaction();
+            }
+
+
+        }
+
     }
 
     @Override
@@ -139,9 +217,7 @@ public class ItemReceiverImpl implements ItemReceiver {
         }
     }
 
-
-    private void loadItems(RequestContent requestContent, FilterCriteria filterCriteria)
-            throws ReceiverLayerException {
+    private void loadItems(RequestContent requestContent, FilterCriteria filterCriteria) throws ReceiverLayerException {
         String[] pages = requestContent.getRequestParameter(RequestConstant.PAGES);
 
         int pageToGo;

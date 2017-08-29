@@ -16,7 +16,12 @@ public interface ItemDAO extends GenericDAO<Item> {
 
     int countRows(FilterCriteria filterCriteria) throws DAOLayerException;
 
+    int countRows(int userId, FilterCriteria filterCriteria) throws DAOLayerException;
+
     List<Item> findItemsWithFilter(FilterCriteria filterCriteria, OrderCriteria orderCriteria,
+                                   int offset, int limit) throws DAOLayerException;
+
+    List<Item> findPurchasedItems(int userId, FilterCriteria filterCriteria, OrderCriteria orderCriteria,
                                    int offset, int limit) throws DAOLayerException;
 
 }

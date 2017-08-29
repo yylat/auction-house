@@ -2,7 +2,12 @@
 <fmt:message bundle="${msg}" key="auction.coming" var="comingAuctions"/>
 <fmt:message bundle="${msg}" key="auction.past" var="pastAuctions"/>
 <fmt:message bundle="${msg}" key="menu.bids" var="bids"/>
-<fmt:message bundle="${msg}" key="menu.items" var="lots"/>
+<fmt:message bundle="${msg}" key="menu.myItems" var="myItems"/>
+
+<fmt:message bundle="${msg}" key="menu.items" var="items"/>
+
+<fmt:message bundle="${msg}" key="menu.mine" var="mine"/>
+<fmt:message bundle="${msg}" key="menu.purchased" var="purchased"/>
 
 <div class="w3-sidebar w3-bar-block w3-collapse w3-animate-opacity sidebar right-separator" id="sidebar">
 
@@ -41,10 +46,25 @@
             <input type="hidden" name="command" value="load-bids">
             <button class="button-reset w3-bar-item pro-bottom-button capitalize">${bids}</button>
         </form>
-        <form action="${pageContext.request.contextPath}/controller">
-            <input type="hidden" name="command" value="load-user-items">
-            <button class="button-reset w3-bar-item pro-bottom-button capitalize">${lots}</button>
-        </form>
+
+        <div class="w3-bar-item">
+            <div class="capitalize">
+                    ${myItems}
+            </div>
+            <div class="w3-margin-left">
+                <form action="${pageContext.request.contextPath}/controller">
+                    <input type="hidden" name="command" value="load-purchased-items">
+                    <button class="button-reset w3-bar-item pro-bottom-button">${purchased}</button>
+                </form>
+            </div>
+            <div class="w3-margin-left">
+                <form action="${pageContext.request.contextPath}/controller">
+                    <input type="hidden" name="command" value="load-user-items">
+                    <button class="button-reset w3-bar-item pro-bottom-button">${mine}</button>
+                </form>
+            </div>
+        </div>
+
     </c:if>
 
     <a href="#" class="w3-bar-item pro-bottom-button">${contactPage}</a>

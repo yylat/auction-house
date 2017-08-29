@@ -19,4 +19,18 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
     </tag>
+    <tag>
+        <name>items</name>
+        <tag-class>com.epam.auction.tag.ItemsPageTag</tag-class>
+        <body-content>scriptless</body-content>
+        <attribute>
+            <name>command</name>
+            <required>true</required>
+        </attribute>
+        <attribute>
+            <name>title</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
 </taglib>

@@ -20,7 +20,7 @@ public class OrderCriteria {
     private static final String TYPE_ASC = "ASC";
     private static final String TYPE_DESC = "DESC";
 
-    private String queryPart = " ORDER BY ";
+    private String queryPart = " ORDER BY `item`.";
 
     public OrderCriteria() {
         queryPart += TableConstant.ITEM_COLUMN_ID;

@@ -27,10 +27,9 @@ public class FilterCriteria {
 
     public <T> void put(FilterQueryParameter filterQueryParameter, T value) throws WrongFilterParameterException {
         this.filterQueryParameters.add(filterQueryParameter);
-        if(filterQueryParameter.getParameterClass().equals(value.getClass())){
+        if (filterQueryParameter.getParameterClass().equals(value.getClass())) {
             this.values.add(value);
-        }
-        else{
+        } else {
             throw new WrongFilterParameterException();
         }
     }
@@ -39,11 +38,21 @@ public class FilterCriteria {
         StringBuilder whereClause = new StringBuilder(WHERE).append(SEPARATOR);
 
         Iterator<FilterQueryParameter> iterator = filterQueryParameters.iterator();
-        while(iterator.hasNext()){
+        while (iterator.hasNext()) {
             whereClause.append(iterator.next().getQueryPart()).append(SEPARATOR);
-            if(iterator.hasNext()){
+            if (iterator.hasNext()) {
                 whereClause.append(AND).append(SEPARATOR);
             }
+        }
+
+        return whereClause.toString();
+    }
+
+    public String buildWhereClausePart() {
+        StringBuilder whereClause = new StringBuilder(SEPARATOR);
+
+        for (FilterQueryParameter filterQueryParameter : filterQueryParameters) {
+            whereClause.append(AND).append(SEPARATOR).append(filterQueryParameter.getQueryPart()).append(SEPARATOR);
         }
 
         return whereClause.toString();

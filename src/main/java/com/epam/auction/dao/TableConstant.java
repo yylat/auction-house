@@ -106,7 +106,7 @@ public final class TableConstant {
 
     public final static String ITEM_QUERY_UPDATE_STATUS =
             "UPDATE `item` SET `item_status_id` = ? WHERE `item_id` = ?";
-;
+    ;
     public final static String ITEM_QUERY_FIND_ROWS_COUNT =
             "SELECT COUNT(*) FROM `item`";
 
@@ -115,6 +115,13 @@ public final class TableConstant {
 
     public final static String ITEM_QUERY_LIMIT = " LIMIT ?, ?";
 
+    private final static String ITEM_QUERY_PURCHASED_JOIN =
+            " INNER JOIN bid ON item.item_id = bid.item_id WHERE bid.bidder_id = ? AND item.item_status_id = 3 AND bid.is_winning = 1";
+    public final static String ITEM_QUERY_PURCHASED_ROWS_COUNT =
+            ITEM_QUERY_FIND_ROWS_COUNT + ITEM_QUERY_PURCHASED_JOIN;
+    public final static String ITEM_QUERY_PURCHASED =
+            "SELECT `item`.`item_id`, `item`.`name`, `item`.`description`, `item`.`start_price`, `item`.`blitz_price`, `item`.`actual_price`, `item`.`start_date`, `item`.`close_date`, `item`.`item_status_id`, `item`.`item_category_id`, `item`.`seller_id` FROM `item`" +
+                    ITEM_QUERY_PURCHASED_JOIN;
 
     //    Notification table
 

@@ -163,6 +163,18 @@ public enum CommandType {
         public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
             ((UserReceiver) getCommand().getReceiver()).updateProfile(requestContent);
         }
+    },
+    LOAD_PURCHASED_ITEMS(new LoadPurchasedItemsCommand(new ItemReceiverImpl())) {
+        @Override
+        public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
+            ((ItemReceiver) getCommand().getReceiver()).loadPurchasedItems(requestContent);
+        }
+    },
+    UPDATE_ITEM(new UpdateItemCommand(new ItemReceiverImpl())) {
+        @Override
+        public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
+            ((ItemReceiver) getCommand().getReceiver()).updateItem(requestContent);
+        }
     };
 
     private AbstractCommand command;
