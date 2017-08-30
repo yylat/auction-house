@@ -8,6 +8,7 @@ import com.epam.auction.exception.DAOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 public class UserDAOImpl extends GenericDAOImpl<User> implements UserDAO {
 
@@ -31,7 +32,7 @@ public class UserDAOImpl extends GenericDAOImpl<User> implements UserDAO {
                 resultSet.getString(TableConstant.USER_COLUMN_PHONE_NUMBER),
                 resultSet.getString(TableConstant.USER_COLUMN_EMAIL),
                 resultSet.getBigDecimal(TableConstant.USER_COLUMN_BALANCE),
-                resultSet.getBoolean(TableConstant.USER_COLUMN_IS_DELETED),
+                resultSet.getBoolean(TableConstant.USER_COLUMN_IS_BANNED),
                 User.UserRole.define(resultSet.getInt(TableConstant.USER_COLUMN_USER_ROLE_ID)));
     }
 
@@ -45,7 +46,7 @@ public class UserDAOImpl extends GenericDAOImpl<User> implements UserDAO {
         statement.setString(6, entity.getPhoneNumber());
         statement.setString(7, entity.getEmail());
         statement.setBigDecimal(8, entity.getBalance());
-        statement.setBoolean(9, entity.isDeleted());
+        statement.setBoolean(9, entity.getIsBanned());
         statement.setInt(10, entity.getRole().ordinal());
     }
 
@@ -65,7 +66,7 @@ public class UserDAOImpl extends GenericDAOImpl<User> implements UserDAO {
                 user.setPhoneNumber(resultSet.getString(TableConstant.USER_COLUMN_PHONE_NUMBER));
                 user.setEmail(resultSet.getString(TableConstant.USER_COLUMN_EMAIL));
                 user.setBalance(resultSet.getBigDecimal(TableConstant.USER_COLUMN_BALANCE));
-                user.setDeleted(resultSet.getBoolean(TableConstant.USER_COLUMN_IS_DELETED));
+                user.setIsBanned(resultSet.getBoolean(TableConstant.USER_COLUMN_IS_BANNED));
                 user.setRole(User.UserRole.define(resultSet.getInt(TableConstant.USER_COLUMN_USER_ROLE_ID)));
 
                 result = true;
@@ -83,6 +84,21 @@ public class UserDAOImpl extends GenericDAOImpl<User> implements UserDAO {
 
     public boolean isEmailAlreadyExist(String email) throws DAOException {
         return isAlreadyExist(email, TableConstant.USER_QUERY_IS_EXIST_EMAIL);
+    }
+
+    @Override
+    public int countRows(int userId) throws DAOException {
+        return countRows(TableConstant.USER_QUERY_FIND_ROWS_COUNT,
+                statement -> statement.setInt(1, userId));
+    }
+
+    @Override
+    public List<User> findUsersWithLimit(int userId, int offset, int limit) throws DAOException {
+        return findSpecificList(TableConstant.USER_QUERY_FIND_USERS_LIMIT, statement -> {
+            statement.setInt(1, userId);
+            statement.setInt(2, offset);
+            statement.setInt(3, limit);
+        });
     }
 
     private boolean isAlreadyExist(String parameter, String query) throws DAOException {

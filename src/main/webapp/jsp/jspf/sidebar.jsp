@@ -5,6 +5,7 @@
 <fmt:message bundle="${msg}" key="menu.myItems" var="myItems"/>
 
 <fmt:message bundle="${msg}" key="menu.items" var="items"/>
+<fmt:message bundle="${msg}" key="menu.users" var="users"/>
 
 <fmt:message bundle="${msg}" key="menu.forSale" var="mine"/>
 <fmt:message bundle="${msg}" key="menu.purchased" var="purchased"/>
@@ -19,9 +20,61 @@
         <div class="small-title uppercase">${menuTitle}</div>
     </div>
 
+    <div id="langSwitch" class="w3-bar-item w3-margin-bottom">
+        <c:choose>
+            <c:when test="${ sessionScope.locale.language eq 'en' }">
+                <a class="w3-row w3-medium a-button"
+                   href="${pageContext.request.contextPath}/controller?command=change_locale&lang=ru">
+                    <div class="w3-col">
+                        <div class="w3-col s6 pro-switch-grey-r pro-green">
+                            ru
+                        </div>
+                        <div class="w3-col s6 pro-switch-green-r pro-lightgrey">
+                            en
+                        </div>
+                    </div>
+                </a>
+            </c:when>
+            <c:otherwise>
+                <a class="w3-row w3-medium a-button"
+                   href="${pageContext.request.contextPath}/controller?command=change_locale&lang=en">
+                    <div class="w3-col">
+                        <div class="w3-col s6 pro-switch-green pro-lightgrey">
+                            ru
+                        </div>
+                        <div class="w3-col s6 pro-switch-grey pro-green">
+                            en
+                        </div>
+                    </div>
+                </a>
+            </c:otherwise>
+        </c:choose>
+    </div>
+
     <a href="${pageContext.request.contextPath}/jsp/active_items.jsp"
        class="w3-bar-item pro-bottom-button">${homePage}
     </a>
+
+    <c:if test="${sessionScope.user.role == 'ADMIN'}">
+        <div class="w3-bar-item">
+            <div class="capitalize">
+                    ${management}
+            </div>
+            <div class="w3-margin-left">
+                <form action="${pageContext.request.contextPath}/controller">
+                    <input type="hidden" name="command" value="load-items-for-check">
+                    <button class="button-reset w3-bar-item pro-bottom-button">${items}</button>
+                </form>
+            </div>
+            <div class="w3-margin-left">
+                <form action="${pageContext.request.contextPath}/controller">
+                    <input type="hidden" name="command" value="load-users">
+                    <button class="button-reset w3-bar-item pro-bottom-button">${users}</button>
+                </form>
+            </div>
+        </div>
+    </c:if>
+
 
     <div class="w3-bar-item">
         <div class="capitalize">
@@ -67,38 +120,7 @@
 
     </c:if>
 
-    <a href="#" class="w3-bar-item pro-bottom-button">${contactPage}</a>
-
-    <div id="langSwitch" class="w3-bar-item lang-button w3-margin-bottom">
-        <c:choose>
-            <c:when test="${ sessionScope.locale.language eq 'en' }">
-                <a class="w3-row w3-medium a-button"
-                   href="${pageContext.request.contextPath}/controller?command=change_locale&lang=ru">
-                    <div class="w3-col">
-                        <div class="w3-col s6 pro-switch-grey-r pro-green">
-                            ru
-                        </div>
-                        <div class="w3-col s6 pro-switch-green-r pro-lightgrey">
-                            en
-                        </div>
-                    </div>
-                </a>
-            </c:when>
-            <c:otherwise>
-                <a class="w3-row w3-medium a-button"
-                   href="${pageContext.request.contextPath}/controller?command=change_locale&lang=en">
-                    <div class="w3-col">
-                        <div class="w3-col s6 pro-switch-green pro-lightgrey">
-                            ru
-                        </div>
-                        <div class="w3-col s6 pro-switch-grey pro-green">
-                            en
-                        </div>
-                    </div>
-                </a>
-            </c:otherwise>
-        </c:choose>
-    </div>
+    <a href="#" class="w3-bar-item pro-bottom-button pro-margin-bottom">${contactPage}</a>
 
 </div>
 

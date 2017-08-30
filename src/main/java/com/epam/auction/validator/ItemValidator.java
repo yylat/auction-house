@@ -10,7 +10,7 @@ import java.util.Date;
 
 public class ItemValidator extends Validator {
 
-    private final static String NAME_PATTERN = "['A-Za-zА-Яа-яЁё ]{2,45}";
+    private static final String NAME_PATTERN = "['A-Za-zА-Яа-яЁё ]{2,45}";
 
     private static final BigDecimal minPrice = new BigDecimal(0);
     private static final BigDecimal maxPrice = new BigDecimal(999999999999999999999.999);

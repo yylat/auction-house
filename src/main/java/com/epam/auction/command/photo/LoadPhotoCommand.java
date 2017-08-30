@@ -12,7 +12,7 @@ import org.apache.logging.log4j.Logger;
 
 public class LoadPhotoCommand extends AbstractCommand {
 
-    private final static Logger LOGGER = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
 
     public LoadPhotoCommand(Receiver receiver) {
         super(receiver);

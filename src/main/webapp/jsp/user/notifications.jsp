@@ -69,30 +69,32 @@
                         <p>${noNotificationsYet}</p>
                     </c:when>
                     <c:otherwise>
-                        <c:forEach var="entry" items="${requestScope.notificationItemMap}">
+                        <div class="pro-margin-bottom">
+                            <c:forEach var="entry" items="${requestScope.notificationItemMap}">
 
-                            <div class="w3-container notification w3-margin">
-                                <form action="${pageContext.request.contextPath}/controller">
-                                    <input type="hidden" name="command" value="load-item"/>
-                                    <input type="hidden" name="itemId"
-                                           value="${entry.value.id}"/>
-                                    <div class="w3-container w3-cell">
-                                            ${entry.key.dateTime}
-                                    </div>
-                                    <div class="w3-container w3-cell">
-                                            ${pageScope[entry.key.type.toString().toLowerCase()]}
-                                    </div>
-                                    <div class="w3-container w3-cell">
-                                        <button class="link-button">
-                                            (${entry.value.name})
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
+                                <div class="w3-container notification w3-margin">
+                                    <form action="${pageContext.request.contextPath}/controller">
+                                        <input type="hidden" name="command" value="load-item"/>
+                                        <input type="hidden" name="itemId"
+                                               value="${entry.value.id}"/>
+                                        <div class="w3-container w3-cell">
+                                                ${entry.key.dateTime}
+                                        </div>
+                                        <div class="w3-container w3-cell">
+                                                ${pageScope[entry.key.type.toString().toLowerCase()]}
+                                        </div>
+                                        <div class="w3-container w3-cell">
+                                            <button class="link-button">
+                                                (${entry.value.name})
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
 
-                        </c:forEach>
+                            </c:forEach>
+                        </div>
 
-                        <div class="w3-center">
+                        <div class="page-bar w3-center">
                             <div id="pageBar" class="w3-bar w3-small w3-margin-top" data-command="load-bids"
                                  data-page="${requestScope.page}" data-pages="${requestScope.pages}">
                                 <a id="prevLink" class="w3-button">&laquo;</a>

@@ -5,13 +5,13 @@ import java.util.ResourceBundle;
 
 public class MessageProvider {
 
-    public final static String BID_MADE_SUCCESSFULLY = "message.bidMadeSuccessfully";
-    public final static String NOT_ENOUGH_MONEY = "message.notEnoughMoney";
-    public final static String YOUR_BID_IS_WINNING = "message.yourBidIsWinning";
+    public static final String BID_MADE_SUCCESSFULLY = "message.bidMadeSuccessfully";
+    public static final String NOT_ENOUGH_MONEY = "message.notEnoughMoney";
+    public static final String YOUR_BID_IS_WINNING = "message.yourBidIsWinning";
 
-    public final static String SUCCESSFUL_REGISTRATION = "message.successfulRegistration";
+    public static final String SUCCESSFUL_REGISTRATION = "message.successfulRegistration";
 
-    private final static String BUNDLE_NAME = "/localization/message";
+    private static final String BUNDLE_NAME = "/localization/message";
 
     private ResourceBundle resourceBundle;
 

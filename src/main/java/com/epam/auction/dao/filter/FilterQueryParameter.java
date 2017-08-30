@@ -21,9 +21,9 @@ public enum FilterQueryParameter {
     SELLER_ID(TableConstant.ITEM_COLUMN_SELLER_ID, QueryOperator.equal, Integer.class);
 
     private static class QueryOperator {
-        private final static String lessOrEqual = " <= ?";
-        private final static String moreOrEqual = " >= ?";
-        private final static String equal = " = ?";
+        private static final String lessOrEqual = " <= ?";
+        private static final String moreOrEqual = " >= ?";
+        private static final String equal = " = ?";
     }
 
     private String queryPart;

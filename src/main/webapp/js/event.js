@@ -1,36 +1,15 @@
 (function () {
 
-    /* tracking bottom of the page ------------------------------------------------------ */
+    var sidebar = document.getElementById("sidebar");
 
-    setInterval(function () {
-
-        if (window.innerWidth > 993) {
-
-            var langSwitch = document.getElementById("langSwitch");
-
-            var totalHeight = document.body.scrollHeight;
-            var visibleHeight = window.innerHeight;
-
-            var currentScroll;
-
-            if (document.documentElement.scrollTop) {
-                currentScroll = document.documentElement.scrollTop;
-            }
-            else {
-                currentScroll = document.body.scrollTop;
-            }
-
-            if (totalHeight <= (currentScroll + visibleHeight + 20)) {
-                langSwitch.style.bottom = "7em";
-            }
-            else {
-                langSwitch.style.bottom = "4em";
-            }
-        }
-
-    }, 10);
-
-    /* ---------------------------------------------------------------------------------- */
+    var sidebarCloseButton = document.getElementById("sidebarCloseButton");
+    var sidebarOpenButton = document.getElementById("sidebarOpenButton");
+    sidebarCloseButton.addEventListener("click", function(){
+        sidebar.style.display = "none";
+    });
+    sidebarOpenButton.addEventListener("click", function(){
+       sidebar.style.display = "block";
+    });
 
     /* remove default validation -------------------------------------------------------- */
 

@@ -34,82 +34,9 @@
 
 <body>
 
-<%@ include file="/jsp/jspf/header.jsp" %>
-
-<main>
-
-    <%@ include file="/jsp/jspf/sidebar.jsp" %>
-
-    <div class="w3-main main-left-margin">
-
-        <div class="content">
-
-            <div class="w3-row-padding w3-margin-top">
-
-                <div class="w3-col s8 w3-margin-top">
-                    <div class="middle-title uppercase">
-                        ${checkedItems}
-                    </div>
-                </div>
-
-                <div class="w3-col s4 w3-right">
-                    <div class="w3-dropdown-click w3-right">
-                        <button id="filterDropdownSwitch" class="w3-button">
-                            <img src="${pageContext.request.contextPath}/img/ic_menu_black_24px.svg">
-                        </button>
-                        <div id="filterDropdownContent"
-                             class="w3-dropdown-content right-dropdown-content pro-dropdown w3-bar-block w3-border">
-                            <form class="w3-container"
-                                  action="${pageContext.request.contextPath}/controller" method="post">
-                                <input type="hidden" name="command" value="load-items-for-check"/>
-                                <%@include file="/jsp/jspf/filters.jsp" %>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="w3-row-padding" id="itemsList">
-
-                <c:choose>
-                    <c:when test="${empty requestScope.items}">
-                        <p>${noItemsForCheck}</p>
-                    </c:when>
-                    <c:otherwise>
-
-                        <%@ include file="/jsp/jspf/items_list.jsp" %>
-
-                        <div class="w3-center">
-                            <div id="pageBar" class="w3-bar w3-small w3-margin-top" data-command="load-items-for-check"
-                                 data-page="${requestScope.page}" data-pages="${requestScope.pages}">
-                                <a id="prevLink" class="w3-button">&laquo;</a>
-
-                                <a id="nextLink" class="w3-button">&raquo;</a>
-                            </div>
-                        </div>
-
-                    </c:otherwise>
-                </c:choose>
-
-
-            </div>
-
-        </div>
-
-    </div>
-
-</main>
-
-<%@ include file="/jsp/jspf/footer.jsp" %>
-
-<script src="${pageContext.request.contextPath}/js/filter-dropdown.js"></script>
-
-<script src="${pageContext.request.contextPath}/js/load-categories.js"></script>
-
-<script src="${pageContext.request.contextPath}/js/pagination.js"></script>
-
-<script src="${pageContext.request.contextPath}/js/load-img.js"></script>
+<ctg:items command="load-items-for-check" title="${checkedItems}">
+    <%@include file="/jsp/jspf/items.jsp" %>
+</ctg:items>
 
 </body>
 

@@ -194,17 +194,14 @@ body {
     width: 200px;
 }
 
-.lang-button {
-    position: absolute;
-    bottom: 4em;
-}
-
 .main-left-margin {
     margin-left: 200px;
 }
 
 .content {
     padding-bottom: 16px;
+    position: relative;
+    min-height: 90%;
 }
 
 .w3-sidebar {
@@ -224,7 +221,7 @@ header {
 main {
     min-height: 100vh;
     padding-top: 3.4em;
-    padding-bottom: 8em;
+    padding-bottom: 4em;
     margin-left: 7%;
     margin-right: 7%;
     border-left: 4px solid #efefef;
@@ -508,8 +505,17 @@ b, strong {
     z-index: 10;
 }
 
-.hi-title{
+.pro-margin-bottom {
+    margin-bottom: 5em;
+}
 
+.page-bar {
+    position: absolute;
+    bottom: 1em;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
 }
 
 @media (max-width: 993px) {
@@ -548,7 +554,7 @@ b, strong {
         text-overflow: ellipsis;
     }
 
-    .hi-title{
+    .hi-title {
 
     }
 }

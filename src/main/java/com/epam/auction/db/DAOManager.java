@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 public class DAOManager implements AutoCloseable {
 
-    private final static Logger LOGGER = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
 
     private ProxyConnection connection = ConnectionPool.getInstance().takeConnection();
 

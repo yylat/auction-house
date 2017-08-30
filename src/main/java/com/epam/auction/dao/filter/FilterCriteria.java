@@ -8,9 +8,9 @@ import java.util.List;
 
 public class FilterCriteria {
 
-    private final static String WHERE = "WHERE";
-    private final static String SEPARATOR = " ";
-    private final static String AND = "AND";
+    private static final String WHERE = "WHERE";
+    private static final String SEPARATOR = " ";
+    private static final String AND = "AND";
 
     private List<FilterQueryParameter> filterQueryParameters;
     private List<Object> values;

@@ -9,6 +9,8 @@ public interface PaginationReceiver extends Receiver {
 
     void loadNotifications(RequestContent requestContent) throws ReceiverException;
 
+    void loadUsers(RequestContent requestContent) throws ReceiverException;
+
     void loadItemsForCheck(RequestContent requestContent) throws ReceiverException;
 
     void loadActiveItems(RequestContent requestContent) throws ReceiverException;

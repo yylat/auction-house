@@ -1,31 +1,16 @@
 package com.epam.auction.receiver.impl;
 
-import com.epam.auction.entity.ItemStatus;
-import com.epam.auction.exception.DAOException;
-import com.epam.auction.receiver.RequestConstant;
 import com.epam.auction.command.RequestContent;
 import com.epam.auction.dao.ItemDAO;
-import com.epam.auction.dao.UserDAO;
 import com.epam.auction.dao.impl.ItemDAOImpl;
-import com.epam.auction.dao.impl.UserDAOImpl;
 import com.epam.auction.db.DAOManager;
+import com.epam.auction.entity.ItemStatus;
+import com.epam.auction.exception.DAOException;
 import com.epam.auction.exception.ReceiverException;
 import com.epam.auction.receiver.AdminReceiver;
+import com.epam.auction.receiver.RequestConstant;
 
 public class AdminReceiverImpl implements AdminReceiver {
-
-    private static final String USERS_ATTR = "users";
-
-    @Override
-    public void loadUsers(RequestContent requestContent) throws ReceiverException {
-        UserDAO userDAO = new UserDAOImpl();
-
-        try (DAOManager daoManager = new DAOManager(userDAO)) {
-            requestContent.setRequestAttribute(USERS_ATTR, userDAO.findAll());
-        } catch (DAOException e) {
-            throw new ReceiverException(e);
-        }
-    }
 
     @Override
     public void approveItem(RequestContent requestContent) throws ReceiverException {

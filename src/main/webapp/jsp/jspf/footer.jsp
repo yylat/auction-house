@@ -3,5 +3,3 @@
         EPAM Final Project | 2017 Auction House | by Vladislav Shamyonok
     </div>
 </footer>
-
-<script src="${pageContext.request.contextPath}/js/event.js"></script>

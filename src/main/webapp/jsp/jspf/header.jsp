@@ -48,12 +48,6 @@
                             <div class="w3-container w3-right-align">
                                     ${hi},<br> ${sessionScope.user.username}
                             </div>
-                            <c:if test="${sessionScope.user.role == 'ADMIN'}">
-                                <form action="${pageContext.request.contextPath}/controller">
-                                    <input type="hidden" name="command" value="load-items-for-check">
-                                    <button class="w3-bar-item w3-button pro-hover-green w3-ripple">${management}</button>
-                                </form>
-                            </c:if>
 
                             <div class="w3-container w3-justify">
                                 <b>${balance}: ${sessionScope.user.balance}</b>

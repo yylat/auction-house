@@ -13,7 +13,7 @@ import org.apache.logging.log4j.Logger;
 
 public class LoadNotificationsCommand extends AbstractCommand {
 
-    private final static Logger LOGGER = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
 
     public LoadNotificationsCommand(Receiver receiver) {
         super(receiver);

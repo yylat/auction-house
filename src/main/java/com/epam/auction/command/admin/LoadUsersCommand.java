@@ -21,7 +21,7 @@ public class LoadUsersCommand extends AbstractCommand {
 
     @Override
     public PageGuide execute(RequestContent requestContent) {
-        PageGuide pageGuide = new PageGuide(PageAddress.MANAGEMENT, TransferMethod.FORWARD);
+        PageGuide pageGuide = new PageGuide(PageAddress.USER_MANAGEMENT, TransferMethod.FORWARD);
 
         try {
             doAction(requestContent);

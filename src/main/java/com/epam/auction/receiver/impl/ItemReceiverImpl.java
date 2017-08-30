@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 
 public class ItemReceiverImpl implements ItemReceiver {
 
-    private final static int itemsForPage = 8;
+    private static final int itemsForPage = 8;
 
     @Override
     public void loadCategories(RequestContent requestContent) throws ReceiverException {

@@ -13,7 +13,7 @@ public class User extends Entity {
     private String phoneNumber;
     private String email;
     private BigDecimal balance = new BigDecimal(0);
-    private boolean isDeleted = false;
+    private boolean isBanned = false;
     private UserRole role = UserRole.USER;
 
     public User() {
@@ -46,7 +46,7 @@ public class User extends Entity {
         this.role = role;
     }
 
-    public User(int id, String username, String password, String lastName, String middleName, String firstName, String phoneNumber, String email, BigDecimal balance, boolean isDeleted, UserRole role) {
+    public User(int id, String username, String password, String lastName, String middleName, String firstName, String phoneNumber, String email, BigDecimal balance, boolean isBanned, UserRole role) {
         super(id);
         this.username = username;
         this.password = password;
@@ -56,7 +56,7 @@ public class User extends Entity {
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.balance = balance;
-        this.isDeleted = isDeleted;
+        this.isBanned = isBanned;
         this.role = role;
     }
 
@@ -124,12 +124,12 @@ public class User extends Entity {
         this.balance = balance;
     }
 
-    public boolean isDeleted() {
-        return isDeleted;
+    public boolean getIsBanned() {
+        return isBanned;
     }
 
-    public void setDeleted(boolean deleted) {
-        isDeleted = deleted;
+    public void setIsBanned(boolean banned) {
+        isBanned = banned;
     }
 
     public UserRole getRole() {
@@ -147,7 +147,7 @@ public class User extends Entity {
 
         User user = (User) o;
 
-        if (isDeleted != user.isDeleted) return false;
+        if (isBanned != user.isBanned) return false;
         if (username != null ? !username.equals(user.username) : user.username != null) return false;
         if (password != null ? !password.equals(user.password) : user.password != null) return false;
         if (lastName != null ? !lastName.equals(user.lastName) : user.lastName != null) return false;
@@ -169,7 +169,7 @@ public class User extends Entity {
         result = 31 * result + (phoneNumber != null ? phoneNumber.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (balance != null ? balance.hashCode() : 0);
-        result = 31 * result + (isDeleted ? 1 : 0);
+        result = 31 * result + (isBanned ? 1 : 0);
         result = 31 * result + (role != null ? role.hashCode() : 0);
         return result;
     }

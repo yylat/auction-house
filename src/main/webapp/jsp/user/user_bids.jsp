@@ -65,53 +65,55 @@
                         <p>${noBidsYet}</p>
                     </c:when>
                     <c:otherwise>
+                        <div class="pro-margin-bottom">
 
-                        <div class="w3-responsive">
-                            <table class="w3-table w3-bordered">
-                                <thead>
-                                <tr class="pro-green">
-                                    <th>
-                                            ${item}
-                                    </th>
-                                    <th>
-                                            ${actualPrice}
-                                    </th>
-                                    <th>
-                                            ${yourBid}
-                                    </th>
-                                </tr>
-                                </thead>
-
-                                <c:forEach var="entry" items="${requestScope.bidItemMap}">
-                                    <tr>
-                                        <td>
-                                            <form action="${pageContext.request.contextPath}/controller">
-                                                <input type="hidden" name="command" value="load-item"/>
-                                                <input type="hidden" name="itemId"
-                                                       value="${entry.value.id}"/>
-                                                <button class="link-button">
-                                                        ${entry.value.name}
-                                                </button>
-                                            </form>
-                                        </td>
-                                        <td>
-                                            <div class="text-on-color money">
-                                                    ${entry.value.actualPrice}
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="text-on-color money">
-                                                    ${entry.key.bidValue}
-                                            </div>
-                                        </td>
+                            <div class="w3-responsive">
+                                <table class="w3-table w3-bordered">
+                                    <thead>
+                                    <tr class="pro-green">
+                                        <th>
+                                                ${item}
+                                        </th>
+                                        <th>
+                                                ${actualPrice}
+                                        </th>
+                                        <th>
+                                                ${yourBid}
+                                        </th>
                                     </tr>
+                                    </thead>
 
-                                </c:forEach>
+                                    <c:forEach var="entry" items="${requestScope.bidItemMap}">
+                                        <tr>
+                                            <td>
+                                                <form action="${pageContext.request.contextPath}/controller">
+                                                    <input type="hidden" name="command" value="load-item"/>
+                                                    <input type="hidden" name="itemId"
+                                                           value="${entry.value.id}"/>
+                                                    <button class="link-button">
+                                                            ${entry.value.name}
+                                                    </button>
+                                                </form>
+                                            </td>
+                                            <td>
+                                                <div class="text-on-color money">
+                                                        ${entry.value.actualPrice}
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="text-on-color money">
+                                                        ${entry.key.bidValue}
+                                                </div>
+                                            </td>
+                                        </tr>
 
-                            </table>
+                                    </c:forEach>
+
+                                </table>
+                            </div>
                         </div>
 
-                        <div class="w3-center">
+                        <div class="page-bar w3-center">
                             <div id="pageBar" class="w3-bar w3-small w3-margin-top" data-command="load-bids"
                                  data-page="${requestScope.page}" data-pages="${requestScope.pages}">
                                 <a id="prevLink" class="w3-button">&laquo;</a>

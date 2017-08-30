@@ -4,12 +4,14 @@ import com.epam.auction.command.RequestContent;
 import com.epam.auction.dao.BidDAO;
 import com.epam.auction.dao.ItemDAO;
 import com.epam.auction.dao.NotificationDAO;
+import com.epam.auction.dao.UserDAO;
 import com.epam.auction.dao.filter.FilterCriteria;
 import com.epam.auction.dao.filter.FilterQueryParameter;
 import com.epam.auction.dao.filter.OrderCriteria;
 import com.epam.auction.dao.impl.BidDAOImpl;
 import com.epam.auction.dao.impl.ItemDAOImpl;
 import com.epam.auction.dao.impl.NotificationDAOImpl;
+import com.epam.auction.dao.impl.UserDAOImpl;
 import com.epam.auction.db.DAOManager;
 import com.epam.auction.entity.Bid;
 import com.epam.auction.entity.Item;
@@ -83,6 +85,29 @@ public class PaginationReceiverImpl implements PaginationReceiver {
                 }
 
                 requestContent.setRequestAttribute(RequestConstant.NOTIFICATION_ITEM_MAP, notificationItemMap);
+            } catch (DAOException e) {
+                throw new ReceiverException(e);
+            }
+        }
+    }
+
+    @Override
+    public void loadUsers(RequestContent requestContent) throws ReceiverException {
+        User user = (User) requestContent.getSessionAttribute(RequestConstant.USER);
+
+        if (user != null) {
+            UserDAO userDAO = new UserDAOImpl();
+
+            try (DAOManager daoManager = new DAOManager(userDAO)) {
+                if (!definePagesNumber(requestContent)) {
+                    requestContent.setRequestAttribute(RequestConstant.PAGES,
+                            (userDAO.countRows(user.getId()) / PageParameter.NOTIFICATIONS_FOR_PAGE) + 1);
+                }
+
+                List<User> users = userDAO.findUsersWithLimit(user.getId(),
+                        defineOffset(requestContent, PageParameter.USERS_FOR_PAGE), PageParameter.USERS_FOR_PAGE);
+
+                requestContent.setRequestAttribute(RequestConstant.USERS, users);
             } catch (DAOException e) {
                 throw new ReceiverException(e);
             }

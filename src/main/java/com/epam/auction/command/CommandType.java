@@ -43,10 +43,10 @@ public enum CommandType {
             ((UserReceiver) getCommand().getReceiver()).logOut(requestContent);
         }
     },
-    LOAD_USERS(new LoadUsersCommand(new AdminReceiverImpl())) {
+    LOAD_USERS(new LoadUsersCommand(new PaginationReceiverImpl())) {
         @Override
         public void doReceiver(RequestContent requestContent) throws ReceiverException {
-            ((AdminReceiver) getCommand().getReceiver()).loadUsers(requestContent);
+            ((PaginationReceiver) getCommand().getReceiver()).loadUsers(requestContent);
         }
     },
     LOAD_USER_ITEMS(new LoadUserItemsCommand(new PaginationReceiverImpl())) {

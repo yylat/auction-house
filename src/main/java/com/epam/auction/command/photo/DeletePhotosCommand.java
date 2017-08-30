@@ -13,7 +13,7 @@ import org.apache.logging.log4j.Logger;
 
 public class DeletePhotosCommand extends AbstractCommand {
 
-    private final static Logger LOGGER = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
 
     public DeletePhotosCommand(Receiver receiver) {
         super(receiver);

@@ -25,7 +25,9 @@ public final class RequestConstant {
     public static final String WRONG_PASSWORD = "wrongPassword";
     public static final String WRONG_USERNAME_PASSWORD = "wrongUsernamePassword";
     public static final String USER = "user";
-
+    public static final String USER_ID = "userId";
+    public static final String BAN = "ban";
+    public static final String USERS = "users";
     public static final String USERNAME_ALREADY_EXIST = "usernameAlreadyExist";
     public static final String EMAIL_ALREADY_EXIST = "emailAlreadyExist";
 
@@ -66,8 +68,8 @@ public final class RequestConstant {
 
     public static final String MONEY_AMOUNT = "moneyAmount";
 
-    public final static String ORDER_BY = "order-by";
-    public final static String ORDER_TYPE = "order-type";
+    public static final String ORDER_BY = "order-by";
+    public static final String ORDER_TYPE = "order-type";
 
     public static final String FILTER_CRITERIA = "filterCriteria";
     public static final String ORDER_CRITERIA = "orderCriteria";

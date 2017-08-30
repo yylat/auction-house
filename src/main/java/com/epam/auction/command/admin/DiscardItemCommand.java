@@ -13,7 +13,7 @@ import org.apache.logging.log4j.Logger;
 
 public class DiscardItemCommand extends AbstractCommand {
 
-    private final static Logger LOGGER = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
 
     public DiscardItemCommand(Receiver receiver) {
         super(receiver);

@@ -12,7 +12,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class ConnectionPool {
 
-    private final static Logger LOGGER = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
 
     private static ReentrantLock lock = new ReentrantLock();
     private static AtomicBoolean isInitialized = new AtomicBoolean(false);
