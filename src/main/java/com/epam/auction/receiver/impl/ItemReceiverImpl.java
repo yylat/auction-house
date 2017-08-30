@@ -54,7 +54,7 @@ public class ItemReceiverImpl implements ItemReceiver {
                 new BigDecimal(requestContent.getRequestParameter(RequestConstant.BLITZ_PRICE)[0]),
                 Date.valueOf(requestContent.getRequestParameter(RequestConstant.START_DATE)[0]),
                 Date.valueOf(requestContent.getRequestParameter(RequestConstant.CLOSE_DATE)[0]),
-                Integer.valueOf(requestContent.getRequestParameter(RequestConstant.CATEGORY_ID)[0]),
+                Integer.valueOf(requestContent.getRequestParameter(RequestConstant.CATEGORY)[0]),
                 ((User) requestContent.getSessionAttribute(RequestConstant.USER)).getId());
 
         ItemValidator itemValidator = new ItemValidator();
@@ -191,6 +191,28 @@ public class ItemReceiverImpl implements ItemReceiver {
 
         }
 
+    }
+
+    @Override
+    public void addPhotos(RequestContent requestContent) throws ReceiverLayerException {
+        int itemId = ((Item) requestContent.getSessionAttribute(RequestConstant.ITEM)).getId();
+
+        List<InputStream> files = requestContent.getFiles();
+        if (files != null) {
+            PhotoDAO photoDAO = new PhotoDAOImpl();
+            DAOManager daoManager = new DAOManager(true, photoDAO);
+
+            daoManager.beginTransaction();
+            try {
+                savePhotos(photoDAO, files, itemId);
+                daoManager.commit();
+            } catch (DAOLayerException e) {
+                daoManager.rollback();
+                throw new ReceiverLayerException(e);
+            } finally {
+                daoManager.endTransaction();
+            }
+        }
     }
 
     @Override

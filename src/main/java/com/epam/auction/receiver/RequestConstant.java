@@ -31,6 +31,7 @@ public final class RequestConstant {
 
 
     public static final String ITEMS = "items";
+    public static final String CATEGORY = "category";
 
     public static final String BID_ITEM_MAP = "bidItemMap";
     public static final String NOTIFICATION_ITEM_MAP = "notificationItemMap";
@@ -46,6 +47,8 @@ public final class RequestConstant {
     public static final String ITEM_ID = "itemId";
 
     public static final String PHOTO = "photo";
+
+    public static final String PHOTO_ID = "photo-id";
 
     public static final String ITEM_STATUS = "item-status";
 

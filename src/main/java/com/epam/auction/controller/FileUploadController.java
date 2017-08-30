@@ -38,13 +38,13 @@ public class FileUploadController extends HttpServlet {
 
         List<InputStream> files = new ArrayList<>();
 
-        for(Part part : request.getParts()){
-            if(part.getSubmittedFileName() != null){
+        for (Part part : request.getParts()) {
+            if (part.getSubmittedFileName() != null && part.getSize() > 0) {
                 files.add(part.getInputStream());
             }
         }
 
-        if(!files.isEmpty()){
+        if (!files.isEmpty()) {
             requestContent.setFiles(files);
         }
 

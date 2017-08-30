@@ -9,4 +9,8 @@ public interface PhotoReceiver extends Receiver {
 
     void loadAllPhotos(RequestContent requestContent) throws ReceiverLayerException;
 
+    void loadPhotosForDelete(RequestContent requestContent) throws ReceiverLayerException;
+
+    void deletePhotos(RequestContent requestContent) throws ReceiverLayerException;
+
 }

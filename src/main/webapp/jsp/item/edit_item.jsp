@@ -20,13 +20,22 @@
 <fmt:message bundle="${msg}" key="form.closeDate" var="closeDate"/>
 <fmt:message bundle="${msg}" key="form.closeDateRule" var="closeDateRule"/>
 <fmt:message bundle="${msg}" key="item.update" var="updateItem"/>
+<fmt:message bundle="${msg}" key="message.noPhotosForItem" var="noPhotosForItem"/>
+<fmt:message bundle="${msg}" key="item.deletePhotos" var="deletePhotos"/>
+<fmt:message bundle="${msg}" key="item.addPhotos" var="addPhotos"/>
+<fmt:message bundle="${msg}" key="form.photos" var="photos"/>
+<fmt:message bundle="${msg}" key="form.messageFilesSelected" var="messageFilesSelected"/>
+<fmt:message bundle="${msg}" key="form.photosRule" var="photosRule"/>
+<fmt:message bundle="${msg}" key="form.photosSizeRule" var="photosSizeRule"/>
+<fmt:message bundle="${msg}" key="form.chooseFiles" var="chooseFiles"/>
+
 
 <html>
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${account}</title>
+    <title>${projectTitle}</title>
     <link rel="icon" href="${pageContext.request.contextPath}/img/ic_gavel_black.png">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/reset.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/w3.css">
@@ -52,6 +61,10 @@
             <form action="${pageContext.request.contextPath}/controller" method="post"
                   class="w3-border-bottom">
                 <input type="hidden" name="command" value="update-item"/>
+
+                <div class="w3-container">
+                    <div class="capitalize w3-margin-bottom"><b>${updateItem}</b></div>
+                </div>
 
                 <div class="w3-row-padding bottom-padding">
                     <div class="w3-col m6 w3-container bottom-padding">
@@ -107,6 +120,54 @@
                 </div>
 
             </form>
+
+            <form action="${pageContext.request.contextPath}/controller" method="post"
+                  id="deletePhotosForm" class="w3-border-bottom">
+                <input type="hidden" name="command" value="delete-photos"/>
+
+                <div class="w3-container w3-margin-top">
+                    <div class="capitalize w3-margin-bottom"><b>${deletePhotos}</b></div>
+                </div>
+
+                <div class="w3-container w3-row-padding w3-margin-top w3-margin-bottom photos-container" id="photos"
+                     data-error-message="${noPhotosForItem}"
+                     data-item-id="${sessionScope.item.id}">
+                </div>
+
+                <div class="w3-container w3-margin">
+                    <button id="deletePhotosButton"
+                            class="w3-button pro-green w3-margin-bottom">${deletePhotos}</button>
+                </div>
+
+            </form>
+
+            <form action="${pageContext.request.contextPath}/upload" method="post" enctype="multipart/form-data"
+                  id="addPhotosForm" class="w3-border-bottom">
+                <input type="hidden" name="command" value="add-photos"/>
+
+                <div class="w3-container w3-margin-top">
+                    <div class="capitalize w3-margin-bottom"><b>${addPhotos}</b></div>
+                </div>
+
+                <div class="w3-row-padding margin-bottom">
+                    <div class="w3-col m6 w3-container">
+                        <label><b>${photos}</b></label>
+                        <input name="file" type="file" id="fileInput" class="inputfile"
+                               title="${photosRule}"
+                               data-multiple-caption="{count} ${messageFilesSelected}"
+                               data-size-message="${photosSizeRule}"
+                               data-rule-message="${photosRule}" multiple/>
+                        <label for="fileInput"><img src="${pageContext.request.contextPath}/img/file.svg"/>
+                            <span>${chooseFiles}</span></label>
+                    </div>
+                </div>
+
+                <div class="w3-container w3-margin">
+                    <button id="addPhotosButton"
+                            class="w3-button pro-green w3-margin-bottom">${addPhotos}</button>
+                </div>
+            </form>
+
         </div>
 
     </div>
@@ -117,6 +178,11 @@
 <%@ include file="/jsp/jspf/message.jsp" %>
 
 <%@ include file="/jsp/jspf/footer.jsp" %>
+
+<script src="${pageContext.request.contextPath}/js/date-validation.js"></script>
+<script src="${pageContext.request.contextPath}/js/update-photos.js"></script>
+<script src="${pageContext.request.contextPath}/js/custom-file-inputs.js"></script>
+
 
 </body>
 

@@ -6,8 +6,7 @@ import com.epam.auction.command.admin.LoadItemsForCheckCommand;
 import com.epam.auction.command.bid.MakeBidCommand;
 import com.epam.auction.command.item.*;
 import com.epam.auction.command.notification.LoadNotificationsCommand;
-import com.epam.auction.command.photo.LoadAllPhotosCommand;
-import com.epam.auction.command.photo.LoadPhotoCommand;
+import com.epam.auction.command.photo.*;
 import com.epam.auction.command.admin.LoadUsersCommand;
 import com.epam.auction.command.bid.LoadBidsCommand;
 import com.epam.auction.command.common.ChangeLocaleCommand;
@@ -174,6 +173,24 @@ public enum CommandType {
         @Override
         public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
             ((ItemReceiver) getCommand().getReceiver()).updateItem(requestContent);
+        }
+    },
+    LOAD_PHOTOS_FOR_DELETE(new LoadPhotosForDeleteCommand(new PhotoReceiverImpl())) {
+        @Override
+        public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
+            ((PhotoReceiver) getCommand().getReceiver()).loadPhotosForDelete(requestContent);
+        }
+    },
+    DELETE_PHOTOS(new DeletePhotosCommand(new PhotoReceiverImpl())) {
+        @Override
+        public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
+            ((PhotoReceiver) getCommand().getReceiver()).deletePhotos(requestContent);
+        }
+    },
+    ADD_PHOTOS(new AddPhotosCommand(new ItemReceiverImpl())) {
+        @Override
+        public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
+            ((ItemReceiver) getCommand().getReceiver()).addPhotos(requestContent);
         }
     };
 

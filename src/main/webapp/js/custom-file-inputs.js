@@ -1,5 +1,3 @@
-'use strict';
-
 ( function (document, window, index) {
     var inputs = document.querySelectorAll(".inputfile");
     Array.prototype.forEach.call(inputs, function (input) {
@@ -9,9 +7,15 @@
         input.addEventListener("change", function (e) {
             var fileMessage = "";
 
+            var maxFileNumber = this.getAttribute("data-max-file-number");
+            if (!maxFileNumber) {
+                maxFileNumber = 4;
+            }
+
             if (this.files && this.files.length > 1) {
-                if (this.files.length < 5) {
+                if (this.files.length < maxFileNumber) {
                     fileMessage = ( this.getAttribute("data-multiple-caption") || "" ).replace("{count}", this.files.length);
+                    this.setCustomValidity("");
                 }
                 else {
                     this.value = "";
@@ -21,6 +25,7 @@
             }
             else {
                 fileMessage = e.target.value.split("\\").pop();
+                this.setCustomValidity("");
             }
 
             var filesSize = checkFilesSize(this.files, this.getAttribute("data-size-message"));

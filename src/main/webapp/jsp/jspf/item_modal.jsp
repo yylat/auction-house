@@ -24,6 +24,7 @@
 <div id="addItemModal" class="w3-modal pro-modal">
     <div class="w3-modal-content w3-card-4 w3-animate-zoom modal-content">
 
+
         <div class="w3-center w3-padding-16 pro-green capitalize">
             <span id="addItemCloseButton"
                   class="w3-button w3-large w3-hover-red w3-display-topright" title="close sign in form">
@@ -92,7 +93,7 @@
                     <div class="w3-container bottom-padding">
                         <label for="categoriesList"><b>${category}</b></label>
 
-                        <select name="category-id" id="categoriesList" class="w3-select">
+                        <select name="category" id="categoriesList" class="w3-select">
                             <option value="" disabled selected>${chooseCategory}</option>
                         </select>
 

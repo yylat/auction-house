@@ -5,13 +5,12 @@
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 <fmt:setBundle basename="/localization/message" var="msg"/>
 
-<fmt:message bundle="${msg}" key="page.error" var="pageTitle"/>
 
 <html>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${pageTitle}</title>
+    <title>${projectTitle}</title>
     <link rel="icon" href="${pageContext.request.contextPath}/img/ic_gavel_black.png">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/reset.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/w3.css">

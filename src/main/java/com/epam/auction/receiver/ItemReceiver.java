@@ -23,4 +23,6 @@ public interface ItemReceiver extends Receiver {
 
     void updateItem(RequestContent requestContent) throws ReceiverLayerException;
 
+    void addPhotos(RequestContent requestContent) throws ReceiverLayerException;
+
 }

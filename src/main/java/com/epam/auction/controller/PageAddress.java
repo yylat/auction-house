@@ -2,6 +2,9 @@ package com.epam.auction.controller;
 
 public final class PageAddress {
 
+    private PageAddress() {
+    }
+
     public final static String INDEX = "/index.jsp";
     public final static String ERROR = "/jsp/error.jsp";
     public final static String MANAGEMENT = "/jsp/admin/management.jsp";
@@ -15,5 +18,6 @@ public final class PageAddress {
     public final static String COMING_ITEMS = "/jsp/item/coming_items.jsp";
     public final static String ACCOUNT = "/jsp/user/account.jsp";
     public final static String PURCHASED_ITEMS = "/jsp/item/purchased_items.jsp";
+    public final static String EDIT_ITEM = "/jsp/item/edit_item.jsp";
 
 }
