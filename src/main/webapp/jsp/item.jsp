@@ -40,6 +40,8 @@
 
 <fmt:message bundle="${msg}" key="label.makeBid" var="makeBid"/>
 
+<fmt:message bundle="${msg}" key="item.delete" var="delete"/>
+
 <fmt:message bundle="${msg}" key="status.title" var="statusTitle"/>
 <fmt:message bundle="${msg}" key="status.created" var="created"/>
 <fmt:message bundle="${msg}" key="status.confirmed" var="confirmed"/>
@@ -100,11 +102,23 @@
 
                                 </div>
                             </c:when>
-                            <c:when test="${sessionScope.user.id == sessionScope.item.sellerId}">
-                                <a href="${pageContext.request.contextPath}/jsp/item/edit_item.jsp"
-                                   class="w3-button pro-green w3-ripple">
-                                        ${edit}
-                                </a>
+                            <c:when test="${(sessionScope.user.id == sessionScope.item.sellerId) &&
+                                ((sessionScope.item.status == 'CREATED') || (sessionScope.item.status == 'CONFIRMED'))}">
+
+                                <div class="w3-bar">
+                                    <a href="${pageContext.request.contextPath}/jsp/item/edit_item.jsp"
+                                       class="w3-bar-item w3-button pro-green w3-ripple">
+                                            ${edit}
+                                    </a>
+
+                                    <form class="w3-bar-item" action="${pageContext.request.contextPath}/controller">
+                                        <input type="hidden" name="command" value="delete-item"/>
+                                        <button class="w3-button pro-green w3-ripple">
+                                                ${delete}
+                                        </button>
+                                    </form>
+                                </div>
+
                             </c:when>
                         </c:choose>
                     </c:if>

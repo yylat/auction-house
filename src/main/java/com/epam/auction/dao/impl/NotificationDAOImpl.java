@@ -3,7 +3,7 @@ package com.epam.auction.dao.impl;
 import com.epam.auction.dao.NotificationDAO;
 import com.epam.auction.dao.TableConstant;
 import com.epam.auction.entity.Notification;
-import com.epam.auction.exception.DAOLayerException;
+import com.epam.auction.exception.DAOException;
 import com.epam.auction.exception.MethodNotSupportedException;
 
 import java.sql.PreparedStatement;
@@ -36,20 +36,20 @@ public class NotificationDAOImpl extends GenericDAOImpl<Notification> implements
 
     }
 
-    public boolean delete(int id) throws DAOLayerException, MethodNotSupportedException {
+    public boolean delete(int id) throws DAOException, MethodNotSupportedException {
         throw new MethodNotSupportedException();
     }
 
-    public boolean create(Notification entity) throws DAOLayerException {
+    public boolean create(Notification entity) throws DAOException {
         return false;
     }
 
-    public boolean update(Notification entity) throws DAOLayerException, MethodNotSupportedException {
+    public boolean update(Notification entity) throws DAOException, MethodNotSupportedException {
         throw new MethodNotSupportedException();
     }
 
     @Override
-    public List<Notification> findUsersNotifications(int userId, int offset, int limit) throws DAOLayerException {
+    public List<Notification> findUsersNotifications(int userId, int offset, int limit) throws DAOException {
         return findSpecificList(TableConstant.NOTIFICATION_QUERY_FIND_FOR_USER_LIMIT,
                 statement -> {
                     statement.setInt(1, userId);
@@ -59,21 +59,9 @@ public class NotificationDAOImpl extends GenericDAOImpl<Notification> implements
     }
 
     @Override
-    public int countRows(int userId) throws DAOLayerException {
-        int rows = 0;
-
-        try (PreparedStatement statement = connection.prepareStatement(TableConstant.NOTIFICATION_QUERY_FIND_NUMBER_FOR_USER)) {
-            statement.setInt(1, userId);
-            ResultSet resultSet = statement.executeQuery();
-
-            if (resultSet.next()) {
-                rows = resultSet.getInt(1);
-            }
-        } catch (SQLException e) {
-            throw new DAOLayerException(e);
-        }
-
-        return rows;
+    public int countRows(int userId) throws DAOException {
+        return countRows(TableConstant.NOTIFICATION_QUERY_FIND_NUMBER_FOR_USER,
+                statement -> statement.setInt(1, userId));
     }
 
 }

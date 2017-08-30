@@ -1,4 +1,4 @@
-package com.epam.auction.command.user;
+package com.epam.auction.command.item;
 
 import com.epam.auction.command.AbstractCommand;
 import com.epam.auction.command.RequestContent;
@@ -11,25 +11,24 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class UpdateProfileCommand extends AbstractCommand {
+public class DeleteItemCommand extends AbstractCommand {
 
-    private static final Logger LOGGER = LogManager.getLogger();
+    private final static Logger LOGGER = LogManager.getLogger();
 
-    public UpdateProfileCommand(Receiver receiver) {
+    public DeleteItemCommand(Receiver receiver) {
         super(receiver);
     }
 
     @Override
     public PageGuide execute(RequestContent requestContent) {
-        PageGuide pageGuide = new PageGuide(PageAddress.ACCOUNT, TransferMethod.REDIRECT);
+        PageGuide pageGuide = new PageGuide(PageAddress.USER_ITEMS, TransferMethod.REDIRECT);
 
         try {
             doAction(requestContent);
         } catch (ReceiverException e) {
-            LOGGER.log(Level.ERROR, e);
+            LOGGER.log(Level.ERROR, e.getMessage(), e);
         }
 
         return pageGuide;
     }
-
 }

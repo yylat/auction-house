@@ -6,7 +6,7 @@ import com.epam.auction.dao.filter.FilterCriteria;
 import com.epam.auction.dao.filter.OrderCriteria;
 import com.epam.auction.entity.Item;
 import com.epam.auction.entity.ItemStatus;
-import com.epam.auction.exception.DAOLayerException;
+import com.epam.auction.exception.DAOException;
 import com.epam.auction.exception.MethodNotSupportedException;
 
 import java.sql.PreparedStatement;
@@ -59,7 +59,7 @@ public class ItemDAOImpl extends GenericDAOImpl<Item> implements ItemDAO {
     }
 
     @Override
-    public boolean updateItemStatus(int itemId, ItemStatus itemStatus) throws DAOLayerException {
+    public boolean updateItemStatus(int itemId, ItemStatus itemStatus) throws DAOException {
         return executeUpdate(TableConstant.ITEM_QUERY_UPDATE_STATUS, statement -> {
             statement.setInt(1, itemStatus.ordinal());
             statement.setInt(2, itemId);
@@ -67,75 +67,32 @@ public class ItemDAOImpl extends GenericDAOImpl<Item> implements ItemDAO {
     }
 
     @Override
-    public int countRows(int userId) throws DAOLayerException {
-        int rows = 0;
-
-        try (PreparedStatement statement = connection.prepareStatement(TableConstant.ITEM_QUERY_FIND_NUMBER_FOR_USER)) {
-            statement.setInt(1, userId);
-            ResultSet resultSet = statement.executeQuery();
-
-            if (resultSet.next()) {
-                rows = resultSet.getInt(1);
-            }
-        } catch (SQLException e) {
-            throw new DAOLayerException(e);
-        }
-
-        return rows;
+    public int countRows(int userId) throws DAOException {
+        return countRows(TableConstant.ITEM_QUERY_FIND_NUMBER_FOR_USER,
+                statement -> statement.setInt(1, userId));
     }
 
     @Override
-    public int countRows(FilterCriteria filterCriteria) throws DAOLayerException {
+    public int countRows(FilterCriteria filterCriteria) throws DAOException {
         String query = TableConstant.ITEM_QUERY_FIND_ROWS_COUNT +
                 filterCriteria.buildWhereClause();
-
-        int rows = 0;
-
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            int i = 0;
-            for (Object value : filterCriteria.getValues()) {
-                statement.setObject(++i, value);
-            }
-            ResultSet resultSet = statement.executeQuery();
-
-            if (resultSet.next()) {
-                rows = resultSet.getInt(1);
-            }
-        } catch (SQLException e) {
-            throw new DAOLayerException(e);
-        }
-
-        return rows;
+        return countRows(query,
+                statement -> defineFilter(statement, 0, filterCriteria));
     }
 
     @Override
-    public int countRows(int userId, FilterCriteria filterCriteria) throws DAOLayerException {
+    public int countRows(int userId, FilterCriteria filterCriteria) throws DAOException {
         String query = TableConstant.ITEM_QUERY_PURCHASED_ROWS_COUNT +
                 filterCriteria.buildWhereClausePart();
-
-        int rows = 0;
-
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            int i = 0;
-            statement.setInt(++i, userId);
-            for (Object value : filterCriteria.getValues()) {
-                statement.setObject(++i, value);
-            }
-            ResultSet resultSet = statement.executeQuery();
-
-            if (resultSet.next()) {
-                rows = resultSet.getInt(1);
-            }
-        } catch (SQLException e) {
-            throw new DAOLayerException(e);
-        }
-
-        return rows;
+        return countRows(query, statement -> {
+            statement.setInt(1, userId);
+            defineFilter(statement, 2, filterCriteria);
+        });
     }
 
     @Override
     public List<Item> findItemsWithFilter(FilterCriteria filterCriteria, OrderCriteria orderCriteria,
-                                          int offset, int limit) throws DAOLayerException {
+                                          int offset, int limit) throws DAOException {
         String query = TableConstant.ITEM_QUERY_FIND_ALL +
                 filterCriteria.buildWhereClause() +
                 orderCriteria.getQueryPart() +
@@ -144,7 +101,7 @@ public class ItemDAOImpl extends GenericDAOImpl<Item> implements ItemDAO {
     }
 
     @Override
-    public List<Item> findPurchasedItems(int userId, FilterCriteria filterCriteria, OrderCriteria orderCriteria, int offset, int limit) throws DAOLayerException {
+    public List<Item> findPurchasedItems(int userId, FilterCriteria filterCriteria, OrderCriteria orderCriteria, int offset, int limit) throws DAOException {
         String query = TableConstant.ITEM_QUERY_PURCHASED +
                 filterCriteria.buildWhereClausePart() +
                 orderCriteria.getQueryPart() +
@@ -153,6 +110,13 @@ public class ItemDAOImpl extends GenericDAOImpl<Item> implements ItemDAO {
             statement.setInt(1, userId);
             defineFilterLimit(statement, 1, filterCriteria, offset, limit);
         });
+    }
+
+    private void defineFilter(PreparedStatement statement, int startParameterIndex, FilterCriteria filterCriteria)
+            throws SQLException {
+        for (Object value : filterCriteria.getValues()) {
+            statement.setObject(++startParameterIndex, value);
+        }
     }
 
     private void defineFilterLimit(PreparedStatement statement, int startParameterIndex,

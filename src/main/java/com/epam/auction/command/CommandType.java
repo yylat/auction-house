@@ -11,7 +11,7 @@ import com.epam.auction.command.admin.LoadUsersCommand;
 import com.epam.auction.command.bid.LoadBidsCommand;
 import com.epam.auction.command.common.ChangeLocaleCommand;
 import com.epam.auction.command.user.*;
-import com.epam.auction.exception.ReceiverLayerException;
+import com.epam.auction.exception.ReceiverException;
 import com.epam.auction.receiver.*;
 import com.epam.auction.receiver.impl.*;
 
@@ -21,19 +21,19 @@ public enum CommandType {
 
     SIGN_UP(new SignUpCommand(new UserReceiverImpl())) {
         @Override
-        public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
+        public void doReceiver(RequestContent requestContent) throws ReceiverException {
             ((UserReceiver) getCommand().getReceiver()).signUp(requestContent);
         }
     },
     SIGN_IN(new SignInCommand(new UserReceiverImpl())) {
         @Override
-        public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
+        public void doReceiver(RequestContent requestContent) throws ReceiverException {
             ((UserReceiver) getCommand().getReceiver()).signIn(requestContent);
         }
     },
     CHANGE_LOCALE(new ChangeLocaleCommand(new CommonReceiverImpl())) {
         @Override
-        public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
+        public void doReceiver(RequestContent requestContent) throws ReceiverException {
             ((CommonReceiver) getCommand().getReceiver()).changeLocale(requestContent);
         }
     },
@@ -45,152 +45,158 @@ public enum CommandType {
     },
     LOAD_USERS(new LoadUsersCommand(new AdminReceiverImpl())) {
         @Override
-        public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
+        public void doReceiver(RequestContent requestContent) throws ReceiverException {
             ((AdminReceiver) getCommand().getReceiver()).loadUsers(requestContent);
         }
     },
-    LOAD_USER_ITEMS(new LoadUserItemsCommand(new ItemReceiverImpl())) {
+    LOAD_USER_ITEMS(new LoadUserItemsCommand(new PaginationReceiverImpl())) {
         @Override
-        public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
-            ((ItemReceiver) getCommand().getReceiver()).loadUserItems(requestContent);
+        public void doReceiver(RequestContent requestContent) throws ReceiverException {
+            ((PaginationReceiver) getCommand().getReceiver()).loadUserItems(requestContent);
         }
     },
     LOAD_CATEGORIES(new LoadUserItemsCommand(new ItemReceiverImpl())) {
         @Override
-        public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
+        public void doReceiver(RequestContent requestContent) throws ReceiverException {
             ((ItemReceiver) getCommand().getReceiver()).loadCategories(requestContent);
         }
     },
     CREATE_ITEM(new CreateItemCommand(new ItemReceiverImpl())) {
         @Override
-        public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
+        public void doReceiver(RequestContent requestContent) throws ReceiverException {
             ((ItemReceiver) getCommand().getReceiver()).createItem(requestContent);
         }
     },
     LOAD_PHOTO(new LoadPhotoCommand(new PhotoReceiverImpl())) {
         @Override
-        public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
+        public void doReceiver(RequestContent requestContent) throws ReceiverException {
             ((PhotoReceiver) getCommand().getReceiver()).loadPhoto(requestContent);
         }
     },
     APPROVE_ITEM(new ApproveItemCommand(new AdminReceiverImpl())) {
         @Override
-        public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
+        public void doReceiver(RequestContent requestContent) throws ReceiverException {
             ((AdminReceiver) getCommand().getReceiver()).approveItem(requestContent);
         }
     },
-    LOAD_ITEMS_FOR_CHECK(new LoadItemsForCheckCommand(new ItemReceiverImpl())) {
+    LOAD_ITEMS_FOR_CHECK(new LoadItemsForCheckCommand(new PaginationReceiverImpl())) {
         @Override
-        public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
-            ((ItemReceiver) getCommand().getReceiver()).loadItemsForCheck(requestContent);
+        public void doReceiver(RequestContent requestContent) throws ReceiverException {
+            ((PaginationReceiver) getCommand().getReceiver()).loadItemsForCheck(requestContent);
         }
     },
     LOAD_ITEM(new LoadItemCommand(new ItemReceiverImpl())) {
         @Override
-        public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
+        public void doReceiver(RequestContent requestContent) throws ReceiverException {
             ((ItemReceiver) getCommand().getReceiver()).loadItem(requestContent);
         }
     },
     LOAD_ALL_PHOTOS(new LoadAllPhotosCommand(new PhotoReceiverImpl())) {
         @Override
-        public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
+        public void doReceiver(RequestContent requestContent) throws ReceiverException {
             ((PhotoReceiver) getCommand().getReceiver()).loadAllPhotos(requestContent);
         }
     },
-    LOAD_BIDS(new LoadBidsCommand(new BidReceiverImpl())) {
+    LOAD_BIDS(new LoadBidsCommand(new PaginationReceiverImpl())) {
         @Override
-        public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
-            ((BidReceiver) getCommand().getReceiver()).loadBids(requestContent);
+        public void doReceiver(RequestContent requestContent) throws ReceiverException {
+            ((PaginationReceiver) getCommand().getReceiver()).loadBids(requestContent);
         }
     },
-    LOAD_ACTIVE_ITEMS(new LoadActiveItemsCommand(new ItemReceiverImpl())) {
+    LOAD_ACTIVE_ITEMS(new LoadActiveItemsCommand(new PaginationReceiverImpl())) {
         @Override
-        public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
-            ((ItemReceiver) getCommand().getReceiver()).loadActiveItems(requestContent);
+        public void doReceiver(RequestContent requestContent) throws ReceiverException {
+            ((PaginationReceiver) getCommand().getReceiver()).loadActiveItems(requestContent);
         }
     },
     DISCARD_ITEM(new DiscardItemCommand(new AdminReceiverImpl())) {
         @Override
-        public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
+        public void doReceiver(RequestContent requestContent) throws ReceiverException {
             ((AdminReceiver) getCommand().getReceiver()).discardItem(requestContent);
         }
     },
-    LOAD_NOTIFICATIONS(new LoadNotificationsCommand(new NotificationReceiverImpl())) {
+    LOAD_NOTIFICATIONS(new LoadNotificationsCommand(new PaginationReceiverImpl())) {
         @Override
-        public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
-            ((NotificationReceiver) getCommand().getReceiver()).loadNotifications(requestContent);
+        public void doReceiver(RequestContent requestContent) throws ReceiverException {
+            ((PaginationReceiver) getCommand().getReceiver()).loadNotifications(requestContent);
         }
     },
     MAKE_BID(new MakeBidCommand(new BidReceiverImpl())) {
         @Override
-        public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
+        public void doReceiver(RequestContent requestContent) throws ReceiverException {
             ((BidReceiver) getCommand().getReceiver()).makeBid(requestContent);
         }
     },
     REPLENISH_BALANCE(new ReplenishBalanceCommand(new UserReceiverImpl())) {
         @Override
-        public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
+        public void doReceiver(RequestContent requestContent) throws ReceiverException {
             ((UserReceiver) getCommand().getReceiver()).replenishBalance(requestContent);
         }
     },
-    LOAD_COMING_ITEMS(new LoadComingItemsCommand(new ItemReceiverImpl())) {
+    LOAD_COMING_ITEMS(new LoadComingItemsCommand(new PaginationReceiverImpl())) {
         @Override
-        public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
-            ((ItemReceiver) getCommand().getReceiver()).loadComingItems(requestContent);
+        public void doReceiver(RequestContent requestContent) throws ReceiverException {
+            ((PaginationReceiver) getCommand().getReceiver()).loadComingItems(requestContent);
         }
     },
     CHANGE_USERNAME(new ChangeUsernameCommand(new UserReceiverImpl())) {
         @Override
-        public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
+        public void doReceiver(RequestContent requestContent) throws ReceiverException {
             ((UserReceiver) getCommand().getReceiver()).changeUsername(requestContent);
         }
     },
     CHANGE_EMAIL(new ChangeEmailCommand(new UserReceiverImpl())) {
         @Override
-        public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
+        public void doReceiver(RequestContent requestContent) throws ReceiverException {
             ((UserReceiver) getCommand().getReceiver()).changeEmail(requestContent);
         }
     },
     CHANGE_PASSWORD(new ChangePasswordCommand(new UserReceiverImpl())) {
         @Override
-        public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
+        public void doReceiver(RequestContent requestContent) throws ReceiverException {
             ((UserReceiver) getCommand().getReceiver()).changePassword(requestContent);
         }
     },
     UPDATE_PROFILE(new UpdateProfileCommand(new UserReceiverImpl())) {
         @Override
-        public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
+        public void doReceiver(RequestContent requestContent) throws ReceiverException {
             ((UserReceiver) getCommand().getReceiver()).updateProfile(requestContent);
         }
     },
-    LOAD_PURCHASED_ITEMS(new LoadPurchasedItemsCommand(new ItemReceiverImpl())) {
+    LOAD_PURCHASED_ITEMS(new LoadPurchasedItemsCommand(new PaginationReceiverImpl())) {
         @Override
-        public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
-            ((ItemReceiver) getCommand().getReceiver()).loadPurchasedItems(requestContent);
+        public void doReceiver(RequestContent requestContent) throws ReceiverException {
+            ((PaginationReceiver) getCommand().getReceiver()).loadPurchasedItems(requestContent);
         }
     },
     UPDATE_ITEM(new UpdateItemCommand(new ItemReceiverImpl())) {
         @Override
-        public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
+        public void doReceiver(RequestContent requestContent) throws ReceiverException {
             ((ItemReceiver) getCommand().getReceiver()).updateItem(requestContent);
         }
     },
     LOAD_PHOTOS_FOR_DELETE(new LoadPhotosForDeleteCommand(new PhotoReceiverImpl())) {
         @Override
-        public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
+        public void doReceiver(RequestContent requestContent) throws ReceiverException {
             ((PhotoReceiver) getCommand().getReceiver()).loadPhotosForDelete(requestContent);
         }
     },
     DELETE_PHOTOS(new DeletePhotosCommand(new PhotoReceiverImpl())) {
         @Override
-        public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
+        public void doReceiver(RequestContent requestContent) throws ReceiverException {
             ((PhotoReceiver) getCommand().getReceiver()).deletePhotos(requestContent);
         }
     },
     ADD_PHOTOS(new AddPhotosCommand(new ItemReceiverImpl())) {
         @Override
-        public void doReceiver(RequestContent requestContent) throws ReceiverLayerException {
+        public void doReceiver(RequestContent requestContent) throws ReceiverException {
             ((ItemReceiver) getCommand().getReceiver()).addPhotos(requestContent);
+        }
+    },
+    DELETE_ITEM(new DeleteItemCommand(new ItemReceiverImpl())) {
+        @Override
+        public void doReceiver(RequestContent requestContent) throws ReceiverException {
+            ((ItemReceiver) getCommand().getReceiver()).deleteItem(requestContent);
         }
     };
 
@@ -204,7 +210,7 @@ public enum CommandType {
         return command;
     }
 
-    public abstract void doReceiver(RequestContent requestContent) throws ReceiverLayerException;
+    public abstract void doReceiver(RequestContent requestContent) throws ReceiverException;
 
     public static CommandType takeCommandType(AbstractCommand command) {
         return Arrays.stream(CommandType.values())

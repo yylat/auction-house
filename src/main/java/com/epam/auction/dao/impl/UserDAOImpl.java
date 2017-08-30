@@ -3,7 +3,7 @@ package com.epam.auction.dao.impl;
 import com.epam.auction.dao.TableConstant;
 import com.epam.auction.dao.UserDAO;
 import com.epam.auction.entity.User;
-import com.epam.auction.exception.DAOLayerException;
+import com.epam.auction.exception.DAOException;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -50,7 +50,7 @@ public class UserDAOImpl extends GenericDAOImpl<User> implements UserDAO {
     }
 
     @Override
-    public boolean isExist(User user) throws DAOLayerException {
+    public boolean isExist(User user) throws DAOException {
         boolean result = false;
         try (PreparedStatement statement = connection.prepareStatement(TableConstant.USER_QUERY_IS_EXIST)) {
             statement.setString(1, user.getUsername());
@@ -72,20 +72,20 @@ public class UserDAOImpl extends GenericDAOImpl<User> implements UserDAO {
             }
 
         } catch (SQLException e) {
-            throw new DAOLayerException(e);
+            throw new DAOException(e);
         }
         return result;
     }
 
-    public boolean isUsernameAlreadyExist(String username) throws DAOLayerException {
+    public boolean isUsernameAlreadyExist(String username) throws DAOException {
         return isAlreadyExist(username, TableConstant.USER_QUERY_IS_EXIST_USERNAME);
     }
 
-    public boolean isEmailAlreadyExist(String email) throws DAOLayerException {
+    public boolean isEmailAlreadyExist(String email) throws DAOException {
         return isAlreadyExist(email, TableConstant.USER_QUERY_IS_EXIST_EMAIL);
     }
 
-    private boolean isAlreadyExist(String parameter, String query) throws DAOLayerException {
+    private boolean isAlreadyExist(String parameter, String query) throws DAOException {
         boolean result = false;
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, parameter);
@@ -95,7 +95,7 @@ public class UserDAOImpl extends GenericDAOImpl<User> implements UserDAO {
                 result = resultSet.getBoolean(1);
             }
         } catch (SQLException e) {
-            throw new DAOLayerException(e);
+            throw new DAOException(e);
         }
         return result;
     }

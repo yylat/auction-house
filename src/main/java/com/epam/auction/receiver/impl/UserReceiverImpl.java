@@ -5,9 +5,9 @@ import com.epam.auction.dao.UserDAO;
 import com.epam.auction.dao.impl.UserDAOImpl;
 import com.epam.auction.db.DAOManager;
 import com.epam.auction.entity.User;
-import com.epam.auction.exception.DAOLayerException;
+import com.epam.auction.exception.DAOException;
 import com.epam.auction.exception.MethodNotSupportedException;
-import com.epam.auction.exception.ReceiverLayerException;
+import com.epam.auction.exception.ReceiverException;
 import com.epam.auction.receiver.RequestConstant;
 import com.epam.auction.receiver.UserReceiver;
 import com.epam.auction.util.Encoder;
@@ -20,7 +20,7 @@ import java.util.Locale;
 public class UserReceiverImpl implements UserReceiver {
 
     @Override
-    public void signIn(RequestContent requestContent) throws ReceiverLayerException {
+    public void signIn(RequestContent requestContent) throws ReceiverException {
         User user = new User(
                 requestContent.getRequestParameter(RequestConstant.USERNAME)[0],
                 Encoder.encode(requestContent.getRequestParameter(RequestConstant.PASSWORD)[0]));
@@ -33,13 +33,13 @@ public class UserReceiverImpl implements UserReceiver {
             } else {
                 requestContent.setRequestAttribute(RequestConstant.WRONG_USERNAME_PASSWORD, true);
             }
-        } catch (DAOLayerException e) {
-            throw new ReceiverLayerException(e);
+        } catch (DAOException e) {
+            throw new ReceiverException(e);
         }
     }
 
     @Override
-    public void signUp(RequestContent requestContent) throws ReceiverLayerException {
+    public void signUp(RequestContent requestContent) throws ReceiverException {
         User user = new User(
                 requestContent.getRequestParameter(RequestConstant.USERNAME)[0],
                 requestContent.getRequestParameter(RequestConstant.PASSWORD)[0],
@@ -72,16 +72,16 @@ public class UserReceiverImpl implements UserReceiver {
                     requestContent.setSessionAttribute(RequestConstant.WAS_SHOWN, false);
                     daoManager.commit();
                 }
-            } catch (DAOLayerException e) {
+            } catch (DAOException e) {
                 daoManager.rollback();
-                throw new ReceiverLayerException(e);
+                throw new ReceiverException(e);
             } finally {
                 daoManager.endTransaction();
             }
 
 
         } else {
-            throw new ReceiverLayerException(validator.getValidationMessage());
+            throw new ReceiverException(validator.getValidationMessage());
         }
     }
 
@@ -91,7 +91,7 @@ public class UserReceiverImpl implements UserReceiver {
     }
 
     @Override
-    public void replenishBalance(RequestContent requestContent) throws ReceiverLayerException {
+    public void replenishBalance(RequestContent requestContent) throws ReceiverException {
         User user = (User) requestContent.getSessionAttribute(RequestConstant.USER);
 
         if (user != null) {
@@ -105,9 +105,9 @@ public class UserReceiverImpl implements UserReceiver {
                 user.setBalance(user.getBalance().add(sumToAdd));
                 userDAO.update(user);
                 daoManager.commit();
-            } catch (DAOLayerException | MethodNotSupportedException e) {
+            } catch (DAOException | MethodNotSupportedException e) {
                 daoManager.rollback();
-                throw new ReceiverLayerException(e);
+                throw new ReceiverException(e);
             } finally {
                 daoManager.endTransaction();
             }
@@ -116,7 +116,7 @@ public class UserReceiverImpl implements UserReceiver {
     }
 
     @Override
-    public void changeUsername(RequestContent requestContent) throws ReceiverLayerException {
+    public void changeUsername(RequestContent requestContent) throws ReceiverException {
         User user = (User) requestContent.getSessionAttribute(RequestConstant.USER);
 
         if (user != null) {
@@ -137,20 +137,20 @@ public class UserReceiverImpl implements UserReceiver {
                     } else {
                         requestContent.setSessionAttribute(RequestConstant.USERNAME_ALREADY_EXIST, true);
                     }
-                } catch (DAOLayerException | MethodNotSupportedException e) {
+                } catch (DAOException | MethodNotSupportedException e) {
                     daoManager.rollback();
-                    throw new ReceiverLayerException(e);
+                    throw new ReceiverException(e);
                 } finally {
                     daoManager.endTransaction();
                 }
             } else {
-                throw new ReceiverLayerException(userValidator.getValidationMessage());
+                throw new ReceiverException(userValidator.getValidationMessage());
             }
         }
     }
 
     @Override
-    public void changeEmail(RequestContent requestContent) throws ReceiverLayerException {
+    public void changeEmail(RequestContent requestContent) throws ReceiverException {
         User user = (User) requestContent.getSessionAttribute(RequestConstant.USER);
 
         if (user != null) {
@@ -171,20 +171,20 @@ public class UserReceiverImpl implements UserReceiver {
                     } else {
                         requestContent.setSessionAttribute(RequestConstant.EMAIL_ALREADY_EXIST, true);
                     }
-                } catch (DAOLayerException | MethodNotSupportedException e) {
+                } catch (DAOException | MethodNotSupportedException e) {
                     daoManager.rollback();
-                    throw new ReceiverLayerException(e);
+                    throw new ReceiverException(e);
                 } finally {
                     daoManager.endTransaction();
                 }
             } else {
-                throw new ReceiverLayerException(userValidator.getValidationMessage());
+                throw new ReceiverException(userValidator.getValidationMessage());
             }
         }
     }
 
     @Override
-    public void changePassword(RequestContent requestContent) throws ReceiverLayerException {
+    public void changePassword(RequestContent requestContent) throws ReceiverException {
         User user = (User) requestContent.getSessionAttribute(RequestConstant.USER);
 
         if (user != null) {
@@ -210,7 +210,7 @@ public class UserReceiverImpl implements UserReceiver {
     }
 
     @Override
-    public void updateProfile(RequestContent requestContent) throws ReceiverLayerException {
+    public void updateProfile(RequestContent requestContent) throws ReceiverException {
         User user = (User) requestContent.getSessionAttribute(RequestConstant.USER);
 
         if (user != null) {
@@ -235,14 +235,14 @@ public class UserReceiverImpl implements UserReceiver {
         }
     }
 
-    private void simpleUserUpdate(User user, DAOManager daoManager, UserDAO userDAO) throws ReceiverLayerException {
+    private void simpleUserUpdate(User user, DAOManager daoManager, UserDAO userDAO) throws ReceiverException {
         daoManager.beginTransaction();
         try {
             userDAO.update(user);
             daoManager.commit();
-        } catch (DAOLayerException | MethodNotSupportedException e) {
+        } catch (DAOException | MethodNotSupportedException e) {
             daoManager.rollback();
-            throw new ReceiverLayerException(e);
+            throw new ReceiverException(e);
         } finally {
             daoManager.endTransaction();
         }

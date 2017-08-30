@@ -1,28 +1,20 @@
 package com.epam.auction.receiver;
 
 import com.epam.auction.command.RequestContent;
-import com.epam.auction.exception.ReceiverLayerException;
+import com.epam.auction.exception.ReceiverException;
 
 public interface ItemReceiver extends Receiver {
 
-    void loadUserItems(RequestContent requestContent) throws ReceiverLayerException;
+    void loadCategories(RequestContent requestContent) throws ReceiverException;
 
-    void loadCategories(RequestContent requestContent) throws ReceiverLayerException;
+    void createItem(RequestContent requestContent) throws ReceiverException;
 
-    void createItem(RequestContent requestContent) throws ReceiverLayerException;
+    void loadItem(RequestContent requestContent) throws ReceiverException;
 
-    void loadItemsForCheck(RequestContent requestContent) throws ReceiverLayerException;
+    void updateItem(RequestContent requestContent) throws ReceiverException;
 
-    void loadActiveItems(RequestContent requestContent) throws ReceiverLayerException;
+    void addPhotos(RequestContent requestContent) throws ReceiverException;
 
-    void loadComingItems(RequestContent requestContent) throws ReceiverLayerException;
-
-    void loadItem(RequestContent requestContent) throws ReceiverLayerException;
-
-    void loadPurchasedItems(RequestContent requestContent) throws ReceiverLayerException;
-
-    void updateItem(RequestContent requestContent) throws ReceiverLayerException;
-
-    void addPhotos(RequestContent requestContent) throws ReceiverLayerException;
+    void deleteItem(RequestContent requestContent) throws ReceiverException;
 
 }

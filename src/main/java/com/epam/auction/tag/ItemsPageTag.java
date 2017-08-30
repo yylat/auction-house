@@ -29,10 +29,18 @@ public class ItemsPageTag extends BodyTagSupport {
         StringBuilder bodyBuilder = new StringBuilder(bodyContent.getString());
 
         int titleStart = bodyBuilder.indexOf(TITLE_PATTERN);
-        bodyBuilder.replace(titleStart, titleStart + TITLE_PATTERN.length(), title);
+        if (titleStart != -1) {
+            bodyBuilder.replace(titleStart, titleStart + TITLE_PATTERN.length(), title);
+        }
 
-        bodyBuilder.insert(bodyBuilder.indexOf(PAGINATION_COMMAND_PATTERN) + PAGINATION_COMMAND_PATTERN.length() - 1, command);
-        bodyBuilder.insert(bodyBuilder.indexOf(FILTER_COMMAND_PATTERN) + FILTER_COMMAND_PATTERN.length() - 1, command);
+        int paginationCommandStart = bodyBuilder.indexOf(PAGINATION_COMMAND_PATTERN);
+        if (paginationCommandStart != -1) {
+            bodyBuilder.insert(paginationCommandStart + PAGINATION_COMMAND_PATTERN.length() - 1, command);
+        }
+        int filterCommandStart = bodyBuilder.indexOf(FILTER_COMMAND_PATTERN);
+        if (filterCommandStart != -1) {
+            bodyBuilder.insert(filterCommandStart + FILTER_COMMAND_PATTERN.length() - 1, command);
+        }
 
         JspWriter jspWriter = bodyContent.getEnclosingWriter();
         try {

@@ -3,7 +3,7 @@ package com.epam.auction.dao.impl;
 import com.epam.auction.dao.BidDAO;
 import com.epam.auction.dao.TableConstant;
 import com.epam.auction.entity.Bid;
-import com.epam.auction.exception.DAOLayerException;
+import com.epam.auction.exception.DAOException;
 import com.epam.auction.exception.MethodNotSupportedException;
 
 import java.sql.*;
@@ -25,7 +25,7 @@ public class BidDAOImpl extends GenericDAOImpl<Bid> implements BidDAO {
     }
 
     @Override
-    public boolean create(Bid entity) throws DAOLayerException {
+    public boolean create(Bid entity) throws DAOException {
         boolean result = false;
 
         try (CallableStatement statement = connection.prepareCall(TableConstant.BID_QUERY_CREATE)) {
@@ -34,7 +34,7 @@ public class BidDAOImpl extends GenericDAOImpl<Bid> implements BidDAO {
                 result = true;
             }
         } catch (SQLException e) {
-            throw new DAOLayerException(e);
+            throw new DAOException(e);
         }
 
         return result;
@@ -63,7 +63,7 @@ public class BidDAOImpl extends GenericDAOImpl<Bid> implements BidDAO {
     }
 
     @Override
-    public List<Bid> findUsersBids(int userId, int offset, int limit) throws DAOLayerException {
+    public List<Bid> findUsersBids(int userId, int offset, int limit) throws DAOException {
         return findSpecificList(TableConstant.BID_QUERY_FIND_FOR_USER_LIMIT,
                 statement -> {
                     statement.setInt(1, userId);
@@ -73,25 +73,13 @@ public class BidDAOImpl extends GenericDAOImpl<Bid> implements BidDAO {
     }
 
     @Override
-    public int countRows(int userId) throws DAOLayerException {
-        int rows = 0;
-
-        try (PreparedStatement statement = connection.prepareStatement(TableConstant.BID_QUERY_FIND_NUMBER_FOR_USER)) {
-            statement.setInt(1, userId);
-            ResultSet resultSet = statement.executeQuery();
-
-            if (resultSet.next()) {
-                rows = resultSet.getInt(1);
-            }
-        } catch (SQLException e) {
-            throw new DAOLayerException(e);
-        }
-
-        return rows;
+    public int countRows(int userId) throws DAOException {
+        return countRows(TableConstant.BID_QUERY_FIND_NUMBER_FOR_USER,
+                statement -> statement.setInt(1, userId));
     }
 
     @Override
-    public Bid findWinning(int itemId) throws DAOLayerException {
+    public Bid findWinning(int itemId) throws DAOException {
         return findEntity(TableConstant.BID_QUERY_FIND_WINNING,
                 statement -> statement.setInt(1, itemId));
     }

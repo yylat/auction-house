@@ -1,7 +1,7 @@
 package com.epam.auction.command;
 
 import com.epam.auction.controller.PageGuide;
-import com.epam.auction.exception.ReceiverLayerException;
+import com.epam.auction.exception.ReceiverException;
 import com.epam.auction.receiver.Receiver;
 
 public abstract class AbstractCommand {
@@ -18,7 +18,7 @@ public abstract class AbstractCommand {
 
     public abstract PageGuide execute(RequestContent requestContent);
 
-    protected void doAction(RequestContent requestContent) throws ReceiverLayerException {
+    protected void doAction(RequestContent requestContent) throws ReceiverException {
         receiver.action(CommandType.takeCommandType(this), requestContent);
     }
 

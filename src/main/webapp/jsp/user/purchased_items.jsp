@@ -38,8 +38,6 @@
     <%@include file="/jsp/jspf/items.jsp" %>
 </ctg:items>
 
-<%@ include file="/jsp/jspf/item_modal.jsp" %>
-
 </body>
 
 </html>

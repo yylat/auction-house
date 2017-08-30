@@ -176,5 +176,8 @@ public final class TableConstant {
     public final static String PHOTO_QUERY_FIND_ALL_FOR_ITEM =
             "SELECT `photo_id`, `photo_file`, `item_id` FROM `photo` WHERE `item_id` = ?";
 
+    public static final String PHOTO_QUERY_DELETE_ITEM_PHOTOS =
+            "DELETE FROM `photo` WHERE `item_id` = ?";
+
 
 }

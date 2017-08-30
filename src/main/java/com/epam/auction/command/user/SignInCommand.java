@@ -5,7 +5,7 @@ import com.epam.auction.command.RequestContent;
 import com.epam.auction.controller.PageAddress;
 import com.epam.auction.controller.PageGuide;
 import com.epam.auction.controller.TransferMethod;
-import com.epam.auction.exception.ReceiverLayerException;
+import com.epam.auction.exception.ReceiverException;
 import com.epam.auction.receiver.Receiver;
 import com.epam.auction.receiver.RequestConstant;
 import org.apache.logging.log4j.Level;
@@ -31,7 +31,7 @@ public class SignInCommand extends AbstractCommand {
             } else {
                 pageGuide.setTransferMethod(TransferMethod.FORWARD);
             }
-        } catch (ReceiverLayerException e) {
+        } catch (ReceiverException e) {
             LOGGER.log(Level.ERROR, e.getMessage(), e);
         }
 

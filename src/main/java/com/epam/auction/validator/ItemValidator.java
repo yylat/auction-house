@@ -51,7 +51,7 @@ public class ItemValidator extends Validator {
         }
     }
 
-    private boolean validateStartDate(Date startDate) {
+    public boolean validateStartDate(Date startDate) {
         if (minStartDate.compareTo(startDate) <= 0) {
             return true;
         } else {
@@ -61,7 +61,7 @@ public class ItemValidator extends Validator {
         }
     }
 
-    private boolean validateCloseDate(Date closeDate) {
+    public boolean validateCloseDate(Date closeDate) {
         if (minCloseDate.compareTo(closeDate) <= 0) {
             return true;
         } else {

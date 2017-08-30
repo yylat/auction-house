@@ -6,7 +6,7 @@
 
 <fmt:message bundle="${msg}" key="menu.items" var="items"/>
 
-<fmt:message bundle="${msg}" key="menu.mine" var="mine"/>
+<fmt:message bundle="${msg}" key="menu.forSale" var="mine"/>
 <fmt:message bundle="${msg}" key="menu.purchased" var="purchased"/>
 
 <div class="w3-sidebar w3-bar-block w3-collapse w3-animate-opacity sidebar right-separator" id="sidebar">
@@ -19,7 +19,7 @@
         <div class="small-title uppercase">${menuTitle}</div>
     </div>
 
-    <a href="${pageContext.request.contextPath}/jsp/item/active_items.jsp"
+    <a href="${pageContext.request.contextPath}/jsp/active_items.jsp"
        class="w3-bar-item pro-bottom-button">${homePage}
     </a>
 

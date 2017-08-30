@@ -3,7 +3,7 @@ package com.epam.auction.dao.impl;
 import com.epam.auction.dao.PhotoDAO;
 import com.epam.auction.dao.TableConstant;
 import com.epam.auction.entity.Photo;
-import com.epam.auction.exception.DAOLayerException;
+import com.epam.auction.exception.DAOException;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -35,50 +35,21 @@ public class PhotoDAOImpl extends GenericDAOImpl<Photo> implements PhotoDAO {
     }
 
     @Override
-    public Photo findItemPhoto(int itemId) throws DAOLayerException {
-
+    public Photo findItemPhoto(int itemId) throws DAOException {
         return findEntity(TableConstant.PHOTO_QUERY_FIND_ITEM_PHOTO,
                 statement -> statement.setInt(1, itemId));
-
-//        Photo photo = null;
-//
-//        try (PreparedStatement statement = connection.prepareStatement(TableConstant.PHOTO_QUERY_FIND_ITEM_PHOTO)) {
-//            statement.setInt(1, itemId);
-//
-//            ResultSet resultSet = statement.executeQuery();
-//            if (resultSet.next()) {
-//                photo = extractEntity(resultSet);
-//            }
-//
-//        } catch (SQLException e) {
-//            throw new DAOLayerException(e);
-//        }
-//
-//        return photo;
     }
 
     @Override
-    public List<Photo> findAll(int itemId) throws DAOLayerException {
-
+    public List<Photo> findAll(int itemId) throws DAOException {
         return findSpecificList(TableConstant.PHOTO_QUERY_FIND_ALL_FOR_ITEM,
                 statement -> statement.setInt(1, itemId));
+    }
 
-//        List<Photo> photos;
-//
-//        try (PreparedStatement statement = connection.prepareStatement(TableConstant.PHOTO_QUERY_FIND_ALL_FOR_ITEM)) {
-//            statement.setInt(1, itemId);
-//
-//            ResultSet resultSet = statement.executeQuery();
-//            photos = new ArrayList<>();
-//            while (resultSet.next()) {
-//                photos.add(extractEntity(resultSet));
-//            }
-//
-//        } catch (SQLException e) {
-//            throw new DAOLayerException(e);
-//        }
-//
-//        return photos;
+    @Override
+    public boolean deleteItemPhotos(int itemId) throws DAOException {
+        return executeUpdate(TableConstant.PHOTO_QUERY_DELETE_ITEM_PHOTOS,
+                statement -> statement.setInt(1, itemId));
     }
 
 }

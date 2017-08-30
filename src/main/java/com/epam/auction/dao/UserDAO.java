@@ -1,14 +1,14 @@
 package com.epam.auction.dao;
 
 import com.epam.auction.entity.User;
-import com.epam.auction.exception.DAOLayerException;
+import com.epam.auction.exception.DAOException;
 
 public interface UserDAO extends GenericDAO<User> {
 
-    boolean isExist(User user) throws DAOLayerException;
+    boolean isExist(User user) throws DAOException;
 
-    boolean isUsernameAlreadyExist(String username) throws DAOLayerException;
+    boolean isUsernameAlreadyExist(String username) throws DAOException;
 
-    boolean isEmailAlreadyExist(String email) throws DAOLayerException;
+    boolean isEmailAlreadyExist(String email) throws DAOException;
 
 }

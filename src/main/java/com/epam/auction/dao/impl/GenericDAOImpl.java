@@ -5,7 +5,7 @@ import com.epam.auction.dao.functional.StatementBiConsumer;
 import com.epam.auction.dao.functional.StatementConsumer;
 import com.epam.auction.db.ProxyConnection;
 import com.epam.auction.entity.Entity;
-import com.epam.auction.exception.DAOLayerException;
+import com.epam.auction.exception.DAOException;
 import com.epam.auction.exception.MethodNotSupportedException;
 
 import java.sql.PreparedStatement;
@@ -37,34 +37,24 @@ public abstract class GenericDAOImpl<T extends Entity> implements GenericDAO<T> 
         this.connection = connection;
     }
 
-    public List<T> findAll() throws DAOLayerException {
+    public List<T> findAll() throws DAOException {
         return findList(queryFindAll);
     }
 
-    public T findEntityById(int id) throws DAOLayerException {
+    public T findEntityById(int id) throws DAOException {
         return findEntity(queryFindById, statement -> statement.setInt(1, id));
     }
 
-    public boolean delete(int id) throws DAOLayerException, MethodNotSupportedException {
-        boolean result = false;
-
-        try (PreparedStatement statement = connection.prepareStatement(queryDelete)) {
-            statement.setInt(1, id);
-            if (statement.executeUpdate() != 0) {
-                result = true;
-            }
-        } catch (SQLException e) {
-            throw new DAOLayerException(e);
-        }
-
-        return result;
+    public boolean delete(int id) throws DAOException, MethodNotSupportedException {
+        return executeUpdate(queryDelete,
+                statement -> statement.setInt(1, id));
     }
 
-    public boolean create(T entity) throws DAOLayerException {
+    public boolean create(T entity) throws DAOException {
         return executeCreate(queryCreate, entity, this::defineQueryAttributes);
     }
 
-    public boolean update(T entity) throws DAOLayerException, MethodNotSupportedException {
+    public boolean update(T entity) throws DAOException, MethodNotSupportedException {
         return executeUpdate(queryUpdate, entity, (en, st) -> {
             defineQueryAttributes(en, st);
             st.setInt(en.getFieldsNumber(), en.getId());
@@ -75,7 +65,7 @@ public abstract class GenericDAOImpl<T extends Entity> implements GenericDAO<T> 
 
     abstract void defineQueryAttributes(T entity, PreparedStatement statement) throws SQLException;
 
-    List<T> findSpecificList(String query, StatementConsumer statementConsumer) throws DAOLayerException {
+    List<T> findSpecificList(String query, StatementConsumer statementConsumer) throws DAOException {
         List<T> entities;
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -86,13 +76,13 @@ public abstract class GenericDAOImpl<T extends Entity> implements GenericDAO<T> 
                 entities.add(extractEntity(resultSet));
             }
         } catch (SQLException e) {
-            throw new DAOLayerException(e);
+            throw new DAOException(e);
         }
 
         return entities;
     }
 
-    List<T> findList(String query) throws DAOLayerException {
+    List<T> findList(String query) throws DAOException {
         List<T> entities;
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -103,13 +93,13 @@ public abstract class GenericDAOImpl<T extends Entity> implements GenericDAO<T> 
             }
 
         } catch (SQLException e) {
-            throw new DAOLayerException(e);
+            throw new DAOException(e);
         }
 
         return entities;
     }
 
-    T findEntity(String query, StatementConsumer statementConsumer) throws DAOLayerException {
+    T findEntity(String query, StatementConsumer statementConsumer) throws DAOException {
         T entity = null;
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -121,13 +111,13 @@ public abstract class GenericDAOImpl<T extends Entity> implements GenericDAO<T> 
             }
 
         } catch (SQLException e) {
-            throw new DAOLayerException(e);
+            throw new DAOException(e);
         }
 
         return entity;
     }
 
-    boolean executeUpdate(String query, StatementConsumer statementConsumer) throws DAOLayerException {
+    boolean executeUpdate(String query, StatementConsumer statementConsumer) throws DAOException {
         boolean result = false;
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -136,13 +126,13 @@ public abstract class GenericDAOImpl<T extends Entity> implements GenericDAO<T> 
                 result = true;
             }
         } catch (SQLException e) {
-            throw new DAOLayerException(e);
+            throw new DAOException(e);
         }
 
         return result;
     }
 
-    boolean executeUpdate(String query, T entity, StatementBiConsumer<T> statementBiConsumer) throws DAOLayerException {
+    boolean executeUpdate(String query, T entity, StatementBiConsumer<T> statementBiConsumer) throws DAOException {
         boolean result = false;
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -151,13 +141,13 @@ public abstract class GenericDAOImpl<T extends Entity> implements GenericDAO<T> 
                 result = true;
             }
         } catch (SQLException e) {
-            throw new DAOLayerException(e);
+            throw new DAOException(e);
         }
 
         return result;
     }
 
-    boolean executeCreate(String query, T entity, StatementBiConsumer<T> statementBiConsumer) throws DAOLayerException {
+    boolean executeCreate(String query, T entity, StatementBiConsumer<T> statementBiConsumer) throws DAOException {
         boolean result = false;
 
         try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
@@ -170,10 +160,27 @@ public abstract class GenericDAOImpl<T extends Entity> implements GenericDAO<T> 
                 }
             }
         } catch (SQLException e) {
-            throw new DAOLayerException(e);
+            throw new DAOException(e);
         }
 
         return result;
+    }
+
+    int countRows(String query, StatementConsumer statementConsumer) throws DAOException {
+        int rows = 0;
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statementConsumer.accept(statement);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                rows = resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        }
+
+        return rows;
     }
 
 }
