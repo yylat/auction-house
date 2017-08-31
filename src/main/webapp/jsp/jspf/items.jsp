@@ -1,3 +1,18 @@
+<fmt:message bundle="${msg}" key="form.startPrice" var="startPrice"/>
+<fmt:message bundle="${msg}" key="form.blitzPrice" var="blitzPrice"/>
+<fmt:message bundle="${msg}" key="form.startDate" var="startDate"/>
+<fmt:message bundle="${msg}" key="form.closeDate" var="closeDate"/>
+<fmt:message bundle="${msg}" key="form.category" var="category"/>
+
+<fmt:message bundle="${msg}" key="status.title" var="statusTitle"/>
+<fmt:message bundle="${msg}" key="status.created" var="created"/>
+<fmt:message bundle="${msg}" key="status.confirmed" var="confirmed"/>
+<fmt:message bundle="${msg}" key="status.active" var="active"/>
+<fmt:message bundle="${msg}" key="status.sold" var="sold"/>
+<fmt:message bundle="${msg}" key="status.canceled" var="canceled"/>
+<fmt:message bundle="${msg}" key="status.ended" var="ended"/>
+<fmt:message bundle="${msg}" key="status.not_confirmed" var="not_confirmed"/>
+
 <%@ include file="/jsp/jspf/header.jsp" %>
 
 <main>
@@ -59,13 +74,36 @@
                                                 <div class="w3-container img-container">
                                                     <img src="" item="${item.id}"/>
                                                 </div>
+                                            </div>
+                                            <div class="item-back">
                                                 <div class="w3-container w3-center item-title uppercase">
                                                         ${item.name}
                                                 </div>
-                                                <div class="w3-container w3-center">
-                                                    <div class="text-on-color money">
-                                                            ${item.actualPrice}
+
+                                                <div class="w3-row">
+                                                    <div class="w3-col s6 w3-padding-small">
+                                                            ${actualPrice}: <span
+                                                            class="text-on-color money">${item.actualPrice}
+                                                    </span>
                                                     </div>
+                                                    <div class="w3-col s6 w3-padding-small">
+                                                            ${startDate}: <span>${item.startDate}</span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="w3-row">
+                                                    <div class="w3-col s6 w3-padding-small">
+                                                            ${blitzPrice}: <span
+                                                            class="text-on-color money">${item.blitzPrice}</span>
+
+                                                    </div>
+                                                    <div class="w3-col s6 w3-padding-small">
+                                                            ${closeDate}: <span>${item.closeDate}</span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="w3-container w3-padding w3-small w3-left-align pro-back">
+                                                        ${pageScope[item.status.toString().toLowerCase()]}
                                                 </div>
                                             </div>
                                         </div>

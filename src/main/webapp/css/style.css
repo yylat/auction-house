@@ -57,6 +57,11 @@ html, body {
     background-color: #b1cbbb;
 }
 
+.pro-back {
+    color: #50394c;
+    background-color: #efefef;
+}
+
 .pro-green-black {
     color: #000000;
     background-color: #b1cbbb;
@@ -516,6 +521,23 @@ b, strong {
     margin-right: auto;
     left: 0;
     right: 0;
+}
+
+.pro-padding-bottom {
+    padding-bottom: 0.5em;
+}
+
+.pro-padding-top {
+    padding-top: 0.5em;
+}
+
+.pro-padding-left {
+    padding-left: 0.2em;
+}
+
+.pro-container {
+    margin-right: 0.3em;
+    margin-left: 0.3em;
 }
 
 @media (max-width: 993px) {

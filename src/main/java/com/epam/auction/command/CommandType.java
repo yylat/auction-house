@@ -1,13 +1,10 @@
 package com.epam.auction.command;
 
-import com.epam.auction.command.admin.ApproveItemCommand;
-import com.epam.auction.command.admin.DiscardItemCommand;
-import com.epam.auction.command.admin.LoadItemsForCheckCommand;
+import com.epam.auction.command.admin.*;
 import com.epam.auction.command.bid.MakeBidCommand;
 import com.epam.auction.command.item.*;
 import com.epam.auction.command.notification.LoadNotificationsCommand;
 import com.epam.auction.command.photo.*;
-import com.epam.auction.command.admin.LoadUsersCommand;
 import com.epam.auction.command.bid.LoadBidsCommand;
 import com.epam.auction.command.common.ChangeLocaleCommand;
 import com.epam.auction.command.user.*;
@@ -73,10 +70,10 @@ public enum CommandType {
             ((PhotoReceiver) getCommand().getReceiver()).loadPhoto(requestContent);
         }
     },
-    APPROVE_ITEM(new ApproveItemCommand(new AdminReceiverImpl())) {
+    APPROVE_ITEM(new ApproveItemCommand(new ItemReceiverImpl())) {
         @Override
         public void doReceiver(RequestContent requestContent) throws ReceiverException {
-            ((AdminReceiver) getCommand().getReceiver()).approveItem(requestContent);
+            ((ItemReceiver) getCommand().getReceiver()).approveItem(requestContent);
         }
     },
     LOAD_ITEMS_FOR_CHECK(new LoadItemsForCheckCommand(new PaginationReceiverImpl())) {
@@ -109,10 +106,10 @@ public enum CommandType {
             ((PaginationReceiver) getCommand().getReceiver()).loadActiveItems(requestContent);
         }
     },
-    DISCARD_ITEM(new DiscardItemCommand(new AdminReceiverImpl())) {
+    DISCARD_ITEM(new DiscardItemCommand(new ItemReceiverImpl())) {
         @Override
         public void doReceiver(RequestContent requestContent) throws ReceiverException {
-            ((AdminReceiver) getCommand().getReceiver()).discardItem(requestContent);
+            ((ItemReceiver) getCommand().getReceiver()).discardItem(requestContent);
         }
     },
     LOAD_NOTIFICATIONS(new LoadNotificationsCommand(new PaginationReceiverImpl())) {
@@ -197,6 +194,18 @@ public enum CommandType {
         @Override
         public void doReceiver(RequestContent requestContent) throws ReceiverException {
             ((ItemReceiver) getCommand().getReceiver()).deleteItem(requestContent);
+        }
+    },
+    CANCEL_AUCTION(new CancelAuctionCommand(new ItemReceiverImpl())) {
+        @Override
+        public void doReceiver(RequestContent requestContent) throws ReceiverException {
+            ((ItemReceiver) getCommand().getReceiver()).cancelAuction(requestContent);
+        }
+    },
+    UPDATE_USER_STATUS(new UpdateUserStatusCommand(new AdminReceiverImpl())) {
+        @Override
+        public void doReceiver(RequestContent requestContent) throws ReceiverException {
+            ((AdminReceiver) getCommand().getReceiver()).updateUserStatus(requestContent);
         }
     };
 

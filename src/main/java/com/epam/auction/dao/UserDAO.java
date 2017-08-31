@@ -17,4 +17,6 @@ public interface UserDAO extends GenericDAO<User> {
 
     List<User> findUsersWithLimit(int userId, int offset, int limit) throws DAOException;
 
+    boolean updateUserStatus(boolean isBanned, int userId) throws DAOException;
+
 }

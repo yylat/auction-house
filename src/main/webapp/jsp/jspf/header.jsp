@@ -45,12 +45,12 @@
 
                     <c:choose>
                         <c:when test="${sessionScope.user != null}">
-                            <div class="w3-container w3-right-align">
-                                    ${hi},<br> ${sessionScope.user.username}
+                            <div class="pro-container w3-left-align pro-padding-top pro-padding-left">
+                                    ${hi}, ${sessionScope.user.username}
                             </div>
 
-                            <div class="w3-container w3-justify">
-                                <b>${balance}: ${sessionScope.user.balance}</b>
+                            <div class="pro-container w3-left-align w3-border-bottom pro-padding-bottom pro-padding-left">
+                                ${balance}: <span class="text-on-color money">${sessionScope.user.balance}</span>
                             </div>
 
                             <a href="${pageContext.request.contextPath}/jsp/user/account.jsp"

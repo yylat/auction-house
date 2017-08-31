@@ -4,6 +4,7 @@ import com.epam.auction.dao.TableConstant;
 import com.epam.auction.dao.UserDAO;
 import com.epam.auction.entity.User;
 import com.epam.auction.exception.DAOException;
+import com.epam.auction.exception.MethodNotSupportedException;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,9 +16,14 @@ public class UserDAOImpl extends GenericDAOImpl<User> implements UserDAO {
     public UserDAOImpl() {
         super(TableConstant.USER_QUERY_FIND_ALL,
                 TableConstant.USER_QUERY_FIND_BY_ID,
-                TableConstant.USER_QUERY_DELETE,
+                null,
                 TableConstant.USER_QUERY_CREATE,
                 TableConstant.USER_QUERY_UPDATE);
+    }
+
+    @Override
+    public boolean delete(int id) throws DAOException, MethodNotSupportedException {
+        throw new MethodNotSupportedException();
     }
 
     @Override
@@ -98,6 +104,14 @@ public class UserDAOImpl extends GenericDAOImpl<User> implements UserDAO {
             statement.setInt(1, userId);
             statement.setInt(2, offset);
             statement.setInt(3, limit);
+        });
+    }
+
+    @Override
+    public boolean updateUserStatus(boolean isBanned, int userId) throws DAOException {
+        return executeUpdate(TableConstant.USER_QUERY_UPDATE_STATUS, statement -> {
+            statement.setBoolean(1, isBanned);
+            statement.setInt(2, userId);
         });
     }
 

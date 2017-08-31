@@ -23,8 +23,6 @@ public final class TableConstant {
             "SELECT `user_id`, `username`, `password`, `last_name`, `middle_name`, `first_name`, `phone_number`, `email`, `balance`, `is_banned`, `user_role_id` FROM `user`";
     public static final String USER_QUERY_FIND_BY_ID =
             "SELECT `user_id`, `username`, `password`, `last_name`, `middle_name`, `first_name`, `phone_number`, `email`, `balance`, `is_banned`, `user_role_id` FROM `user` WHERE `user_id` = ?";
-    public static final String USER_QUERY_DELETE =
-            "UPDATE `user` SET `is_banned` = 1 WHERE `user_id` = ?";
     public static final String USER_QUERY_CREATE =
             "INSERT INTO `user`(`username`, `password`, `last_name`, `middle_name`, `first_name`, `phone_number`, `email`, `balance`, `is_banned`, `user_role_id`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     public static final String USER_QUERY_UPDATE =
@@ -43,6 +41,8 @@ public final class TableConstant {
     public static final String USER_QUERY_FIND_USERS_LIMIT =
             USER_QUERY_FIND_ALL + " WHERE `user_id` != ? ORDER BY `user_id` DESC LIMIT ?, ?";
 
+    public static final String USER_QUERY_UPDATE_STATUS =
+            "UPDATE `user` SET `is_banned` = ? WHERE `user_id` = ?";
 
     //    Bid table
 

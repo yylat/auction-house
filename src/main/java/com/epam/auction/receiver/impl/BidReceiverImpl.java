@@ -5,6 +5,8 @@ import com.epam.auction.dao.BidDAO;
 import com.epam.auction.dao.impl.BidDAOImpl;
 import com.epam.auction.db.DAOManager;
 import com.epam.auction.entity.Bid;
+import com.epam.auction.entity.Item;
+import com.epam.auction.entity.ItemStatus;
 import com.epam.auction.entity.User;
 import com.epam.auction.exception.DAOException;
 import com.epam.auction.exception.ReceiverException;
@@ -31,10 +33,12 @@ public class BidReceiverImpl implements BidReceiver {
             try {
                 MessageProvider messageProvider = new MessageProvider((Locale) requestContent.getSessionAttribute(RequestConstant.LOCALE));
 
-                if (bidDAO.findWinning(itemId).getBidderId() != user.getId()) {
+                Bid winningBid = bidDAO.findWinning(itemId);
+                if (winningBid == null || winningBid.getBidderId() != user.getId()) {
                     if (bidValue.compareTo(user.getBalance()) <= 0) {
                         Bid bid = new Bid(itemId, user.getId(), bidValue);
                         bidDAO.create(bid);
+                        updateSessionItem(requestContent, bidValue);
                         requestContent.setSessionAttribute(RequestConstant.MESSAGE,
                                 messageProvider.getMessage(MessageProvider.BID_MADE_SUCCESSFULLY));
                     } else {
@@ -54,6 +58,14 @@ public class BidReceiverImpl implements BidReceiver {
             } finally {
                 daoManager.endTransaction();
             }
+        }
+    }
+
+    private void updateSessionItem(RequestContent requestContent, BigDecimal bidValue) {
+        Item item = (Item) requestContent.getSessionAttribute(RequestConstant.ITEM);
+        item.setActualPrice(bidValue);
+        if (bidValue.compareTo(item.getBlitzPrice()) >= 0) {
+            item.setStatus(ItemStatus.SOLD);
         }
     }
 

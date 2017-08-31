@@ -17,4 +17,9 @@ public interface ItemReceiver extends Receiver {
 
     void deleteItem(RequestContent requestContent) throws ReceiverException;
 
+    void cancelAuction(RequestContent requestContent) throws ReceiverException;
+
+    void approveItem(RequestContent requestContent) throws ReceiverException;
+
+    void discardItem(RequestContent requestContent) throws ReceiverException;
 }

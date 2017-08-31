@@ -41,6 +41,7 @@
 <fmt:message bundle="${msg}" key="label.makeBid" var="makeBid"/>
 
 <fmt:message bundle="${msg}" key="item.delete" var="delete"/>
+<fmt:message bundle="${msg}" key="item.cancelAuction" var="cancelAuction"/>
 
 <fmt:message bundle="${msg}" key="status.title" var="statusTitle"/>
 <fmt:message bundle="${msg}" key="status.created" var="created"/>
@@ -102,23 +103,35 @@
 
                                 </div>
                             </c:when>
-                            <c:when test="${(sessionScope.user.id == sessionScope.item.sellerId) &&
-                                ((sessionScope.item.status == 'CREATED') || (sessionScope.item.status == 'CONFIRMED'))}">
-
+                            <c:when test="${(sessionScope.user.id == sessionScope.item.sellerId)}">
                                 <div class="w3-bar">
-                                    <a href="${pageContext.request.contextPath}/jsp/item/edit_item.jsp"
-                                       class="w3-bar-item w3-button pro-green w3-ripple">
-                                            ${edit}
-                                    </a>
+                                    <c:if test="${(sessionScope.item.status == 'CREATED')
+                                    || (sessionScope.item.status == 'CONFIRMED')}">
+                                        <a href="${pageContext.request.contextPath}/jsp/user/edit_item.jsp"
+                                           class="w3-bar-item w3-button pro-green w3-ripple">
+                                                ${edit}
+                                        </a>
 
-                                    <form class="w3-bar-item" action="${pageContext.request.contextPath}/controller">
-                                        <input type="hidden" name="command" value="delete-item"/>
-                                        <button class="w3-button pro-green w3-ripple">
-                                                ${delete}
-                                        </button>
-                                    </form>
+                                        <form class="w3-bar-item"
+                                              action="${pageContext.request.contextPath}/controller">
+                                            <input type="hidden" name="command" value="delete-item"/>
+                                            <button class="w3-button pro-green w3-ripple">
+                                                    ${delete}
+                                            </button>
+                                        </form>
+                                    </c:if>
+                                    <c:if test="${(sessionScope.item.status == 'CREATED')
+                                    || (sessionScope.item.status == 'CONFIRMED')
+                                    || (sessionScope.item.status == 'ACTIVE')}">
+                                        <form class="w3-bar-item"
+                                              action="${pageContext.request.contextPath}/controller">
+                                            <input type="hidden" name="command" value="cancel-auction"/>
+                                            <button class="w3-button pro-green w3-ripple">
+                                                    ${cancelAuction}
+                                            </button>
+                                        </form>
+                                    </c:if>
                                 </div>
-
                             </c:when>
                         </c:choose>
                     </c:if>

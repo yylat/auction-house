@@ -1,10 +1,9 @@
 package com.epam.auction.receiver.impl;
 
 import com.epam.auction.command.RequestContent;
-import com.epam.auction.dao.ItemDAO;
-import com.epam.auction.dao.impl.ItemDAOImpl;
+import com.epam.auction.dao.UserDAO;
+import com.epam.auction.dao.impl.UserDAOImpl;
 import com.epam.auction.db.DAOManager;
-import com.epam.auction.entity.ItemStatus;
 import com.epam.auction.exception.DAOException;
 import com.epam.auction.exception.ReceiverException;
 import com.epam.auction.receiver.AdminReceiver;
@@ -13,33 +12,23 @@ import com.epam.auction.receiver.RequestConstant;
 public class AdminReceiverImpl implements AdminReceiver {
 
     @Override
-    public void approveItem(RequestContent requestContent) throws ReceiverException {
-        updateItemStatus(requestContent, ItemStatus.CONFIRMED);
-    }
+    public void updateUserStatus(RequestContent requestContent) throws ReceiverException {
+        int userId = Integer.valueOf(requestContent.getRequestParameter(RequestConstant.USER_ID)[0]);
+        boolean isBanned = Boolean.valueOf(requestContent.getRequestParameter(RequestConstant.IS_BANNED)[0]);
 
-    @Override
-    public void discardItem(RequestContent requestContent) throws ReceiverException {
-        updateItemStatus(requestContent, ItemStatus.NOT_CONFIRMED);
-    }
+        UserDAO userDAO = new UserDAOImpl();
+        DAOManager daoManager = new DAOManager(true, userDAO);
 
-    private void updateItemStatus(RequestContent requestContent, ItemStatus itemStatus) throws ReceiverException {
-        int itemId = Integer.valueOf(requestContent.getRequestParameter(RequestConstant.ITEM_ID)[0]);
-
-        ItemDAO itemDAO = new ItemDAOImpl();
-
-        DAOManager daoManager = new DAOManager(true, itemDAO);
         daoManager.beginTransaction();
-
         try {
-            if (itemDAO.updateItemStatus(itemId, itemStatus)) {
+            if (userDAO.updateUserStatus(isBanned, userId)) {
                 daoManager.commit();
             }
         } catch (DAOException e) {
             daoManager.rollback();
-            throw new ReceiverException(e);
+            throw new ReceiverException();
         } finally {
             daoManager.endTransaction();
         }
     }
-
 }

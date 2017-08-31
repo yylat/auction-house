@@ -29,8 +29,6 @@ import java.util.stream.Collectors;
 
 public class ItemReceiverImpl implements ItemReceiver {
 
-    private static final int itemsForPage = 8;
-
     @Override
     public void loadCategories(RequestContent requestContent) throws ReceiverException {
         ItemCategoryDAO itemCategoryDAO = new ItemCategoryDAOImpl();
@@ -130,10 +128,7 @@ public class ItemReceiverImpl implements ItemReceiver {
             } finally {
                 daoManager.endTransaction();
             }
-
-
         }
-
     }
 
     @Override
@@ -175,6 +170,42 @@ public class ItemReceiverImpl implements ItemReceiver {
             itemDAO.delete(itemId);
             daoManager.commit();
         } catch (DAOException | MethodNotSupportedException e) {
+            daoManager.rollback();
+            throw new ReceiverException(e);
+        } finally {
+            daoManager.endTransaction();
+        }
+    }
+
+    @Override
+    public void cancelAuction(RequestContent requestContent) throws ReceiverException {
+        updateItemStatus(requestContent, ItemStatus.CANCELED);
+    }
+
+    @Override
+    public void approveItem(RequestContent requestContent) throws ReceiverException {
+        updateItemStatus(requestContent, ItemStatus.CONFIRMED);
+    }
+
+    @Override
+    public void discardItem(RequestContent requestContent) throws ReceiverException {
+        updateItemStatus(requestContent, ItemStatus.NOT_CONFIRMED);
+    }
+
+    private void updateItemStatus(RequestContent requestContent, ItemStatus itemStatus) throws ReceiverException {
+        Item item = (Item) requestContent.getSessionAttribute(RequestConstant.ITEM);
+
+        ItemDAO itemDAO = new ItemDAOImpl();
+
+        DAOManager daoManager = new DAOManager(true, itemDAO);
+        daoManager.beginTransaction();
+
+        try {
+            if (itemDAO.updateItemStatus(item.getId(), itemStatus)) {
+                item.setStatus(itemStatus);
+                daoManager.commit();
+            }
+        } catch (DAOException e) {
             daoManager.rollback();
             throw new ReceiverException(e);
         } finally {

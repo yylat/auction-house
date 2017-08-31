@@ -84,14 +84,15 @@
 
                         <div class="w3-container w3-margin">
                             <form action="${pageContext.request.contextPath}/controller" method="post">
+                                <input type="hidden" name="command" value="update-user-status"/>
                                 <input type="hidden" name="userId" value="${user.id}"/>
                                 <c:choose>
                                     <c:when test="${!user.isBanned}">
-                                        <input type="hidden" name="command" value="ban-user"/>
+                                        <input type="hidden" name="isBanned" value="true"/>
                                         <button class="w3-button pro-purple w3-ripple">${ban}</button>
                                     </c:when>
                                     <c:otherwise>
-                                        <input type="hidden" name="command" value="unban-user"/>
+                                        <input type="hidden" name="isBanned" value="false"/>
                                         <button class="w3-button pro-purple w3-ripple">${unban}</button>
                                     </c:otherwise>
                                 </c:choose>
