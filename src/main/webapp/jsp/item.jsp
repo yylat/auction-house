@@ -107,11 +107,6 @@
                                 <div class="w3-bar">
                                     <c:if test="${(sessionScope.item.status == 'CREATED')
                                     || (sessionScope.item.status == 'CONFIRMED')}">
-                                        <a href="${pageContext.request.contextPath}/jsp/user/edit_item.jsp"
-                                           class="w3-bar-item w3-button pro-green w3-ripple">
-                                                ${edit}
-                                        </a>
-
                                         <form class="w3-bar-item"
                                               action="${pageContext.request.contextPath}/controller">
                                             <input type="hidden" name="command" value="delete-item"/>
@@ -119,7 +114,15 @@
                                                     ${delete}
                                             </button>
                                         </form>
+
+                                        <div class="w3-bar-item ">
+                                            <a href="${pageContext.request.contextPath}/jsp/user/edit_item.jsp"
+                                               class="w3-button pro-green w3-ripple">
+                                                    ${edit}
+                                            </a>
+                                        </div>
                                     </c:if>
+
                                     <c:if test="${(sessionScope.item.status == 'CREATED')
                                     || (sessionScope.item.status == 'CONFIRMED')
                                     || (sessionScope.item.status == 'ACTIVE')}">

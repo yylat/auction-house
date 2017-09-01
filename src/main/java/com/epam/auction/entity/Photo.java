@@ -1,32 +1,30 @@
 package com.epam.auction.entity;
 
-import java.io.InputStream;
-
 public class Photo extends Entity {
 
-    private InputStream photoFile;
+    private String fileName;
     private int itemId;
 
     public Photo() {
     }
 
-    public Photo(InputStream photoFile, int itemId) {
-        this.photoFile = photoFile;
+    public Photo(String fileName, int itemId) {
+        this.fileName = fileName;
         this.itemId = itemId;
     }
 
-    public Photo(int id, InputStream photoFile, int itemId) {
+    public Photo(int id, String fileName, int itemId) {
         super(id);
-        this.photoFile = photoFile;
+        this.fileName = fileName;
         this.itemId = itemId;
     }
 
-    public InputStream getPhotoFile() {
-        return photoFile;
+    public String getFileName() {
+        return fileName;
     }
 
-    public void setPhotoFile(InputStream photoFile) {
-        this.photoFile = photoFile;
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
     public int getItemId() {
@@ -44,16 +42,15 @@ public class Photo extends Entity {
 
         Photo photo = (Photo) o;
 
-        if (id != photo.id) return false;
         if (itemId != photo.itemId) return false;
-        return photoFile != null ? photoFile.equals(photo.photoFile) : photo.photoFile == null;
+        return fileName != null ? fileName.equals(photo.fileName) : photo.fileName == null;
     }
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + (photoFile != null ? photoFile.hashCode() : 0);
+        int result = fileName != null ? fileName.hashCode() : 0;
         result = 31 * result + itemId;
         return result;
     }
+
 }

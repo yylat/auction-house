@@ -20,7 +20,7 @@ public class EncodingFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         code = filterConfig.getInitParameter("encoding");
-        LOGGER.log(Level.INFO, this.getClass().getName() + " initialized." + " Filter encoding: " + code);
+        LOGGER.log(Level.DEBUG, this.getClass().getName() + " initialized." + " Filter encoding: " + code);
     }
 
     @Override
@@ -35,6 +35,7 @@ public class EncodingFilter implements Filter {
 
     @Override
     public void destroy() {
-        code = null;
+        LOGGER.log(Level.DEBUG, this.getClass().getName() + " initialized.");
     }
+
 }

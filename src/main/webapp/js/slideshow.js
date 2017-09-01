@@ -2,11 +2,17 @@
 
     var photosContainer = document.getElementById("photos");
 
-    function displayErrorMsg() {
-        var newItem = document.createElement("p");
-        var textNode = document.createTextNode(photosContainer.getAttribute("data-error-message"));
-        newItem.appendChild(textNode);
-        photosContainer.insertBefore(newItem, null);
+    function displayDefaultPic() {
+        var imgContainer = document.createElement("div");
+        imgContainer.className = "static-img-container";
+
+        var img = document.createElement("img");
+        img.className = "";
+        img.src = "/img/default_img.gif";
+
+        imgContainer.appendChild(img);
+
+        photosContainer.insertBefore(imgContainer, null);
     }
 
     var slideIndex = 1;
@@ -66,7 +72,7 @@
                 var length = photos.length;
 
                 if (length == 0) {
-                    displayErrorMsg();
+                    displayDefaultPic();
                 }
                 else {
 

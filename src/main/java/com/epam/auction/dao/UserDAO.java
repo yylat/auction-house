@@ -13,10 +13,14 @@ public interface UserDAO extends GenericDAO<User> {
 
     boolean isEmailAlreadyExist(String email) throws DAOException;
 
-    int countRows(int userId) throws DAOException;
+    int countRows() throws DAOException;
 
-    List<User> findUsersWithLimit(int userId, int offset, int limit) throws DAOException;
+    List<User> findUsersWithLimit(int offset, int limit) throws DAOException;
 
     boolean updateUserStatus(boolean isBanned, int userId) throws DAOException;
+
+    int countRows(String username) throws DAOException;
+
+    List<User> findByUsername(String username, int offset, int limit) throws DAOException;
 
 }

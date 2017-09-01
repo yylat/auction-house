@@ -18,12 +18,12 @@ public class HttpSessionListenerImpl implements HttpSessionListener {
     @Override
     public void sessionCreated(HttpSessionEvent se) {
         se.getSession().setAttribute(RequestConstant.LOCALE, LocaleType.EN.getLocale());
-        LOGGER.log(Level.INFO, this.getClass().getName() + " initialized.");
+        LOGGER.log(Level.DEBUG, this.getClass().getName() + " initialized.");
     }
 
     @Override
     public void sessionDestroyed(HttpSessionEvent se) {
-        LOGGER.log(Level.INFO, this.getClass().getName() + " destroyed.");
+        LOGGER.log(Level.DEBUG, this.getClass().getName() + " destroyed.");
     }
 
 }

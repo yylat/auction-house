@@ -37,12 +37,17 @@ public final class TableConstant {
             "SELECT EXISTS(SELECT * FROM `user` WHERE `email` = ?)";
 
     public static final String USER_QUERY_FIND_ROWS_COUNT =
-            "SELECT COUNT(*) FROM `user` WHERE `user_id` != ?";
+            "SELECT COUNT(*) FROM `user`";
     public static final String USER_QUERY_FIND_USERS_LIMIT =
-            USER_QUERY_FIND_ALL + " WHERE `user_id` != ? ORDER BY `user_id` DESC LIMIT ?, ?";
+            USER_QUERY_FIND_ALL + " ORDER BY `user_id` DESC LIMIT ?, ?";
 
     public static final String USER_QUERY_UPDATE_STATUS =
             "UPDATE `user` SET `is_banned` = ? WHERE `user_id` = ?";
+
+    public static final String USER_QUERY_FIND_ROWS_COUNT_USERNAME =
+            USER_QUERY_FIND_ROWS_COUNT + " WHERE `username` LIKE ?";
+    public static final String USER_QUERY_FIND_BY_USERNAME =
+            "SELECT `user_id`, `username`, `password`, `last_name`, `middle_name`, `first_name`, `phone_number`, `email`, `balance`, `is_banned`, `user_role_id` FROM `user` WHERE `username` LIKE ? ORDER BY `user_id` DESC LIMIT ?, ?";
 
     //    Bid table
 
@@ -111,7 +116,7 @@ public final class TableConstant {
 
     public static final String ITEM_QUERY_UPDATE_STATUS =
             "UPDATE `item` SET `item_status_id` = ? WHERE `item_id` = ?";
-    ;
+
     public static final String ITEM_QUERY_FIND_ROWS_COUNT =
             "SELECT COUNT(*) FROM `item`";
 
@@ -162,24 +167,22 @@ public final class TableConstant {
     //    Photo table
 
     public static final String PHOTO_COLUMN_ID = "photo_id";
-    public static final String PHOTO_COLUMN_PHOTO_FILE = "photo_file";
+    public static final String PHOTO_COLUMN_FILE_NAME = "file_name";
     public static final String PHOTO_COLUMN_ITEM_ID = "item_id";
 
     public static final String PHOTO_QUERY_FIND_ALL =
-            "SELECT `photo_id`, `photo_file`, `item_id` FROM `photo`";
+            "SELECT `photo_id`, `file_name`, `item_id` FROM `photo`";
     public static final String PHOTO_QUERY_FIND_BY_ID =
-            "SELECT `photo_id`, `photo_file`, `item_id` FROM `photo` WHERE `photo_id` = ?";
+            "SELECT `photo_id`, `file_name`, `item_id` FROM `photo` WHERE `photo_id` = ?";
     public static final String PHOTO_QUERY_DELETE =
             "DELETE FROM `photo` WHERE `photo_id` = ?";
     public static final String PHOTO_QUERY_CREATE =
-            "INSERT INTO `photo`(`photo_file`, `item_id`) VALUES (?, ?)";
-    public static final String PHOTO_QUERY_UPDATE =
-            "UPDATE `photo` SET `photo_file` = ?, `item_id` = ? WHERE `photo_id` = ?";
+            "INSERT INTO `photo`(`file_name`, `item_id`) VALUES (?, ?)";
 
     public static final String PHOTO_QUERY_FIND_ITEM_PHOTO =
-            "SELECT `photo_id`, `photo_file`, `item_id` FROM `photo` WHERE `item_id` = ? LIMIT 1";
+            "SELECT `photo_id`, `file_name`, `item_id` FROM `photo` WHERE `item_id` = ? LIMIT 1";
     public static final String PHOTO_QUERY_FIND_ALL_FOR_ITEM =
-            "SELECT `photo_id`, `photo_file`, `item_id` FROM `photo` WHERE `item_id` = ?";
+            "SELECT `photo_id`, `file_name`, `item_id` FROM `photo` WHERE `item_id` = ?";
 
     public static final String PHOTO_QUERY_DELETE_ITEM_PHOTOS =
             "DELETE FROM `photo` WHERE `item_id` = ?";

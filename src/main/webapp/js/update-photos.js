@@ -24,7 +24,7 @@
 
     addPhotosForm.addEventListener("submit", function (event) {
         if (fileInput.files.length == 0) {
-            //event.preventDefault();
+            event.preventDefault();
         }
     });
 

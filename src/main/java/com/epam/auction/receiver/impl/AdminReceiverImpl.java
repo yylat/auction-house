@@ -31,4 +31,5 @@ public class AdminReceiverImpl implements AdminReceiver {
             daoManager.endTransaction();
         }
     }
+
 }

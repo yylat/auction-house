@@ -17,20 +17,20 @@ public class PhotoDAOImpl extends GenericDAOImpl<Photo> implements PhotoDAO {
                 TableConstant.PHOTO_QUERY_FIND_BY_ID,
                 TableConstant.PHOTO_QUERY_DELETE,
                 TableConstant.PHOTO_QUERY_CREATE,
-                TableConstant.PHOTO_QUERY_UPDATE);
+                null);
     }
 
     @Override
     Photo extractEntity(ResultSet resultSet) throws SQLException {
         return new Photo(
                 resultSet.getInt(TableConstant.PHOTO_COLUMN_ID),
-                resultSet.getBinaryStream(TableConstant.PHOTO_COLUMN_PHOTO_FILE),
+                resultSet.getString(TableConstant.PHOTO_COLUMN_FILE_NAME),
                 resultSet.getInt(TableConstant.PHOTO_COLUMN_ITEM_ID));
     }
 
     @Override
     void defineQueryAttributes(Photo entity, PreparedStatement statement) throws SQLException {
-        statement.setBinaryStream(1, entity.getPhotoFile());
+        statement.setString(1, entity.getFileName());
         statement.setInt(2, entity.getItemId());
     }
 

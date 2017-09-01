@@ -7,12 +7,13 @@ import com.epam.auction.db.DAOManager;
 import com.epam.auction.entity.Photo;
 import com.epam.auction.exception.DAOException;
 import com.epam.auction.exception.MethodNotSupportedException;
+import com.epam.auction.exception.PhotoLoadingException;
 import com.epam.auction.exception.ReceiverException;
 import com.epam.auction.receiver.PhotoReceiver;
 import com.epam.auction.receiver.RequestConstant;
 import com.epam.auction.util.Converter;
+import com.epam.auction.util.PhotoLoader;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,8 +30,9 @@ public class PhotoReceiverImpl implements PhotoReceiver {
 
         try (DAOManager daoManager = new DAOManager(photoDAO)) {
             photo = photoDAO.findItemPhoto(itemId);
-            requestContent.setAjaxResponse(Converter.inputStreamToString(photo.getPhotoFile()));
-        } catch (DAOException | IOException e) {
+            PhotoLoader photoLoader = new PhotoLoader();
+            requestContent.setAjaxResponse(photoLoader.loadPhotoAsString(photo.getFileName()));
+        } catch (DAOException | PhotoLoadingException e) {
             throw new ReceiverException(e);
         }
     }
@@ -43,11 +45,12 @@ public class PhotoReceiverImpl implements PhotoReceiver {
         List<String> photos = new ArrayList<>();
 
         try (DAOManager daoManager = new DAOManager(photoDAO)) {
+            PhotoLoader photoLoader = new PhotoLoader();
             for (Photo photo : photoDAO.findAll(itemId)) {
-                photos.add(Converter.inputStreamToString(photo.getPhotoFile()));
+                photos.add(photoLoader.loadPhotoAsString(photo.getFileName()));
             }
             requestContent.setAjaxResponse(Converter.objectToJson(photos));
-        } catch (DAOException | IOException e) {
+        } catch (DAOException | PhotoLoadingException e) {
             throw new ReceiverException(e);
         }
     }
@@ -60,11 +63,12 @@ public class PhotoReceiverImpl implements PhotoReceiver {
         Map<Integer, String> photos = new HashMap<>();
 
         try (DAOManager daoManager = new DAOManager(photoDAO)) {
+            PhotoLoader photoLoader = new PhotoLoader();
             for (Photo photo : photoDAO.findAll(itemId)) {
-                photos.put(photo.getId(), Converter.inputStreamToString(photo.getPhotoFile()));
+                photos.put(photo.getId(), photoLoader.loadPhotoAsString(photo.getFileName()));
             }
             requestContent.setAjaxResponse(Converter.objectToJson(photos));
-        } catch (DAOException | IOException e) {
+        } catch (DAOException | PhotoLoadingException e) {
             throw new ReceiverException(e);
         }
     }

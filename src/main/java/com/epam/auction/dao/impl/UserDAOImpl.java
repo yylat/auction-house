@@ -93,17 +93,16 @@ public class UserDAOImpl extends GenericDAOImpl<User> implements UserDAO {
     }
 
     @Override
-    public int countRows(int userId) throws DAOException {
-        return countRows(TableConstant.USER_QUERY_FIND_ROWS_COUNT,
-                statement -> statement.setInt(1, userId));
+    public int countRows() throws DAOException {
+        return countRows(TableConstant.USER_QUERY_FIND_ROWS_COUNT, statement -> {
+        });
     }
 
     @Override
-    public List<User> findUsersWithLimit(int userId, int offset, int limit) throws DAOException {
+    public List<User> findUsersWithLimit(int offset, int limit) throws DAOException {
         return findSpecificList(TableConstant.USER_QUERY_FIND_USERS_LIMIT, statement -> {
-            statement.setInt(1, userId);
-            statement.setInt(2, offset);
-            statement.setInt(3, limit);
+            statement.setInt(1, offset);
+            statement.setInt(2, limit);
         });
     }
 
@@ -112,6 +111,22 @@ public class UserDAOImpl extends GenericDAOImpl<User> implements UserDAO {
         return executeUpdate(TableConstant.USER_QUERY_UPDATE_STATUS, statement -> {
             statement.setBoolean(1, isBanned);
             statement.setInt(2, userId);
+        });
+    }
+
+    @Override
+    public int countRows(String username) throws DAOException {
+        return countRows(TableConstant.USER_QUERY_FIND_ROWS_COUNT_USERNAME, statement -> {
+            statement.setString(1, "%" + username + "%");
+        });
+    }
+
+    @Override
+    public List<User> findByUsername(String username, int offset, int limit) throws DAOException {
+        return findSpecificList(TableConstant.USER_QUERY_FIND_BY_USERNAME, statement -> {
+            statement.setString(1, "%" + username + "%");
+            statement.setInt(2, offset);
+            statement.setInt(3, limit);
         });
     }
 

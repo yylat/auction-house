@@ -14,18 +14,19 @@ import com.epam.auction.entity.Photo;
 import com.epam.auction.entity.User;
 import com.epam.auction.exception.DAOException;
 import com.epam.auction.exception.MethodNotSupportedException;
+import com.epam.auction.exception.PhotoLoadingException;
 import com.epam.auction.exception.ReceiverException;
 import com.epam.auction.receiver.ItemReceiver;
 import com.epam.auction.receiver.RequestConstant;
 import com.epam.auction.util.Converter;
 import com.epam.auction.util.DateFixer;
+import com.epam.auction.util.PhotoLoader;
 import com.epam.auction.validator.ItemValidator;
 
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ItemReceiverImpl implements ItemReceiver {
 
@@ -70,7 +71,7 @@ public class ItemReceiverImpl implements ItemReceiver {
                 if (photosSaved) {
                     daoManager.commit();
                 }
-            } catch (DAOException e) {
+            } catch (DAOException | PhotoLoadingException e) {
                 daoManager.rollback();
                 throw new ReceiverException(e);
             } finally {
@@ -147,7 +148,7 @@ public class ItemReceiverImpl implements ItemReceiver {
                 savePhotos(photoDAO, files, item.getId());
                 updateItemForCheck(item, itemDAO);
                 daoManager.commit();
-            } catch (DAOException | MethodNotSupportedException e) {
+            } catch (DAOException | MethodNotSupportedException | PhotoLoadingException e) {
                 daoManager.rollback();
                 throw new ReceiverException(e);
             } finally {
@@ -225,19 +226,14 @@ public class ItemReceiverImpl implements ItemReceiver {
         itemDAO.update(item);
     }
 
-    private boolean savePhotos(PhotoDAO photoDAO, List<InputStream> files, int itemId) throws DAOException {
-        boolean result = false;
-        List<Photo> photos = files.stream()
-                .map(file -> new Photo(file, itemId))
-                .collect(Collectors.toList());
-
-        for (Photo photo : photos) {
-            result = photoDAO.create(photo);
-            if (!result) {
+    private boolean savePhotos(PhotoDAO photoDAO, List<InputStream> files, int itemId) throws DAOException, PhotoLoadingException {
+        PhotoLoader photoLoader = new PhotoLoader();
+        for (int i = 0; i < files.size(); i++) {
+            if (!photoDAO.create(new Photo(photoLoader.savePhotoToServer(files.get(i), i), itemId))) {
                 return false;
             }
         }
-        return result;
+        return true;
     }
 
 }

@@ -17,11 +17,11 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-@WebServlet(name = "FileUploadController", urlPatterns = {"/upload"})
+@WebServlet(name = "PhotoUploadController", urlPatterns = {"/upload"})
 @MultipartConfig(fileSizeThreshold = 1024 * 1024 * 5,
         maxFileSize = 1024 * 1024 * 5,
         maxRequestSize = 1024 * 1024 * 20)
-public class FileUploadController extends HttpServlet {
+public class PhotoUploadController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -21,7 +21,7 @@ public class AdminForwardFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        LOGGER.log(Level.INFO, this.getClass().getName() + " initialized.");
+        LOGGER.log(Level.DEBUG, this.getClass().getName() + " initialized.");
     }
 
     @Override
@@ -40,7 +40,7 @@ public class AdminForwardFilter implements Filter {
 
     @Override
     public void destroy() {
-        LOGGER.log(Level.INFO, this.getClass().getName() + " destroyed.");
+        LOGGER.log(Level.DEBUG, this.getClass().getName() + " destroyed.");
     }
 
 }

@@ -72,7 +72,8 @@
                                         <div class="w3-card item-wrapper">
                                             <div class="w3-container item-back">
                                                 <div class="w3-container img-container">
-                                                    <img src="" item="${item.id}"/>
+                                                    <img src="${pageContext.request.contextPath}/img/default_img.gif"
+                                                         item="${item.id}"/>
                                                 </div>
                                             </div>
                                             <div class="item-back">

@@ -13,17 +13,13 @@ import com.epam.auction.dao.impl.ItemDAOImpl;
 import com.epam.auction.dao.impl.NotificationDAOImpl;
 import com.epam.auction.dao.impl.UserDAOImpl;
 import com.epam.auction.db.DAOManager;
-import com.epam.auction.entity.Bid;
-import com.epam.auction.entity.Item;
-import com.epam.auction.entity.ItemStatus;
-import com.epam.auction.entity.Notification;
-import com.epam.auction.entity.User;
+import com.epam.auction.entity.*;
 import com.epam.auction.exception.DAOException;
 import com.epam.auction.exception.ReceiverException;
 import com.epam.auction.exception.WrongFilterParameterException;
-import com.epam.auction.receiver.PageParameter;
 import com.epam.auction.receiver.PaginationReceiver;
 import com.epam.auction.receiver.RequestConstant;
+import com.epam.auction.receiver.SiteManager;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -40,14 +36,15 @@ public class PaginationReceiverImpl implements PaginationReceiver {
             ItemDAO itemDAO = new ItemDAOImpl();
 
             try (DAOManager daoManager = new DAOManager(bidDAO, itemDAO)) {
+                int bidsForPage = SiteManager.getInstance().getBidsForPage();
+
                 if (!definePagesNumber(requestContent)) {
                     requestContent.setRequestAttribute(RequestConstant.PAGES,
-                            (itemDAO.countRows(user.getId()) / PageParameter.BIDS_FOR_PAGE) + 1);
+                            (itemDAO.countRows(user.getId()) / bidsForPage) + 1);
                 }
 
                 List<Bid> bids = bidDAO.findUsersBids(user.getId(),
-                        defineOffset(requestContent, PageParameter.BIDS_FOR_PAGE),
-                        PageParameter.BIDS_FOR_PAGE);
+                        defineOffset(requestContent, bidsForPage), bidsForPage);
 
                 Map<Bid, Item> bidItemMap = new LinkedHashMap<>();
                 for (Bid bid : bids) {
@@ -70,14 +67,15 @@ public class PaginationReceiverImpl implements PaginationReceiver {
             ItemDAO itemDAO = new ItemDAOImpl();
 
             try (DAOManager daoManager = new DAOManager(notificationDAO, itemDAO)) {
+                int notificationsForPage = SiteManager.getInstance().getNotificationsForPage();
+
                 if (!definePagesNumber(requestContent)) {
                     requestContent.setRequestAttribute(RequestConstant.PAGES,
-                            (itemDAO.countRows(user.getId()) / PageParameter.NOTIFICATIONS_FOR_PAGE) + 1);
+                            (itemDAO.countRows(user.getId()) / notificationsForPage) + 1);
                 }
 
                 List<Notification> notifications = notificationDAO.findUsersNotifications(user.getId(),
-                        defineOffset(requestContent, PageParameter.NOTIFICATIONS_FOR_PAGE),
-                        PageParameter.NOTIFICATIONS_FOR_PAGE);
+                        defineOffset(requestContent, notificationsForPage), notificationsForPage);
 
                 Map<Notification, Item> notificationItemMap = new LinkedHashMap<>();
                 for (Notification notification : notifications) {
@@ -99,13 +97,52 @@ public class PaginationReceiverImpl implements PaginationReceiver {
             UserDAO userDAO = new UserDAOImpl();
 
             try (DAOManager daoManager = new DAOManager(userDAO)) {
+                int usersForPage = SiteManager.getInstance().getUsersForPage();
+
                 if (!definePagesNumber(requestContent)) {
                     requestContent.setRequestAttribute(RequestConstant.PAGES,
-                            (userDAO.countRows(user.getId()) / PageParameter.NOTIFICATIONS_FOR_PAGE) + 1);
+                            ((userDAO.countRows() - 1) / usersForPage) + 1);
                 }
 
-                List<User> users = userDAO.findUsersWithLimit(user.getId(),
-                        defineOffset(requestContent, PageParameter.USERS_FOR_PAGE), PageParameter.USERS_FOR_PAGE);
+                List<User> users = userDAO.findUsersWithLimit(defineOffset(requestContent, usersForPage),
+                        usersForPage);
+
+                users.remove(user);
+
+                requestContent.setRequestAttribute(RequestConstant.USERS, users);
+            } catch (DAOException e) {
+                throw new ReceiverException(e);
+            }
+        }
+    }
+
+    @Override
+    public void findUsersByUsername(RequestContent requestContent) throws ReceiverException {
+        User user = (User) requestContent.getSessionAttribute(RequestConstant.USER);
+        String username = requestContent.getRequestParameter(RequestConstant.USERNAME)[0];
+
+        if (user != null) {
+            UserDAO userDAO = new UserDAOImpl();
+
+            try (DAOManager daoManager = new DAOManager(userDAO)) {
+                int usersNumber = userDAO.countRows(username);
+                int usersForPage = SiteManager.getInstance().getUsersForPage();
+
+                List<User> users = userDAO.findByUsername(username,
+                        defineOffset(requestContent, usersForPage), usersForPage);
+
+                boolean userRemoved = users.remove(user);
+
+                if (!definePagesNumber(requestContent)) {
+                    int pages;
+                    if (userRemoved) {
+                        pages = ((usersNumber - 1) / usersForPage) + 1;
+                    } else {
+                        pages = (usersNumber / usersForPage) + 1;
+                    }
+                    requestContent.setRequestAttribute(RequestConstant.PAGES,
+                            pages);
+                }
 
                 requestContent.setRequestAttribute(RequestConstant.USERS, users);
             } catch (DAOException e) {
@@ -141,13 +178,15 @@ public class PaginationReceiverImpl implements PaginationReceiver {
                 extractFilterParameters(requestContent, filterCriteria);
                 OrderCriteria orderCriteria = extractOrderParameters(requestContent);
 
+                int itemsForPage = SiteManager.getInstance().getItemsForPage();
+
                 if (!definePagesNumber(requestContent)) {
                     requestContent.setRequestAttribute(RequestConstant.PAGES,
-                            (itemDAO.countRows(user.getId(), filterCriteria) / PageParameter.ITEMS_FOR_PAGE) + 1);
+                            (itemDAO.countRows(user.getId(), filterCriteria) / itemsForPage) + 1);
                 }
 
                 List<Item> items = itemDAO.findPurchasedItems(user.getId(), filterCriteria, orderCriteria,
-                        defineOffset(requestContent, PageParameter.ITEMS_FOR_PAGE), PageParameter.ITEMS_FOR_PAGE);
+                        defineOffset(requestContent, itemsForPage), itemsForPage);
 
                 requestContent.setRequestAttribute(RequestConstant.ITEMS, items);
             } catch (DAOException e) {
@@ -237,13 +276,15 @@ public class PaginationReceiverImpl implements PaginationReceiver {
             extractFilterParameters(requestContent, filterCriteria);
             OrderCriteria orderCriteria = extractOrderParameters(requestContent);
 
+            int itemsForPage = SiteManager.getInstance().getItemsForPage();
+
             if (!definePagesNumber(requestContent)) {
                 requestContent.setRequestAttribute(RequestConstant.PAGES,
-                        (itemDAO.countRows(filterCriteria) / PageParameter.ITEMS_FOR_PAGE) + 1);
+                        (itemDAO.countRows(filterCriteria) / itemsForPage) + 1);
             }
 
             List<Item> items = itemDAO.findItemsWithFilter(filterCriteria, orderCriteria,
-                    defineOffset(requestContent, PageParameter.ITEMS_FOR_PAGE), PageParameter.ITEMS_FOR_PAGE);
+                    defineOffset(requestContent, itemsForPage), itemsForPage);
 
             requestContent.setRequestAttribute(RequestConstant.ITEMS, items);
         } catch (DAOException e) {

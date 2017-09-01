@@ -160,7 +160,7 @@ public class UserReceiverImpl implements UserReceiver {
             UserValidator userValidator = new UserValidator();
 
             if (userValidator.validateEmail(newEmail)) {
-                user.setUsername(newEmail);
+                user.setEmail(newEmail);
 
                 UserDAO userDAO = new UserDAOImpl();
                 DAOManager daoManager = new DAOManager(true, userDAO);
