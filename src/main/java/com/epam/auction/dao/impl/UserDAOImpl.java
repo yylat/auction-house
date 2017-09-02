@@ -94,13 +94,13 @@ public class UserDAOImpl extends GenericDAOImpl<User> implements UserDAO {
 
     @Override
     public int countRows() throws DAOException {
-        return countRows(TableConstant.USER_QUERY_FIND_ROWS_COUNT, statement -> {
+        return countRows(TableConstant.USER_QUERY_FIND_ROWS_COUNT_USERS, statement -> {
         });
     }
 
     @Override
     public List<User> findUsersWithLimit(int offset, int limit) throws DAOException {
-        return findSpecificList(TableConstant.USER_QUERY_FIND_USERS_LIMIT, statement -> {
+        return findSpecificList(TableConstant.USER_QUERY_FIND_USERS, statement -> {
             statement.setInt(1, offset);
             statement.setInt(2, limit);
         });

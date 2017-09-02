@@ -72,8 +72,7 @@
                                         <div class="w3-card item-wrapper">
                                             <div class="w3-container item-back">
                                                 <div class="w3-container img-container">
-                                                    <img src="${pageContext.request.contextPath}/img/default_img.gif"
-                                                         item="${item.id}"/>
+                                                    <img src="${pageContext.request.contextPath}/img/default_img.gif" item="${item.id}"/>
                                                 </div>
                                             </div>
                                             <div class="item-back">
@@ -120,7 +119,7 @@
 
                         <div class="page-bar w3-center">
                             <div id="pageBar" class="w3-bar w3-small w3-margin-top" data-command=""
-                                 data-page="${requestScope.page}" data-pages="${requestScope.pages}">
+                                 data-page="${requestScope.page}" data-pages="${sessionScope.pages}">
                                 <a id="prevLink" class="w3-button">&laquo;</a>
 
                                 <a id="nextLink" class="w3-button">&raquo;</a>

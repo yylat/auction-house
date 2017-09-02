@@ -74,6 +74,6 @@ public final class RequestConstant {
 
     public static final String FILTER_CRITERIA = "filterCriteria";
     public static final String ORDER_CRITERIA = "orderCriteria";
-    public static final String NOT_INITIAL = "not-initial";
+    public static final String INITIAL = "initial";
 
 }

@@ -4,6 +4,9 @@ import com.epam.auction.command.RequestContent;
 import com.epam.auction.dao.ItemCategoryDAO;
 import com.epam.auction.dao.ItemDAO;
 import com.epam.auction.dao.PhotoDAO;
+import com.epam.auction.dao.filter.FilterCriteria;
+import com.epam.auction.dao.filter.FilterQueryParameter;
+import com.epam.auction.dao.filter.OrderCriteria;
 import com.epam.auction.dao.impl.ItemCategoryDAOImpl;
 import com.epam.auction.dao.impl.ItemDAOImpl;
 import com.epam.auction.dao.impl.PhotoDAOImpl;
@@ -12,12 +15,11 @@ import com.epam.auction.entity.Item;
 import com.epam.auction.entity.ItemStatus;
 import com.epam.auction.entity.Photo;
 import com.epam.auction.entity.User;
-import com.epam.auction.exception.DAOException;
-import com.epam.auction.exception.MethodNotSupportedException;
-import com.epam.auction.exception.PhotoLoadingException;
-import com.epam.auction.exception.ReceiverException;
+import com.epam.auction.exception.*;
 import com.epam.auction.receiver.ItemReceiver;
+import com.epam.auction.receiver.PaginationHelper;
 import com.epam.auction.receiver.RequestConstant;
+import com.epam.auction.receiver.SiteManager;
 import com.epam.auction.util.Converter;
 import com.epam.auction.util.DateFixer;
 import com.epam.auction.util.PhotoLoader;
@@ -191,6 +193,132 @@ public class ItemReceiverImpl implements ItemReceiver {
     @Override
     public void discardItem(RequestContent requestContent) throws ReceiverException {
         updateItemStatus(requestContent, ItemStatus.NOT_CONFIRMED);
+    }
+
+    @Override
+    public void loadItemsForCheck(RequestContent requestContent) throws ReceiverException {
+        loadItemsWithStatus(requestContent, ItemStatus.CREATED);
+    }
+
+    @Override
+    public void loadActiveItems(RequestContent requestContent) throws ReceiverException {
+        loadItemsWithStatus(requestContent, ItemStatus.ACTIVE);
+    }
+
+    @Override
+    public void loadComingItems(RequestContent requestContent) throws ReceiverException {
+        loadItemsWithStatus(requestContent, ItemStatus.CONFIRMED);
+    }
+
+    @Override
+    public void loadPurchasedItems(RequestContent requestContent) throws ReceiverException {
+        User user = (User) requestContent.getSessionAttribute(RequestConstant.USER);
+        if (user != null) {
+
+            ItemDAO itemDAO = new ItemDAOImpl();
+
+            try (DAOManager daoManager = new DAOManager(itemDAO)) {
+                FilterCriteria filterCriteria = new FilterCriteria();
+                extractFilterParameters(requestContent, filterCriteria);
+                OrderCriteria orderCriteria = extractOrderParameters(requestContent);
+
+                PaginationHelper paginationHelper = new PaginationHelper(SiteManager.getInstance().getItemsForPage());
+                paginationHelper.definePage(requestContent);
+                if (!paginationHelper.pagesNumberDefined(requestContent)) {
+                    paginationHelper.definePages(requestContent, itemDAO.countRows(user.getId(), filterCriteria));
+                }
+
+                List<Item> items = itemDAO.findPurchasedItems(user.getId(), filterCriteria, orderCriteria,
+                        paginationHelper.findOffset(), paginationHelper.getLimit());
+
+                requestContent.setRequestAttribute(RequestConstant.ITEMS, items);
+            } catch (DAOException e) {
+                throw new ReceiverException(e);
+            }
+        }
+    }
+
+    @Override
+    public void loadUserItems(RequestContent requestContent) throws ReceiverException {
+        User user = (User) requestContent.getSessionAttribute(RequestConstant.USER);
+        if (user != null) {
+            FilterCriteria filterCriteria = new FilterCriteria();
+            try {
+                filterCriteria.put(FilterQueryParameter.SELLER_ID, user.getId());
+                loadItems(requestContent, filterCriteria);
+            } catch (WrongFilterParameterException e) {
+                throw new ReceiverException(e);
+            }
+        }
+    }
+
+    private void extractFilterParameters(RequestContent requestContent, FilterCriteria filterCriteria) {
+        if (requestContent.getRequestParameter(RequestConstant.INITIAL) == null) {
+            for (FilterQueryParameter filterQueryParameter : FilterQueryParameter.values()) {
+                String[] requestParameter = requestContent.getRequestParameter(filterQueryParameter.name().toLowerCase().replaceAll("_", "-"));
+                if (requestParameter != null && !requestParameter[0].isEmpty()) {
+                    filterCriteria.put(filterQueryParameter, requestParameter[0]);
+                }
+            }
+            requestContent.setSessionAttribute(RequestConstant.FILTER_CRITERIA, filterCriteria);
+        } else {
+            filterCriteria = (FilterCriteria) requestContent.getSessionAttribute(RequestConstant.FILTER_CRITERIA);
+        }
+    }
+
+    private OrderCriteria extractOrderParameters(RequestContent requestContent) {
+        OrderCriteria orderCriteria;
+
+        if (requestContent.getRequestParameter(RequestConstant.INITIAL) == null) {
+            String[] orderBy = requestContent.getRequestParameter(RequestConstant.ORDER_BY);
+            String[] orderType = requestContent.getRequestParameter(RequestConstant.ORDER_TYPE);
+
+            if (orderBy != null && orderType != null) {
+                orderCriteria = new OrderCriteria(orderBy[0], orderType[0]);
+            } else if (orderBy != null) {
+                orderCriteria = new OrderCriteria(orderBy[0]);
+            } else {
+                orderCriteria = new OrderCriteria();
+            }
+            requestContent.setSessionAttribute(RequestConstant.ORDER_CRITERIA, orderCriteria);
+        } else {
+            orderCriteria = (OrderCriteria) requestContent.getSessionAttribute(RequestConstant.ORDER_CRITERIA);
+        }
+
+        return orderCriteria;
+    }
+
+    private void loadItems(RequestContent requestContent, FilterCriteria filterCriteria) throws ReceiverException {
+        ItemDAO itemDAO = new ItemDAOImpl();
+
+        try (DAOManager daoManager = new DAOManager(itemDAO)) {
+            extractFilterParameters(requestContent, filterCriteria);
+            OrderCriteria orderCriteria = extractOrderParameters(requestContent);
+
+            PaginationHelper paginationHelper = new PaginationHelper(SiteManager.getInstance().getItemsForPage());
+            paginationHelper.definePage(requestContent);
+            if (!paginationHelper.pagesNumberDefined(requestContent)) {
+                paginationHelper.definePages(requestContent, itemDAO.countRows(filterCriteria));
+            }
+
+            List<Item> items = itemDAO.findItemsWithFilter(filterCriteria, orderCriteria,
+                    paginationHelper.findOffset(), paginationHelper.getLimit());
+
+            requestContent.setRequestAttribute(RequestConstant.ITEMS, items);
+        } catch (DAOException e) {
+            throw new ReceiverException(e);
+        }
+
+    }
+
+    private void loadItemsWithStatus(RequestContent requestContent, ItemStatus itemStatus) throws ReceiverException {
+        FilterCriteria filterCriteria = new FilterCriteria();
+        try {
+            filterCriteria.put(FilterQueryParameter.STATUS, itemStatus.ordinal());
+            loadItems(requestContent, filterCriteria);
+        } catch (WrongFilterParameterException e) {
+            throw new ReceiverException(e);
+        }
     }
 
     private void updateItemStatus(RequestContent requestContent, ItemStatus itemStatus) throws ReceiverException {

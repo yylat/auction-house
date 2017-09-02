@@ -115,7 +115,7 @@
 
                         <div class="page-bar w3-center">
                             <div id="pageBar" class="w3-bar w3-small w3-margin-top" data-command="load-bids"
-                                 data-page="${requestScope.page}" data-pages="${requestScope.pages}">
+                                 data-page="${requestScope.page}" data-pages="${sessionScope.pages}">
                                 <a id="prevLink" class="w3-button">&laquo;</a>
 
                                 <a id="nextLink" class="w3-button">&raquo;</a>

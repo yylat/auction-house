@@ -22,4 +22,15 @@ public interface ItemReceiver extends Receiver {
     void approveItem(RequestContent requestContent) throws ReceiverException;
 
     void discardItem(RequestContent requestContent) throws ReceiverException;
+
+    void loadItemsForCheck(RequestContent requestContent) throws ReceiverException;
+
+    void loadActiveItems(RequestContent requestContent) throws ReceiverException;
+
+    void loadComingItems(RequestContent requestContent) throws ReceiverException;
+
+    void loadPurchasedItems(RequestContent requestContent) throws ReceiverException;
+
+    void loadUserItems(RequestContent requestContent) throws ReceiverException;
+
 }

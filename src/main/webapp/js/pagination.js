@@ -5,7 +5,7 @@
     var prevLink = document.getElementById("prevLink");
     var nextLink = document.getElementById("nextLink");
 
-    var basicUrl = "/controller?command=" + pageBar.getAttribute("data-command") + "&not-initial=true";
+    var basicUrl = "/controller?command=" + pageBar.getAttribute("data-command") + "&initial=false";
 
     var pages = parseInt(pageBar.getAttribute("data-pages"));
     basicUrl += "&pages=" + pages;

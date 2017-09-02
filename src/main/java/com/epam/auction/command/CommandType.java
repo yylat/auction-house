@@ -40,16 +40,16 @@ public enum CommandType {
             ((UserReceiver) getCommand().getReceiver()).logOut(requestContent);
         }
     },
-    LOAD_USERS(new LoadUsersCommand(new PaginationReceiverImpl())) {
+    LOAD_USERS(new LoadUsersCommand(new UserReceiverImpl())) {
         @Override
         public void doReceiver(RequestContent requestContent) throws ReceiverException {
-            ((PaginationReceiver) getCommand().getReceiver()).loadUsers(requestContent);
+            ((UserReceiver) getCommand().getReceiver()).loadUsers(requestContent);
         }
     },
-    LOAD_USER_ITEMS(new LoadUserItemsCommand(new PaginationReceiverImpl())) {
+    LOAD_USER_ITEMS(new LoadUserItemsCommand(new ItemReceiverImpl())) {
         @Override
         public void doReceiver(RequestContent requestContent) throws ReceiverException {
-            ((PaginationReceiver) getCommand().getReceiver()).loadUserItems(requestContent);
+            ((ItemReceiver) getCommand().getReceiver()).loadUserItems(requestContent);
         }
     },
     LOAD_CATEGORIES(new LoadUserItemsCommand(new ItemReceiverImpl())) {
@@ -76,10 +76,10 @@ public enum CommandType {
             ((ItemReceiver) getCommand().getReceiver()).approveItem(requestContent);
         }
     },
-    LOAD_ITEMS_FOR_CHECK(new LoadItemsForCheckCommand(new PaginationReceiverImpl())) {
+    LOAD_ITEMS_FOR_CHECK(new LoadItemsForCheckCommand(new ItemReceiverImpl())) {
         @Override
         public void doReceiver(RequestContent requestContent) throws ReceiverException {
-            ((PaginationReceiver) getCommand().getReceiver()).loadItemsForCheck(requestContent);
+            ((ItemReceiver) getCommand().getReceiver()).loadItemsForCheck(requestContent);
         }
     },
     LOAD_ITEM(new LoadItemCommand(new ItemReceiverImpl())) {
@@ -94,16 +94,16 @@ public enum CommandType {
             ((PhotoReceiver) getCommand().getReceiver()).loadAllPhotos(requestContent);
         }
     },
-    LOAD_BIDS(new LoadBidsCommand(new PaginationReceiverImpl())) {
+    LOAD_BIDS(new LoadBidsCommand(new BidReceiverImpl())) {
         @Override
         public void doReceiver(RequestContent requestContent) throws ReceiverException {
-            ((PaginationReceiver) getCommand().getReceiver()).loadBids(requestContent);
+            ((BidReceiver) getCommand().getReceiver()).loadBids(requestContent);
         }
     },
-    LOAD_ACTIVE_ITEMS(new LoadActiveItemsCommand(new PaginationReceiverImpl())) {
+    LOAD_ACTIVE_ITEMS(new LoadActiveItemsCommand(new ItemReceiverImpl())) {
         @Override
         public void doReceiver(RequestContent requestContent) throws ReceiverException {
-            ((PaginationReceiver) getCommand().getReceiver()).loadActiveItems(requestContent);
+            ((ItemReceiver) getCommand().getReceiver()).loadActiveItems(requestContent);
         }
     },
     DISCARD_ITEM(new DiscardItemCommand(new ItemReceiverImpl())) {
@@ -112,10 +112,10 @@ public enum CommandType {
             ((ItemReceiver) getCommand().getReceiver()).discardItem(requestContent);
         }
     },
-    LOAD_NOTIFICATIONS(new LoadNotificationsCommand(new PaginationReceiverImpl())) {
+    LOAD_NOTIFICATIONS(new LoadNotificationsCommand(new NotificationReceiverImpl())) {
         @Override
         public void doReceiver(RequestContent requestContent) throws ReceiverException {
-            ((PaginationReceiver) getCommand().getReceiver()).loadNotifications(requestContent);
+            ((NotificationReceiver) getCommand().getReceiver()).loadNotifications(requestContent);
         }
     },
     MAKE_BID(new MakeBidCommand(new BidReceiverImpl())) {
@@ -130,10 +130,10 @@ public enum CommandType {
             ((UserReceiver) getCommand().getReceiver()).replenishBalance(requestContent);
         }
     },
-    LOAD_COMING_ITEMS(new LoadComingItemsCommand(new PaginationReceiverImpl())) {
+    LOAD_COMING_ITEMS(new LoadComingItemsCommand(new ItemReceiverImpl())) {
         @Override
         public void doReceiver(RequestContent requestContent) throws ReceiverException {
-            ((PaginationReceiver) getCommand().getReceiver()).loadComingItems(requestContent);
+            ((ItemReceiver) getCommand().getReceiver()).loadComingItems(requestContent);
         }
     },
     CHANGE_USERNAME(new ChangeUsernameCommand(new UserReceiverImpl())) {
@@ -160,10 +160,10 @@ public enum CommandType {
             ((UserReceiver) getCommand().getReceiver()).updateProfile(requestContent);
         }
     },
-    LOAD_PURCHASED_ITEMS(new LoadPurchasedItemsCommand(new PaginationReceiverImpl())) {
+    LOAD_PURCHASED_ITEMS(new LoadPurchasedItemsCommand(new ItemReceiverImpl())) {
         @Override
         public void doReceiver(RequestContent requestContent) throws ReceiverException {
-            ((PaginationReceiver) getCommand().getReceiver()).loadPurchasedItems(requestContent);
+            ((ItemReceiver) getCommand().getReceiver()).loadPurchasedItems(requestContent);
         }
     },
     UPDATE_ITEM(new UpdateItemCommand(new ItemReceiverImpl())) {

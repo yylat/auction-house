@@ -8,13 +8,16 @@ import com.epam.auction.entity.User;
 import com.epam.auction.exception.DAOException;
 import com.epam.auction.exception.MethodNotSupportedException;
 import com.epam.auction.exception.ReceiverException;
+import com.epam.auction.receiver.PaginationHelper;
 import com.epam.auction.receiver.RequestConstant;
+import com.epam.auction.receiver.SiteManager;
 import com.epam.auction.receiver.UserReceiver;
 import com.epam.auction.util.Encoder;
 import com.epam.auction.util.MessageProvider;
 import com.epam.auction.validator.UserValidator;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Locale;
 
 public class UserReceiverImpl implements UserReceiver {
@@ -233,6 +236,55 @@ public class UserReceiverImpl implements UserReceiver {
                 DAOManager daoManager = new DAOManager(true, userDAO);
 
                 simpleUserUpdate(user, daoManager, userDAO);
+            }
+        }
+    }
+
+    @Override
+    public void loadUsers(RequestContent requestContent) throws ReceiverException {
+        User user = (User) requestContent.getSessionAttribute(RequestConstant.USER);
+
+        if (user != null) {
+            UserDAO userDAO = new UserDAOImpl();
+
+            try (DAOManager daoManager = new DAOManager(userDAO)) {
+                PaginationHelper paginationHelper = new PaginationHelper(SiteManager.getInstance().getUsersForPage());
+                paginationHelper.definePage(requestContent);
+                if (!paginationHelper.pagesNumberDefined(requestContent)) {
+                    paginationHelper.definePages(requestContent, userDAO.countRows());
+                }
+
+                List<User> users = userDAO.findUsersWithLimit(paginationHelper.findOffset(),
+                        paginationHelper.getLimit());
+
+                requestContent.setRequestAttribute(RequestConstant.USERS, users);
+            } catch (DAOException e) {
+                throw new ReceiverException(e);
+            }
+        }
+    }
+
+    @Override
+    public void findUsersByUsername(RequestContent requestContent) throws ReceiverException {
+        User user = (User) requestContent.getSessionAttribute(RequestConstant.USER);
+        String username = requestContent.getRequestParameter(RequestConstant.USERNAME)[0];
+
+        if (user != null) {
+            UserDAO userDAO = new UserDAOImpl();
+
+            try (DAOManager daoManager = new DAOManager(userDAO)) {
+                PaginationHelper paginationHelper = new PaginationHelper(SiteManager.getInstance().getUsersForPage());
+                paginationHelper.definePage(requestContent);
+                if (!paginationHelper.pagesNumberDefined(requestContent)) {
+                    paginationHelper.definePages(requestContent, userDAO.countRows());
+                }
+
+                List<User> users = userDAO.findByUsername(username,
+                        paginationHelper.findOffset(), paginationHelper.getLimit());
+
+                requestContent.setRequestAttribute(RequestConstant.USERS, users);
+            } catch (DAOException e) {
+                throw new ReceiverException(e);
             }
         }
     }

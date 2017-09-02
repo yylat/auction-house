@@ -21,4 +21,8 @@ public interface UserReceiver extends Receiver {
 
     void updateProfile(RequestContent requestContent) throws ReceiverException;
 
+    void loadUsers(RequestContent requestContent) throws ReceiverException;
+
+    void findUsersByUsername(RequestContent requestContent) throws ReceiverException;
+
 }

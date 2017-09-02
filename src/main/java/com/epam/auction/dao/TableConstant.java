@@ -44,10 +44,15 @@ public final class TableConstant {
     public static final String USER_QUERY_UPDATE_STATUS =
             "UPDATE `user` SET `is_banned` = ? WHERE `user_id` = ?";
 
+    public static final String USER_QUERY_FIND_ROWS_COUNT_USERS =
+            USER_QUERY_FIND_ROWS_COUNT + " WHERE `user_role_id` = 1";
+    public static final String USER_QUERY_FIND_USERS =
+            USER_QUERY_FIND_ALL + " WHERE `user_role_id` = 1 ORDER BY `user_id` DESC LIMIT ?, ?";
+
     public static final String USER_QUERY_FIND_ROWS_COUNT_USERNAME =
-            USER_QUERY_FIND_ROWS_COUNT + " WHERE `username` LIKE ?";
+            USER_QUERY_FIND_ROWS_COUNT + " WHERE `user_role_id` = 1 AND `username` LIKE ?";
     public static final String USER_QUERY_FIND_BY_USERNAME =
-            "SELECT `user_id`, `username`, `password`, `last_name`, `middle_name`, `first_name`, `phone_number`, `email`, `balance`, `is_banned`, `user_role_id` FROM `user` WHERE `username` LIKE ? ORDER BY `user_id` DESC LIMIT ?, ?";
+            USER_QUERY_FIND_ALL + " WHERE `user_role_id` = 1 AND `username` LIKE ? ORDER BY `user_id` DESC LIMIT ?, ?";
 
     //    Bid table
 

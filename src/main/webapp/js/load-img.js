@@ -12,7 +12,12 @@
         xhttp.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
                 var string = this.responseText;
-                img.src = "data:image/png;base64," + string;
+                if (string) {
+                    img.src = "data:image/png;base64," + string;
+                }
+                else {
+                    img.src = "/img/default_img.gif";
+                }
             }
         };
         xhttp.send();
