@@ -1,4 +1,4 @@
-package com.epam.auction.dao.filter;
+package com.epam.auction.dao.criteria;
 
 import com.epam.auction.exception.WrongFilterParameterException;
 

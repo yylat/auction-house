@@ -1,12 +1,13 @@
 (function () {
 
-    var maxPhotoNumber = 4;
+    var MAX_PHOTO_NUMBER = 4;
 
-    var photosContainer = document.getElementById("photos");
-    var fileInput = document.getElementById("fileInput");
+    var updateItemForm = document.getElementById("updateItemForm");
+    var updateItemButton = updateItemForm.querySelector("button");
+    updateItemButton.addEventListener("click", validateForm.bind(null, updateItemForm));
 
     var deletePhotosForm = document.getElementById("deletePhotosForm");
-
+    var deletePhotosButton = deletePhotosForm.querySelector("button");
     deletePhotosForm.addEventListener("submit", function (event) {
         var checkboxes = document.getElementsByName("photo-id");
         var checked = 0;
@@ -21,12 +22,15 @@
     });
 
     var addPhotosForm = document.getElementById("addPhotosForm");
-
+    var addPhotosButton = addPhotosForm.querySelector("button");
     addPhotosForm.addEventListener("submit", function (event) {
         if (fileInput.files.length == 0) {
             event.preventDefault();
         }
     });
+
+    var photosContainer = document.getElementById("photos");
+    var fileInput = document.getElementById("fileInput");
 
     function displayErrorMsg() {
         var newItem = document.createElement("p");
@@ -68,7 +72,7 @@
                 var photos = JSON.parse(this.responseText);
                 var length = Object.keys(photos).length;
 
-                fileInput.setAttribute("data-max-file-number", maxPhotoNumber - length);
+                fileInput.setAttribute("data-max-file-number", MAX_PHOTO_NUMBER - length);
 
                 if (length == 0) {
                     displayErrorMsg();

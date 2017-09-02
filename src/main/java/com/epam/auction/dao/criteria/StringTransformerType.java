@@ -1,4 +1,4 @@
-package com.epam.auction.dao.filter;
+package com.epam.auction.dao.criteria;
 
 import java.math.BigDecimal;
 import java.sql.Date;

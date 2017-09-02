@@ -1,7 +1,7 @@
 package com.epam.auction.util;
 
-import com.epam.auction.dao.filter.FilterCriteria;
-import com.epam.auction.dao.filter.FilterQueryParameter;
+import com.epam.auction.dao.criteria.FilterCriteria;
+import com.epam.auction.dao.criteria.FilterQueryParameter;
 
 import java.util.HashMap;
 import java.util.Map;

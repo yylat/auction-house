@@ -4,37 +4,22 @@
 
     var sidebarCloseButton = document.getElementById("sidebarCloseButton");
     var sidebarOpenButton = document.getElementById("sidebarOpenButton");
-    sidebarCloseButton.addEventListener("click", function(){
+    sidebarCloseButton.addEventListener("click", function () {
         sidebar.style.display = "none";
     });
-    sidebarOpenButton.addEventListener("click", function(){
-       sidebar.style.display = "block";
+    sidebarOpenButton.addEventListener("click", function () {
+        sidebar.style.display = "block";
     });
 
-    /* remove default validation -------------------------------------------------------- */
-
-    function removeDefaultValidationMsg(form) {
-
-        form.addEventListener("invalid", function (event) {
-            event.preventDefault();
-        }, true);
-
-        form.addEventListener("submit", function (event) {
-            if (!this.checkValidity()) {
-                event.preventDefault();
-            }
-        });
-
-    }
-
-    var forms = document.forms;
-    for (var i = 0; i < forms.length; i++) {
-        removeDefaultValidationMsg(forms[i]);
-    }
-
-    /* ---------------------------------------------------------------------------------- */
-
 })();
+
+function removeDefaultValidation(form) {
+
+    form.addEventListener("invalid", function (event) {
+        event.preventDefault();
+    }, true);
+
+}
 
 function validateForm(form) {
 

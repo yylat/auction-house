@@ -11,6 +11,7 @@
 <fmt:message bundle="${msg}" key="form.username" var="username"/>
 <fmt:message bundle="${msg}" key="form.email" var="email"/>
 <fmt:message bundle="${msg}" key="form.phoneNumber" var="phoneNumber"/>
+<fmt:message bundle="${msg}" key="form.usernameRule" var="usernameRule"/>
 
 <fmt:message bundle="${msg}" key="label.fullName" var="fullName"/>
 
@@ -18,6 +19,7 @@
 <fmt:message bundle="${msg}" key="user.ban" var="ban"/>
 <fmt:message bundle="${msg}" key="user.unban" var="unban"/>
 <fmt:message bundle="${msg}" key="menu.users" var="users"/>
+<fmt:message bundle="${msg}" key="form.search" var="search"/>
 
 <c:if test="${requestScope.users == null}">
     <jsp:forward page="${pageContext.request.contextPath}/controller">
@@ -52,6 +54,26 @@
             <div class="w3-container w3-margin-top w3-margin-bottom middle-title uppercase">
                 ${users}
             </div>
+
+            <form id="searchForm" action="${pageContext.request.contextPath}/controller">
+                <input type="hidden" name="command" value="search-users"/>
+                <div class="w3-row w3-padding w3-margin-left">
+                    <div class="w3-col l5 m7 s10">
+                        <input class="w3-input back-back-color" placeholder="${search}" name="username" required
+                               pattern="[A-Za-z][A-Za-z0-9.//-]{1,20}"
+                               title="${usernameRule}"/>
+                    </div>
+                    <div class="w3-col s1">
+                        <div class="w3-left pro-padding-top">
+                            <button class="button-reset pro-padding-top search-button">
+                                <img src="${pageContext.request.contextPath}/img/ic_search_black_18px.svg"/>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+
             <div class="pro-margin-bottom">
                 <c:forEach var="user" items="${requestScope.users}">
                     <div class="w3-container w3-margin-bottom w3-border-bottom">
@@ -121,5 +143,6 @@
 <%@ include file="/jsp/jspf/footer.jsp" %>
 
 <script src="${pageContext.request.contextPath}/js/pagination.js"></script>
+<script src="${pageContext.request.contextPath}/js/controller/search.controller.js"></script>
 
 </body>

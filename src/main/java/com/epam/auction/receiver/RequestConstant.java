@@ -76,4 +76,6 @@ public final class RequestConstant {
     public static final String ORDER_CRITERIA = "orderCriteria";
     public static final String INITIAL = "initial";
 
+    public static final String SEARCH_NAME = "search-name";
+
 }

@@ -507,7 +507,8 @@ b, strong {
 }
 
 .pro-dropdown {
-    z-index: 10;
+    z-index: 1;
+    width: 600px;
 }
 
 .pro-margin-bottom {
@@ -540,6 +541,10 @@ b, strong {
     margin-left: 0.3em;
 }
 
+.search-button {
+    opacity: 0.8;
+}
+
 @media (max-width: 993px) {
 
     main {
@@ -569,15 +574,23 @@ b, strong {
 
 }
 
+@media (max-width: 680px) {
+    .pro-dropdown {
+        width: 540px;
+    }
+}
+
+@media (max-width: 601px) {
+    .pro-dropdown {
+        width: 300px;
+    }
+}
+
 @media (min-width: 601px) {
     .item-title {
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
-    }
-
-    .hi-title {
-
     }
 }
 

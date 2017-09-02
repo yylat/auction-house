@@ -207,6 +207,18 @@ public enum CommandType {
         public void doReceiver(RequestContent requestContent) throws ReceiverException {
             ((AdminReceiver) getCommand().getReceiver()).updateUserStatus(requestContent);
         }
+    },
+    SEARCH_USERS(new SearchUsersCommand(new UserReceiverImpl())) {
+        @Override
+        public void doReceiver(RequestContent requestContent) throws ReceiverException {
+            ((UserReceiver) getCommand().getReceiver()).findUsersByUsername(requestContent);
+        }
+    },
+    SEARCH_ITEMS(new SearchItemsCommand(new ItemReceiverImpl())) {
+        @Override
+        public void doReceiver(RequestContent requestContent) throws ReceiverException {
+            ((ItemReceiver) getCommand().getReceiver()).searchItems(requestContent);
+        }
     };
 
     private AbstractCommand command;

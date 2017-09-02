@@ -47,8 +47,8 @@
                         <b>${balanceReplenishment}</b>
                     </div>
 
-                    <form class="w3-container bottom-padding" action="${pageContext.request.contextPath}/controller"
-                          method="post">
+                    <form id="balanceForm" class="w3-container bottom-padding"
+                          action="${pageContext.request.contextPath}/controller" method="post">
                         <input type="hidden" name="command" value="replenish-balance"/>
 
                         <div class="w3-section">
@@ -77,8 +77,7 @@
                                 <div class="w3-container bottom-padding">
                                     <label><b>${moneyAmount}</b></label>
                                     <input name="moneyAmount" class="w3-input" type="number" step="0.001"
-                                           min="0.000"
-                                           max="99999999999999999999.999" required
+                                           min="0.000" max="99999999999999999999.999" required
                                            title="${priceRule}"/>
                                 </div>
                             </div>
@@ -104,8 +103,9 @@
 </main>
 
 <%@ include file="/jsp/jspf/message.jsp" %>
-
 <%@ include file="/jsp/jspf/footer.jsp" %>
+
+<script src="${pageContext.request.contextPath}/js/controller/balance.controller.js"></script>
 
 </body>
 

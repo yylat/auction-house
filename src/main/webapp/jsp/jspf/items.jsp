@@ -3,6 +3,9 @@
 <fmt:message bundle="${msg}" key="form.startDate" var="startDate"/>
 <fmt:message bundle="${msg}" key="form.closeDate" var="closeDate"/>
 <fmt:message bundle="${msg}" key="form.category" var="category"/>
+<fmt:message bundle="${msg}" key="form.itemTitle" var="itemTitle"/>
+<fmt:message bundle="${msg}" key="form.itemTitleRule" var="itemTitleRule"/>
+<fmt:message bundle="${msg}" key="form.search" var="search"/>
 
 <fmt:message bundle="${msg}" key="status.title" var="statusTitle"/>
 <fmt:message bundle="${msg}" key="status.created" var="created"/>
@@ -33,11 +36,11 @@
                 <div class="w3-col s4 w3-right">
                     <div class="w3-dropdown-click w3-right">
                         <button id="filterDropdownSwitch" class="w3-button">
-                            <img src="${pageContext.request.contextPath}/img/ic_menu_black_24px.svg">
+                            <img src="${pageContext.request.contextPath}/img/ic_sort_black_24px.svg">
                         </button>
                         <div id="filterDropdownContent"
                              class="w3-dropdown-content right-dropdown-content pro-dropdown w3-bar-block w3-border">
-                            <form class="w3-container"
+                            <form class="w3-container filter-window"
                                   action="${pageContext.request.contextPath}/controller" method="post">
                                 <input type="hidden" name="command" value=""/>
                                 <%@include file="/jsp/jspf/filters.jsp" %>
@@ -46,8 +49,25 @@
                     </div>
                 </div>
 
-
             </div>
+
+            <form id="searchForm" action="${pageContext.request.contextPath}/controller">
+                <input type="hidden" name="command" value="search-items"/>
+                <div class="w3-row w3-padding w3-margin-left">
+                    <div class="w3-col l5 m7 s10">
+                        <input class="w3-input back-color" placeholder="${search}" name="search-name" required
+                               pattern="[A-Za-zА-Яа-яЁё0-9-_ ]{1,40}"
+                               title="${itemTitleRule}"/>
+                    </div>
+                    <div class="w3-col s1">
+                        <div class="w3-left pro-padding-top">
+                            <button class="button-reset pro-padding-top search-button">
+                                <img src="${pageContext.request.contextPath}/img/ic_search_black_18px.svg"/>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
 
             <div class="w3-row-padding" id="itemsList">
 
@@ -72,7 +92,8 @@
                                         <div class="w3-card item-wrapper">
                                             <div class="w3-container item-back">
                                                 <div class="w3-container img-container">
-                                                    <img src="${pageContext.request.contextPath}/img/default_img.gif" item="${item.id}"/>
+                                                    <img src="${pageContext.request.contextPath}/img/default_img.gif"
+                                                         item="${item.id}"/>
                                                 </div>
                                             </div>
                                             <div class="item-back">
@@ -140,9 +161,7 @@
 <%@ include file="/jsp/jspf/footer.jsp" %>
 
 <script src="${pageContext.request.contextPath}/js/load-categories.js"></script>
-
 <script src="${pageContext.request.contextPath}/js/filter-dropdown.js"></script>
-
-<script src="${pageContext.request.contextPath}/js/load-img.js"></script>
-
+<script src="${pageContext.request.contextPath}/js/photo.loader.js"></script>
 <script src="${pageContext.request.contextPath}/js/pagination.js"></script>
+<script src="${pageContext.request.contextPath}/js/controller/search.controller.js"></script>

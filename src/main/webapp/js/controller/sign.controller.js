@@ -34,8 +34,10 @@
     var signInSubmitButton = document.getElementById("signInSubmitButton");
     var signUpSubmitButton = document.getElementById("signUpSubmitButton");
 
-    signInSubmitButton.addEventListener("click", validateForm.bind(null, signInForm));
+    removeDefaultValidation(signInForm);
+    removeDefaultValidation(signUpForm);
 
+    signInSubmitButton.addEventListener("click", validateForm.bind(null, signInForm));
     signUpSubmitButton.addEventListener("click", validateForm.bind(null, signUpForm));
 
     /* ---------------------------------------------------------------------------------- */

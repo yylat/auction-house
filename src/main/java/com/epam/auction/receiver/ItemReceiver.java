@@ -33,4 +33,6 @@ public interface ItemReceiver extends Receiver {
 
     void loadUserItems(RequestContent requestContent) throws ReceiverException;
 
+    void searchItems(RequestContent requestContent) throws ReceiverException;
+
 }

@@ -4,9 +4,9 @@ import com.epam.auction.command.RequestContent;
 import com.epam.auction.dao.ItemCategoryDAO;
 import com.epam.auction.dao.ItemDAO;
 import com.epam.auction.dao.PhotoDAO;
-import com.epam.auction.dao.filter.FilterCriteria;
-import com.epam.auction.dao.filter.FilterQueryParameter;
-import com.epam.auction.dao.filter.OrderCriteria;
+import com.epam.auction.dao.criteria.FilterCriteria;
+import com.epam.auction.dao.criteria.FilterQueryParameter;
+import com.epam.auction.dao.criteria.OrderCriteria;
 import com.epam.auction.dao.impl.ItemCategoryDAOImpl;
 import com.epam.auction.dao.impl.ItemDAOImpl;
 import com.epam.auction.dao.impl.PhotoDAOImpl;
@@ -252,10 +252,20 @@ public class ItemReceiverImpl implements ItemReceiver {
         }
     }
 
+    @Override
+    public void searchItems(RequestContent requestContent) throws ReceiverException {
+        FilterCriteria filterCriteria = (FilterCriteria) requestContent.getSessionAttribute(RequestConstant.FILTER_CRITERIA);
+        OrderCriteria orderCriteria = (OrderCriteria) requestContent.getSessionAttribute(RequestConstant.ORDER_CRITERIA);
+        filterCriteria.put(FilterQueryParameter.SEARCH_NAME,
+                requestContent.getRequestParameter(RequestConstant.SEARCH_NAME)[0]);
+        loadItems(requestContent, filterCriteria, orderCriteria);
+    }
+
     private void extractFilterParameters(RequestContent requestContent, FilterCriteria filterCriteria) {
         if (requestContent.getRequestParameter(RequestConstant.INITIAL) == null) {
             for (FilterQueryParameter filterQueryParameter : FilterQueryParameter.values()) {
-                String[] requestParameter = requestContent.getRequestParameter(filterQueryParameter.name().toLowerCase().replaceAll("_", "-"));
+                String[] requestParameter = requestContent
+                        .getRequestParameter(filterQueryParameter.name().toLowerCase().replaceAll("_", "-"));
                 if (requestParameter != null && !requestParameter[0].isEmpty()) {
                     filterCriteria.put(filterQueryParameter, requestParameter[0]);
                 }
@@ -288,12 +298,27 @@ public class ItemReceiverImpl implements ItemReceiver {
         return orderCriteria;
     }
 
+    private void loadItemsWithStatus(RequestContent requestContent, ItemStatus itemStatus) throws ReceiverException {
+        FilterCriteria filterCriteria = new FilterCriteria();
+        try {
+            filterCriteria.put(FilterQueryParameter.STATUS, itemStatus.ordinal());
+            loadItems(requestContent, filterCriteria);
+        } catch (WrongFilterParameterException e) {
+            throw new ReceiverException(e);
+        }
+    }
+
     private void loadItems(RequestContent requestContent, FilterCriteria filterCriteria) throws ReceiverException {
+        extractFilterParameters(requestContent, filterCriteria);
+        OrderCriteria orderCriteria = extractOrderParameters(requestContent);
+        loadItems(requestContent, filterCriteria, orderCriteria);
+    }
+
+    private void loadItems(RequestContent requestContent, FilterCriteria filterCriteria, OrderCriteria orderCriteria)
+            throws ReceiverException {
         ItemDAO itemDAO = new ItemDAOImpl();
 
         try (DAOManager daoManager = new DAOManager(itemDAO)) {
-            extractFilterParameters(requestContent, filterCriteria);
-            OrderCriteria orderCriteria = extractOrderParameters(requestContent);
 
             PaginationHelper paginationHelper = new PaginationHelper(SiteManager.getInstance().getItemsForPage());
             paginationHelper.definePage(requestContent);
@@ -306,17 +331,6 @@ public class ItemReceiverImpl implements ItemReceiver {
 
             requestContent.setRequestAttribute(RequestConstant.ITEMS, items);
         } catch (DAOException e) {
-            throw new ReceiverException(e);
-        }
-
-    }
-
-    private void loadItemsWithStatus(RequestContent requestContent, ItemStatus itemStatus) throws ReceiverException {
-        FilterCriteria filterCriteria = new FilterCriteria();
-        try {
-            filterCriteria.put(FilterQueryParameter.STATUS, itemStatus.ordinal());
-            loadItems(requestContent, filterCriteria);
-        } catch (WrongFilterParameterException e) {
             throw new ReceiverException(e);
         }
     }

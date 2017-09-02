@@ -11,11 +11,11 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class LoadUsersCommand extends AbstractCommand {
+public class SearchUsersCommand extends AbstractCommand {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-    public LoadUsersCommand(Receiver receiver) {
+    public SearchUsersCommand(Receiver receiver) {
         super(receiver);
     }
 

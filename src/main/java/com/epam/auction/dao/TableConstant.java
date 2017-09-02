@@ -50,9 +50,9 @@ public final class TableConstant {
             USER_QUERY_FIND_ALL + " WHERE `user_role_id` = 1 ORDER BY `user_id` DESC LIMIT ?, ?";
 
     public static final String USER_QUERY_FIND_ROWS_COUNT_USERNAME =
-            USER_QUERY_FIND_ROWS_COUNT + " WHERE `user_role_id` = 1 AND `username` LIKE ?";
+            USER_QUERY_FIND_ROWS_COUNT + " WHERE `user_role_id` = 1 AND `username` LIKE '%' || ? || '%'";
     public static final String USER_QUERY_FIND_BY_USERNAME =
-            USER_QUERY_FIND_ALL + " WHERE `user_role_id` = 1 AND `username` LIKE ? ORDER BY `user_id` DESC LIMIT ?, ?";
+            USER_QUERY_FIND_ALL + " WHERE `user_role_id` = 1 AND `username` LIKE '%' || ? || '%' ORDER BY `user_id` DESC LIMIT ?, ?";
 
     //    Bid table
 

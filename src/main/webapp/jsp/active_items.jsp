@@ -41,7 +41,7 @@
 <c:if test="${sessionScope.user == null}">
     <%@ include file="/jsp/jspf/sign_in.jsp" %>
     <%@ include file="/jsp/jspf/sign_up.jsp" %>
-    <script src="${pageContext.request.contextPath}/js/sign.js"></script>
+    <script src="${pageContext.request.contextPath}/js/controller/sign.controller.js"></script>
 </c:if>
 
 </body>

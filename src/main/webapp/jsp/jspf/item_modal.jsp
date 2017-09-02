@@ -129,4 +129,4 @@
 
 <script src="${pageContext.request.contextPath}/js/add-item.js"></script>
 <script src="${pageContext.request.contextPath}/js/date-validation.js"></script>
-<script src="${pageContext.request.contextPath}/js/custom-file-inputs.js"></script>
+<script src="${pageContext.request.contextPath}/js/custom-file-input.js"></script>

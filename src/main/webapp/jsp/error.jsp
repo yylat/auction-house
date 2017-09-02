@@ -54,9 +54,7 @@
 
 <%@ include file="/jsp/jspf/sign_up.jsp" %>
 
-<script src="${pageContext.request.contextPath}/js/event.js"></script>
-
-<script src="${pageContext.request.contextPath}/js/sign.js"></script>
+<script src="${pageContext.request.contextPath}/js/controller/sign.controller.js"></script>
 
 
 </body>

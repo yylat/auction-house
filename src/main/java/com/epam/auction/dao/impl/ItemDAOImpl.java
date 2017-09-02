@@ -2,8 +2,8 @@ package com.epam.auction.dao.impl;
 
 import com.epam.auction.dao.ItemDAO;
 import com.epam.auction.dao.TableConstant;
-import com.epam.auction.dao.filter.FilterCriteria;
-import com.epam.auction.dao.filter.OrderCriteria;
+import com.epam.auction.dao.criteria.FilterCriteria;
+import com.epam.auction.dao.criteria.OrderCriteria;
 import com.epam.auction.entity.Item;
 import com.epam.auction.entity.ItemStatus;
 import com.epam.auction.exception.DAOException;

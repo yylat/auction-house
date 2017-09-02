@@ -59,7 +59,7 @@
             </div>
 
             <form action="${pageContext.request.contextPath}/controller" method="post"
-                  class="w3-border-bottom">
+                  id="updateItemForm" class="w3-border-bottom">
                 <input type="hidden" name="command" value="update-item"/>
 
                 <div class="w3-container">
@@ -176,12 +176,11 @@
 </main>
 
 <%@ include file="/jsp/jspf/message.jsp" %>
-
 <%@ include file="/jsp/jspf/footer.jsp" %>
 
 <script src="${pageContext.request.contextPath}/js/date-validation.js"></script>
-<script src="${pageContext.request.contextPath}/js/update-photos.js"></script>
-<script src="${pageContext.request.contextPath}/js/custom-file-inputs.js"></script>
+<script src="${pageContext.request.contextPath}/js/controller/edit-item.controller.js"></script>
+<script src="${pageContext.request.contextPath}/js/custom-file-input.js"></script>
 
 
 </body>
