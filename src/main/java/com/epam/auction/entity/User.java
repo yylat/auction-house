@@ -3,27 +3,81 @@ package com.epam.auction.entity;
 import java.math.BigDecimal;
 import java.util.Arrays;
 
+/**
+ * Represents `user` table from database.
+ */
 public class User extends Entity {
 
+    /**
+     * Name in the system.
+     */
     private String username;
+    /**
+     * Password.
+     */
     private String password;
+    /**
+     * Last name.
+     */
     private String lastName;
+    /**
+     * Middle name.
+     */
     private String middleName;
+    /**
+     * First name.
+     */
     private String firstName;
+    /**
+     * Phone number.
+     */
     private String phoneNumber;
+    /**
+     * Email.
+     */
     private String email;
+    /**
+     * Balance.
+     */
     private BigDecimal balance = new BigDecimal(0);
+    /**
+     * Boolean value that detect is user account deleted or not ("0" - not deleted, "1" - deleted).
+     */
     private boolean isBanned = false;
+    /**
+     * Shows if user banned or not.
+     */
     private UserRole role = UserRole.USER;
 
+    /**
+     * Constructs user without parameters.
+     */
     public User() {
     }
 
+    /**
+     * Constructs user with username and password.
+     *
+     * @param username username
+     * @param password password
+     */
     public User(String username, String password) {
         this.username = username;
         this.password = password;
     }
 
+    /**
+     * Constructs user with username, password, last name, middle name,
+     * first name, phone number and email.
+     *
+     * @param username    username
+     * @param password    password
+     * @param lastName    last name
+     * @param middleName  middle name
+     * @param firstName   first name
+     * @param phoneNumber phone number
+     * @param email       email
+     */
     public User(String username, String password, String lastName, String middleName, String firstName, String phoneNumber, String email) {
         this.username = username;
         this.password = password;
@@ -34,7 +88,21 @@ public class User extends Entity {
         this.email = email;
     }
 
-    public User(int id, String username, String password, String lastName, String middleName, String firstName, String phoneNumber, String email, UserRole role) {
+    /**
+     * Constructs user with id, username, password, last name, middle name,
+     * first name, phone number, email and role.
+     *
+     * @param id          id
+     * @param username    username
+     * @param password    password
+     * @param lastName    last name
+     * @param middleName  middle name
+     * @param firstName   first name
+     * @param phoneNumber phone number
+     * @param email       email
+     * @param role        role
+     */
+    public User(long id, String username, String password, String lastName, String middleName, String firstName, String phoneNumber, String email, UserRole role) {
         super(id);
         this.username = username;
         this.password = password;
@@ -46,7 +114,23 @@ public class User extends Entity {
         this.role = role;
     }
 
-    public User(int id, String username, String password, String lastName, String middleName, String firstName, String phoneNumber, String email, BigDecimal balance, boolean isBanned, UserRole role) {
+    /**
+     * Constructs user with id, username, password, last name, middle name,
+     * first name, phone number, email, balance, ban status and role.
+     *
+     * @param id          id
+     * @param username    username
+     * @param password    password
+     * @param lastName    last name
+     * @param middleName  middle name
+     * @param firstName   first name
+     * @param phoneNumber phone number
+     * @param email       email
+     * @param balance     balance
+     * @param isBanned    ban status
+     * @param role        role
+     */
+    public User(long id, String username, String password, String lastName, String middleName, String firstName, String phoneNumber, String email, BigDecimal balance, boolean isBanned, UserRole role) {
         super(id);
         this.username = username;
         this.password = password;
@@ -60,82 +144,184 @@ public class User extends Entity {
         this.role = role;
     }
 
+    /**
+     * Returns username.
+     *
+     * @return username
+     */
     public String getUsername() {
         return username;
     }
 
+    /**
+     * Sets username.
+     *
+     * @param username username
+     */
     public void setUsername(String username) {
         this.username = username;
     }
 
+    /**
+     * Returns password.
+     *
+     * @return password
+     */
     public String getPassword() {
         return password;
     }
 
+    /**
+     * Sets password.
+     *
+     * @param password password
+     */
     public void setPassword(String password) {
         this.password = password;
     }
 
+    /**
+     * Returns last name.
+     *
+     * @return last name
+     */
     public String getLastName() {
         return lastName;
     }
 
+    /**
+     * Sets last name.
+     *
+     * @param lastName last name
+     */
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
+    /**
+     * Returns middle name.
+     *
+     * @return middle name
+     */
     public String getMiddleName() {
         return middleName;
     }
 
+    /**
+     * Sets middle name.
+     *
+     * @param middleName middle name
+     */
     public void setMiddleName(String middleName) {
         this.middleName = middleName;
     }
 
+    /**
+     * Returns first name.
+     *
+     * @return first name
+     */
     public String getFirstName() {
         return firstName;
     }
 
+    /**
+     * Sets first name.
+     *
+     * @param firstName first name
+     */
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
+    /**
+     * Returns phone number.
+     *
+     * @return phone number
+     */
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
+    /**
+     * Sets phone number.
+     *
+     * @param phoneNumber phone number
+     */
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
+    /**
+     * Returns email.
+     *
+     * @return email
+     */
     public String getEmail() {
         return email;
     }
 
+    /**
+     * Sets email.
+     *
+     * @param email email
+     */
     public void setEmail(String email) {
         this.email = email;
     }
 
+    /**
+     * Returns balance.
+     *
+     * @return balance
+     */
     public BigDecimal getBalance() {
         return balance;
     }
 
+    /**
+     * Sets balance.
+     *
+     * @param balance balance
+     */
     public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 
-    public boolean getIsBanned() {
+    /**
+     * Returns <code>true</code> if user is banned.
+     *
+     * @return <code>true</code> if user is banned;
+     * <code>false</code> otherwise
+     */
+    public boolean isBanned() {
         return isBanned;
     }
 
-    public void setIsBanned(boolean banned) {
+    /**
+     * Sets whether user is banned or not.
+     *
+     * @param banned ban status
+     */
+    public void setBanned(boolean banned) {
         isBanned = banned;
     }
 
+
+    /**
+     * Returns role of the user.
+     *
+     * @return role of the user
+     */
     public UserRole getRole() {
         return role;
     }
 
+    /**
+     * Sets role of the user.
+     *
+     * @param role role of the user
+     */
     public void setRole(UserRole role) {
         this.role = role;
     }
@@ -147,16 +333,16 @@ public class User extends Entity {
 
         User user = (User) o;
 
-        if (isBanned != user.isBanned) return false;
-        if (username != null ? !username.equals(user.username) : user.username != null) return false;
-        if (password != null ? !password.equals(user.password) : user.password != null) return false;
-        if (lastName != null ? !lastName.equals(user.lastName) : user.lastName != null) return false;
-        if (middleName != null ? !middleName.equals(user.middleName) : user.middleName != null) return false;
-        if (firstName != null ? !firstName.equals(user.firstName) : user.firstName != null) return false;
-        if (phoneNumber != null ? !phoneNumber.equals(user.phoneNumber) : user.phoneNumber != null) return false;
-        if (email != null ? !email.equals(user.email) : user.email != null) return false;
-        if (balance != null ? !balance.equals(user.balance) : user.balance != null) return false;
-        return role == user.role;
+        return isBanned == user.isBanned
+                && (username != null ? username.equals(user.username) : user.username == null)
+                && (password != null ? password.equals(user.password) : user.password == null)
+                && (lastName != null ? lastName.equals(user.lastName) : user.lastName == null)
+                && (middleName != null ? middleName.equals(user.middleName) : user.middleName == null)
+                && (firstName != null ? firstName.equals(user.firstName) : user.firstName == null)
+                && (phoneNumber != null ? phoneNumber.equals(user.phoneNumber) : user.phoneNumber == null)
+                && (email != null ? email.equals(user.email) : user.email == null)
+                && (balance != null ? balance.equals(user.balance) : user.balance == null)
+                && role == user.role;
     }
 
     @Override
@@ -174,11 +360,26 @@ public class User extends Entity {
         return result;
     }
 
+    /**
+     * Represents `user_role` table from database.
+     */
     public enum UserRole {
 
+        /**
+         * Administrator role.
+         */
         ADMIN,
+        /**
+         * User role.
+         */
         USER;
 
+        /**
+         * Returns usr role with id (ordinal number in enum).
+         *
+         * @param id id of the user role
+         * @return user role
+         */
         public static UserRole define(int id) {
             return Arrays.stream(UserRole.values())
                     .filter(userRole -> id == userRole.ordinal())

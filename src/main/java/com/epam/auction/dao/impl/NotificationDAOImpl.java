@@ -36,7 +36,7 @@ public class NotificationDAOImpl extends GenericDAOImpl<Notification> implements
 
     }
 
-    public boolean delete(int id) throws DAOException, MethodNotSupportedException {
+    public boolean delete(long id) throws DAOException, MethodNotSupportedException {
         throw new MethodNotSupportedException();
     }
 
@@ -49,19 +49,19 @@ public class NotificationDAOImpl extends GenericDAOImpl<Notification> implements
     }
 
     @Override
-    public List<Notification> findUsersNotifications(int userId, int offset, int limit) throws DAOException {
+    public List<Notification> findUsersNotifications(long userId, int offset, int limit) throws DAOException {
         return findSpecificList(TableConstant.NOTIFICATION_QUERY_FIND_FOR_USER_LIMIT,
                 statement -> {
-                    statement.setInt(1, userId);
+                    statement.setLong(1, userId);
                     statement.setInt(2, offset);
                     statement.setInt(3, limit);
                 });
     }
 
     @Override
-    public int countRows(int userId) throws DAOException {
+    public int countRows(long userId) throws DAOException {
         return countRows(TableConstant.NOTIFICATION_QUERY_FIND_NUMBER_FOR_USER,
-                statement -> statement.setInt(1, userId));
+                statement -> statement.setLong(1, userId));
     }
 
 }

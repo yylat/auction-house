@@ -1,12 +1,13 @@
 package com.epam.auction.validator;
 
 import com.epam.auction.entity.Item;
+import com.epam.auction.util.DateFixer;
 
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
+import java.sql.Date;
 
 public class ItemValidator extends Validator {
 
@@ -17,14 +18,11 @@ public class ItemValidator extends Validator {
 
     private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private final Date minStartDate;
-    private final Date minCloseDate;
 
     public ItemValidator() {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DATE, 2);
-        this.minStartDate = calendar.getTime();
-        calendar.add(Calendar.DATE, 2);
-        this.minCloseDate = calendar.getTime();
+        this.minStartDate = new Date(calendar.getTimeInMillis());
     }
 
     public boolean validateItemParam(Item item) {
@@ -39,7 +37,7 @@ public class ItemValidator extends Validator {
                 validatePrice(startPrice) &&
                 validatePrice(blitzPrice) &&
                 validateStartDate(startDate) &&
-                validateCloseDate(closeDate);
+                validateCloseDate(closeDate, startDate);
     }
 
     private boolean validatePrice(BigDecimal value) {
@@ -61,11 +59,11 @@ public class ItemValidator extends Validator {
         }
     }
 
-    public boolean validateCloseDate(Date closeDate) {
-        if (minCloseDate.compareTo(closeDate) <= 0) {
+    public boolean validateCloseDate(Date closeDate, Date startDate) {
+        if (closeDate.compareTo(DateFixer.addDays(startDate, 2)) >= 0) {
             return true;
         } else {
-            setValidationMessage("Close date can begin from: " + minStartDate +
+            setValidationMessage("Close date must be 2 days after start date: " + startDate +
                     ". Entered close date: " + closeDate);
             return false;
         }

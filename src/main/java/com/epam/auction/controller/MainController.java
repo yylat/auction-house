@@ -12,6 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Provides service for working with standard requests.
+ */
 @WebServlet(name = "MainController", urlPatterns = {"/controller"})
 public class MainController extends HttpServlet {
 
@@ -25,6 +28,14 @@ public class MainController extends HttpServlet {
         processRequest(request, response);
     }
 
+    /**
+     * Process GET or POST request. Invoke command.
+     *
+     * @param request  request
+     * @param response response
+     * @throws ServletException if servlet exception occurred
+     * @throws IOException      if IO exception occurred
+     */
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RequestContent requestContent = new RequestContent();
 

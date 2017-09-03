@@ -1,7 +1,14 @@
 package com.epam.auction.controller;
 
+/**
+ * Stores page addresses.
+ */
 public final class PageAddress {
 
+    /**
+     * Private constructor without parameters.
+     * Restrict instantiation of the class.
+     */
     private PageAddress() {
     }
 

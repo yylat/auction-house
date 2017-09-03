@@ -22,7 +22,7 @@ public class UserDAOImpl extends GenericDAOImpl<User> implements UserDAO {
     }
 
     @Override
-    public boolean delete(int id) throws DAOException, MethodNotSupportedException {
+    public boolean delete(long id) throws DAOException, MethodNotSupportedException {
         throw new MethodNotSupportedException();
     }
 

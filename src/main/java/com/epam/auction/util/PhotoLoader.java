@@ -3,12 +3,10 @@ package com.epam.auction.util;
 import com.epam.auction.exception.PhotoLoadingException;
 import com.epam.auction.receiver.SiteManager;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Base64;
 import java.util.Date;
 
 public class PhotoLoader {
@@ -39,11 +37,21 @@ public class PhotoLoader {
     }
 
     public String loadPhotoAsString(String fileName) throws PhotoLoadingException {
-        try {
-            return Converter.inputStreamToString(new FileInputStream(UPLOAD_PATH + fileName));
+        String result;
+
+        try (InputStream inputStream = new FileInputStream(UPLOAD_PATH + fileName)) {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, length);
+            }
+            result = Base64.getEncoder().encodeToString(outputStream.toByteArray());
         } catch (IOException e) {
             throw new PhotoLoadingException("Error trying to load photo.", e);
         }
+
+        return result;
     }
 
 }

@@ -20,7 +20,7 @@ import com.epam.auction.receiver.ItemReceiver;
 import com.epam.auction.receiver.PaginationHelper;
 import com.epam.auction.receiver.RequestConstant;
 import com.epam.auction.receiver.SiteManager;
-import com.epam.auction.util.Converter;
+import com.epam.auction.util.JSONConverter;
 import com.epam.auction.util.DateFixer;
 import com.epam.auction.util.PhotoLoader;
 import com.epam.auction.validator.ItemValidator;
@@ -37,7 +37,7 @@ public class ItemReceiverImpl implements ItemReceiver {
         ItemCategoryDAO itemCategoryDAO = new ItemCategoryDAOImpl();
 
         try (DAOManager daoManager = new DAOManager(itemCategoryDAO)) {
-            requestContent.setAjaxResponse(Converter.objectToJson(itemCategoryDAO.findAll()));
+            requestContent.setAjaxResponse(JSONConverter.objectAsJson(itemCategoryDAO.findAll()));
         } catch (DAOException e) {
             throw new ReceiverException(e);
         }
@@ -161,7 +161,7 @@ public class ItemReceiverImpl implements ItemReceiver {
 
     @Override
     public void deleteItem(RequestContent requestContent) throws ReceiverException {
-        int itemId = ((Item) requestContent.getSessionAttribute(RequestConstant.ITEM)).getId();
+        long itemId = ((Item) requestContent.getSessionAttribute(RequestConstant.ITEM)).getId();
 
         ItemDAO itemDAO = new ItemDAOImpl();
         PhotoDAO photoDAO = new PhotoDAOImpl();
@@ -359,16 +359,16 @@ public class ItemReceiverImpl implements ItemReceiver {
     private void updateItemForCheck(Item item, ItemDAO itemDAO) throws MethodNotSupportedException, DAOException {
         ItemValidator itemValidator = new ItemValidator();
         if (!itemValidator.validateStartDate(item.getStartDate())) {
-            item.setStartDate(DateFixer.fix(item.getStartDate()));
+            item.setStartDate(DateFixer.addDays(2));
         }
-        if (!itemValidator.validateStartDate(item.getCloseDate())) {
-            item.setCloseDate(DateFixer.fix(item.getCloseDate()));
+        if (!itemValidator.validateCloseDate(item.getCloseDate(), item.getStartDate())) {
+            item.setCloseDate(DateFixer.addDays(item.getStartDate(), 2));
         }
         item.setStatus(ItemStatus.CREATED);
         itemDAO.update(item);
     }
 
-    private boolean savePhotos(PhotoDAO photoDAO, List<InputStream> files, int itemId) throws DAOException, PhotoLoadingException {
+    private boolean savePhotos(PhotoDAO photoDAO, List<InputStream> files, long itemId) throws DAOException, PhotoLoadingException {
         PhotoLoader photoLoader = new PhotoLoader();
         for (int i = 0; i < files.size(); i++) {
             if (!photoDAO.create(new Photo(photoLoader.savePhotoToServer(files.get(i), i), itemId))) {

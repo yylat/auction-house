@@ -45,9 +45,9 @@ public abstract class GenericDAOImpl<T extends Entity> implements GenericDAO<T> 
         return findEntity(queryFindById, statement -> statement.setInt(1, id));
     }
 
-    public boolean delete(int id) throws DAOException, MethodNotSupportedException {
+    public boolean delete(long id) throws DAOException, MethodNotSupportedException {
         return executeUpdate(queryDelete,
-                statement -> statement.setInt(1, id));
+                statement -> statement.setLong(1, id));
     }
 
     public boolean create(T entity) throws DAOException {
@@ -57,7 +57,7 @@ public abstract class GenericDAOImpl<T extends Entity> implements GenericDAO<T> 
     public boolean update(T entity) throws DAOException, MethodNotSupportedException {
         return executeUpdate(queryUpdate, entity, (en, st) -> {
             defineQueryAttributes(en, st);
-            st.setInt(en.getFieldsNumber(), en.getId());
+            st.setLong(en.getFieldsNumber(), en.getId());
         });
     }
 

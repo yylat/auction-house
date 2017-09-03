@@ -12,7 +12,7 @@ import com.epam.auction.receiver.PaginationHelper;
 import com.epam.auction.receiver.RequestConstant;
 import com.epam.auction.receiver.SiteManager;
 import com.epam.auction.receiver.UserReceiver;
-import com.epam.auction.util.Encoder;
+import com.epam.auction.util.StringEncoder;
 import com.epam.auction.util.MessageProvider;
 import com.epam.auction.validator.UserValidator;
 
@@ -26,7 +26,7 @@ public class UserReceiverImpl implements UserReceiver {
     public void signIn(RequestContent requestContent) throws ReceiverException {
         User user = new User(
                 requestContent.getRequestParameter(RequestConstant.USERNAME)[0],
-                Encoder.encode(requestContent.getRequestParameter(RequestConstant.PASSWORD)[0]));
+                StringEncoder.encode(requestContent.getRequestParameter(RequestConstant.PASSWORD)[0]));
 
         UserDAO userDAO = new UserDAOImpl();
 
@@ -56,7 +56,7 @@ public class UserReceiverImpl implements UserReceiver {
 
         UserValidator validator = new UserValidator();
         if (validator.validateSignUpParam(user)) {
-            user.setPassword(Encoder.encode(user.getPassword()));
+            user.setPassword(StringEncoder.encode(user.getPassword()));
 
             UserDAO userDAO = new UserDAOImpl();
             DAOManager daoManager = new DAOManager(true, userDAO);
@@ -193,14 +193,14 @@ public class UserReceiverImpl implements UserReceiver {
         User user = (User) requestContent.getSessionAttribute(RequestConstant.USER);
 
         if (user != null) {
-            String oldPassword = Encoder.encode(requestContent.getRequestParameter(RequestConstant.OLD_PASSWORD)[0]);
+            String oldPassword = StringEncoder.encode(requestContent.getRequestParameter(RequestConstant.OLD_PASSWORD)[0]);
 
             if (oldPassword.equals(user.getPassword())) {
                 String newPassword = requestContent.getRequestParameter(RequestConstant.NEW_PASSWORD)[0];
 
                 UserValidator userValidator = new UserValidator();
                 if (userValidator.validatePassword(newPassword)) {
-                    user.setPassword(Encoder.encode(newPassword));
+                    user.setPassword(StringEncoder.encode(newPassword));
 
                     UserDAO userDAO = new UserDAOImpl();
                     DAOManager daoManager = new DAOManager(true, userDAO);

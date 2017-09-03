@@ -10,17 +10,44 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * Provides a pool of connections to database. Singleton.
+ */
 public class ConnectionPool {
 
+    /**
+     * Logger to write logs.
+     */
     private static final Logger LOGGER = LogManager.getLogger();
 
+    /**
+     * Reentrant lock.
+     */
     private static ReentrantLock lock = new ReentrantLock();
+    /**
+     * Shows if instance initialized or not.
+     */
     private static AtomicBoolean isInitialized = new AtomicBoolean(false);
+    /**
+     * Instance of ConnectionPool
+     */
     private static ConnectionPool instance;
 
+    /**
+     * Available connections queue.
+     */
     private BlockingQueue<ProxyConnection> availableConnections;
+    /**
+     * Busy connections queue.
+     */
     private BlockingQueue<ProxyConnection> busyConnections;
 
+    /**
+     * Constructs ConnectionPool. Fills available connections queue.
+     * If pool not filed with given number of connections: tries to fill.
+     * If pool filled with connections less then two times from given:
+     * end application work by throwing RuntimeException.
+     */
     private ConnectionPool() {
         DBManager dbManager = DBManager.getInstance();
 
@@ -58,10 +85,18 @@ public class ConnectionPool {
 
     }
 
+    /**
+     * Returns ConnectionPool instance.
+     *
+     * @return instance
+     */
     public static ConnectionPool getInstance() {
         return instance;
     }
 
+    /**
+     * Initialize ConnectionPool with double-checked locking.
+     */
     public static void init() {
         if (!isInitialized.get()) {
             lock.lock();
@@ -82,6 +117,9 @@ public class ConnectionPool {
         }
     }
 
+    /**
+     * Destroys ConnectionPool.
+     */
     public void destroy() {
         if (isInitialized.get()) {
             lock.lock();
@@ -108,7 +146,13 @@ public class ConnectionPool {
         }
     }
 
-    public ProxyConnection takeConnection() {
+    /**
+     * Returns connection from available connections
+     * queue and put this connection in busy connections queue.
+     *
+     * @return connection from available connections queue
+     */
+    ProxyConnection takeConnection() {
         ProxyConnection connection = null;
         try {
             connection = availableConnections.take();
@@ -119,7 +163,15 @@ public class ConnectionPool {
         return connection;
     }
 
-    public void returnConnection(ProxyConnection connection) {
+    /**
+     * Returns connection to available connections queue if this connection
+     * is not null value and busy connection queue contains it. Checks if
+     * auto commit parameter is <code>false</code> and set it to <code>true</code>
+     * if so. Remove connection from busy connections queue.
+     *
+     * @param connection connection to return
+     */
+    void returnConnection(ProxyConnection connection) {
         if (connection != null && busyConnections.contains(connection)) {
             try {
                 if (!connection.getAutoCommit()) {
@@ -135,6 +187,12 @@ public class ConnectionPool {
         }
     }
 
+    /**
+     * Clears connection queue and closes connections.
+     *
+     * @param connectionQueue connection queue
+     * @throws SQLException if can't close the connection
+     */
     private void clearConnectionQueue(BlockingQueue<ProxyConnection> connectionQueue) throws SQLException {
         ProxyConnection connection;
         while ((connection = connectionQueue.poll()) != null) {

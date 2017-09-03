@@ -5,12 +5,37 @@ import com.epam.auction.exception.DAOException;
 
 import java.util.List;
 
+/**
+ * Provides the base model DAO interface for `photo` table.
+ */
 public interface PhotoDAO extends GenericDAO<Photo> {
 
+    /**
+     * Returns the photo with item id.
+     *
+     * @param itemId item id
+     * @return the photo with item id
+     * @throws DAOException if SQL exception occurred
+     */
     Photo findItemPhoto(int itemId) throws DAOException;
 
+    /**
+     * Returns all photos with item id.
+     *
+     * @param itemId item id
+     * @return all photos with item id
+     * @throws DAOException if SQL exception occurred
+     */
     List<Photo> findAll(int itemId) throws DAOException;
 
-    boolean deleteItemPhotos(int itemId) throws DAOException;
+    /**
+     * Deletes all photos with item id.
+     *
+     * @param itemId item id
+     * @return <code>true</code> if all photos with item id was deleted successfully;
+     * <code>false</code> otherwise
+     * @throws DAOException if SQL exception occurred
+     */
+    boolean deleteItemPhotos(long itemId) throws DAOException;
 
 }

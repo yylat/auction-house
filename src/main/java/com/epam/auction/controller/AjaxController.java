@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Provides service for working with AJAX requests.
+ */
 @WebServlet(name = "AjaxController", urlPatterns = {"/ajax"})
 public class AjaxController extends HttpServlet {
 
@@ -24,6 +27,15 @@ public class AjaxController extends HttpServlet {
         processRequest(request, response);
     }
 
+    /**
+     * Writes JSON into response.
+     *
+     * @param request  request
+     * @param response response
+     * @throws ServletException if servlet exception occurred
+     * @throws IOException      if IO exception occurred
+     * @see MainController#processRequest(HttpServletRequest, HttpServletResponse)
+     */
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RequestContent requestContent = new RequestContent();
 
@@ -43,7 +55,7 @@ public class AjaxController extends HttpServlet {
         response.getWriter().write(ajaxResponse);
 
         if (pageGuide != null && PageAddress.ERROR.equals(pageGuide.getPageAddress())) {
-            response.sendRedirect(pageGuide.getPageAddress());
+            response.sendRedirect(PageAddress.ERROR);
         }
 
     }

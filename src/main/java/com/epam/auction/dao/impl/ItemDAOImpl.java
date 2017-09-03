@@ -24,7 +24,7 @@ public class ItemDAOImpl extends GenericDAOImpl<Item> implements ItemDAO {
                 TableConstant.ITEM_QUERY_UPDATE);
     }
 
-    public boolean delete(int id) throws MethodNotSupportedException {
+    public boolean delete(long id) throws MethodNotSupportedException {
         throw new MethodNotSupportedException("Delete item operation not supported.");
     }
 
@@ -54,22 +54,16 @@ public class ItemDAOImpl extends GenericDAOImpl<Item> implements ItemDAO {
         statement.setDate(6, entity.getStartDate());
         statement.setDate(7, entity.getCloseDate());
         statement.setInt(8, entity.getStatus().ordinal());
-        statement.setInt(9, entity.getItemCategoryId());
-        statement.setInt(10, entity.getSellerId());
+        statement.setLong(9, entity.getItemCategoryId());
+        statement.setLong(10, entity.getSellerId());
     }
 
     @Override
-    public boolean updateItemStatus(int itemId, ItemStatus itemStatus) throws DAOException {
+    public boolean updateItemStatus(long itemId, ItemStatus itemStatus) throws DAOException {
         return executeUpdate(TableConstant.ITEM_QUERY_UPDATE_STATUS, statement -> {
             statement.setInt(1, itemStatus.ordinal());
-            statement.setInt(2, itemId);
+            statement.setLong(2, itemId);
         });
-    }
-
-    @Override
-    public int countRows(int userId) throws DAOException {
-        return countRows(TableConstant.ITEM_QUERY_FIND_NUMBER_FOR_USER,
-                statement -> statement.setInt(1, userId));
     }
 
     @Override
@@ -81,11 +75,11 @@ public class ItemDAOImpl extends GenericDAOImpl<Item> implements ItemDAO {
     }
 
     @Override
-    public int countRows(int userId, FilterCriteria filterCriteria) throws DAOException {
+    public int countRows(long userId, FilterCriteria filterCriteria) throws DAOException {
         String query = TableConstant.ITEM_QUERY_PURCHASED_ROWS_COUNT +
                 filterCriteria.buildWhereClausePart();
         return countRows(query, statement -> {
-            statement.setInt(1, userId);
+            statement.setLong(1, userId);
             defineFilter(statement, 2, filterCriteria);
         });
     }
@@ -101,13 +95,13 @@ public class ItemDAOImpl extends GenericDAOImpl<Item> implements ItemDAO {
     }
 
     @Override
-    public List<Item> findPurchasedItems(int userId, FilterCriteria filterCriteria, OrderCriteria orderCriteria, int offset, int limit) throws DAOException {
+    public List<Item> findPurchasedItems(long userId, FilterCriteria filterCriteria, OrderCriteria orderCriteria, int offset, int limit) throws DAOException {
         String query = TableConstant.ITEM_QUERY_PURCHASED +
                 filterCriteria.buildWhereClausePart() +
                 orderCriteria.getQueryPart() +
                 TableConstant.ITEM_QUERY_LIMIT;
         return findSpecificList(query, statement -> {
-            statement.setInt(1, userId);
+            statement.setLong(1, userId);
             defineFilterLimit(statement, 1, filterCriteria, offset, limit);
         });
     }

@@ -11,7 +11,7 @@ import com.epam.auction.exception.PhotoLoadingException;
 import com.epam.auction.exception.ReceiverException;
 import com.epam.auction.receiver.PhotoReceiver;
 import com.epam.auction.receiver.RequestConstant;
-import com.epam.auction.util.Converter;
+import com.epam.auction.util.JSONConverter;
 import com.epam.auction.util.PhotoLoader;
 
 import java.util.ArrayList;
@@ -49,7 +49,7 @@ public class PhotoReceiverImpl implements PhotoReceiver {
             for (Photo photo : photoDAO.findAll(itemId)) {
                 photos.add(photoLoader.loadPhotoAsString(photo.getFileName()));
             }
-            requestContent.setAjaxResponse(Converter.objectToJson(photos));
+            requestContent.setAjaxResponse(JSONConverter.objectAsJson(photos));
         } catch (DAOException | PhotoLoadingException e) {
             throw new ReceiverException(e);
         }
@@ -60,14 +60,14 @@ public class PhotoReceiverImpl implements PhotoReceiver {
         int itemId = Integer.valueOf(requestContent.getRequestParameter(RequestConstant.ITEM_ID)[0]);
 
         PhotoDAO photoDAO = new PhotoDAOImpl();
-        Map<Integer, String> photos = new HashMap<>();
+        Map<Long, String> photos = new HashMap<>();
 
         try (DAOManager daoManager = new DAOManager(photoDAO)) {
             PhotoLoader photoLoader = new PhotoLoader();
             for (Photo photo : photoDAO.findAll(itemId)) {
                 photos.put(photo.getId(), photoLoader.loadPhotoAsString(photo.getFileName()));
             }
-            requestContent.setAjaxResponse(Converter.objectToJson(photos));
+            requestContent.setAjaxResponse(JSONConverter.objectAsJson(photos));
         } catch (DAOException | PhotoLoadingException e) {
             throw new ReceiverException(e);
         }

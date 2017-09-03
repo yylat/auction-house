@@ -125,9 +125,6 @@ public final class TableConstant {
     public static final String ITEM_QUERY_FIND_ROWS_COUNT =
             "SELECT COUNT(*) FROM `item`";
 
-    public static final String ITEM_QUERY_FIND_NUMBER_FOR_USER =
-            "SELECT COUNT(*) FROM `item` WHERE `seller_id` = ?";
-
     public static final String ITEM_QUERY_LIMIT = " LIMIT ?, ?";
 
     private static final String ITEM_QUERY_PURCHASED_JOIN =

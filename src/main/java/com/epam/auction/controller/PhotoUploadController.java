@@ -17,6 +17,9 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Provides service for uploading photos to server.
+ */
 @WebServlet(name = "PhotoUploadController", urlPatterns = {"/upload"})
 @MultipartConfig(fileSizeThreshold = 1024 * 1024 * 5,
         maxFileSize = 1024 * 1024 * 5,
@@ -28,6 +31,15 @@ public class PhotoUploadController extends HttpServlet {
         processRequest(request, response);
     }
 
+    /**
+     * Collects files from request into {@link RequestContent#files}.
+     *
+     * @param request  request
+     * @param response response
+     * @throws ServletException if servlet exception occurred
+     * @throws IOException      if IO exception occurred
+     * @see MainController#processRequest(HttpServletRequest, HttpServletResponse)
+     */
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RequestContent requestContent = new RequestContent();
 
@@ -37,13 +49,11 @@ public class PhotoUploadController extends HttpServlet {
         AbstractCommand command = commandFactory.initCommand(requestContent);
 
         List<InputStream> files = new ArrayList<>();
-
         for (Part part : request.getParts()) {
             if (part.getSubmittedFileName() != null && part.getSize() > 0) {
                 files.add(part.getInputStream());
             }
         }
-
         if (!files.isEmpty()) {
             requestContent.setFiles(files);
         }

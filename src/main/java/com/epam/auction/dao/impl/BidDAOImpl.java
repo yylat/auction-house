@@ -20,7 +20,7 @@ public class BidDAOImpl extends GenericDAOImpl<Bid> implements BidDAO {
     }
 
     @Override
-    public boolean delete(int id) throws MethodNotSupportedException {
+    public boolean delete(long id) throws MethodNotSupportedException {
         throw new MethodNotSupportedException("Delete bid operation not supported.");
     }
 
@@ -63,19 +63,19 @@ public class BidDAOImpl extends GenericDAOImpl<Bid> implements BidDAO {
     }
 
     @Override
-    public List<Bid> findUsersBids(int userId, int offset, int limit) throws DAOException {
+    public List<Bid> findUsersBids(long bidderId, int offset, int limit) throws DAOException {
         return findSpecificList(TableConstant.BID_QUERY_FIND_FOR_USER_LIMIT,
                 statement -> {
-                    statement.setInt(1, userId);
+                    statement.setLong(1, bidderId);
                     statement.setInt(2, offset);
                     statement.setInt(3, limit);
                 });
     }
 
     @Override
-    public int countRows(int userId) throws DAOException {
+    public int countRows(long bidderId) throws DAOException {
         return countRows(TableConstant.BID_QUERY_FIND_NUMBER_FOR_USER,
-                statement -> statement.setInt(1, userId));
+                statement -> statement.setLong(1, bidderId));
     }
 
     @Override

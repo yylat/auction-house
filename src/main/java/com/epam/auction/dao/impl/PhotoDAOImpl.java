@@ -47,9 +47,9 @@ public class PhotoDAOImpl extends GenericDAOImpl<Photo> implements PhotoDAO {
     }
 
     @Override
-    public boolean deleteItemPhotos(int itemId) throws DAOException {
+    public boolean deleteItemPhotos(long itemId) throws DAOException {
         return executeUpdate(TableConstant.PHOTO_QUERY_DELETE_ITEM_PHOTOS,
-                statement -> statement.setInt(1, itemId));
+                statement -> statement.setLong(1, itemId));
     }
 
 }
