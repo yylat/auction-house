@@ -37,7 +37,7 @@ public interface GenericDAO<T extends Entity> {
      * @return entity with id
      * @throws DAOException if SQLException occurred
      */
-    T findEntityById(int id) throws DAOException;
+    T findEntityById(long id) throws DAOException;
 
     /**
      * Deletes entity with id from database.
@@ -56,9 +56,10 @@ public interface GenericDAO<T extends Entity> {
      * @param entity entity
      * @return <code>true</code> if entity was created successfully;
      * <code>false</code> otherwise
-     * @throws DAOException if SQLException occurred
+     * @throws DAOException                if SQLException occurred
+     * @throws MethodNotSupportedException if create operation not supported
      */
-    boolean create(T entity) throws DAOException;
+    boolean create(T entity) throws DAOException, MethodNotSupportedException;
 
     /**
      * Updates entity.

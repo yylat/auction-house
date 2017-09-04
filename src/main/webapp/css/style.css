@@ -545,6 +545,14 @@ b, strong {
     opacity: 0.8;
 }
 
+.hide-date-input input[type="date"]:not(.has-value):before {
+    content: attr(placeholder) !important;
+    width: 100%;
+    text-transform: lowercase;
+    font-size: 0.8em;
+    color: #8d8d8d;
+}
+
 @media (max-width: 993px) {
 
     main {

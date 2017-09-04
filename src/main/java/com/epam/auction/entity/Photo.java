@@ -39,7 +39,7 @@ public class Photo extends Entity {
      * @param fileName file name
      * @param itemId   item id
      */
-    public Photo(int id, String fileName, int itemId) {
+    public Photo(long id, String fileName, long itemId) {
         super(id);
         this.fileName = fileName;
         this.itemId = itemId;
@@ -77,7 +77,7 @@ public class Photo extends Entity {
      *
      * @param itemId item id of the photo
      */
-    public void setItemId(int itemId) {
+    public void setItemId(long itemId) {
         this.itemId = itemId;
     }
 

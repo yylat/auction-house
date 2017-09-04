@@ -23,27 +23,27 @@ public class PhotoDAOImpl extends GenericDAOImpl<Photo> implements PhotoDAO {
     @Override
     Photo extractEntity(ResultSet resultSet) throws SQLException {
         return new Photo(
-                resultSet.getInt(TableConstant.PHOTO_COLUMN_ID),
+                resultSet.getLong(TableConstant.PHOTO_COLUMN_ID),
                 resultSet.getString(TableConstant.PHOTO_COLUMN_FILE_NAME),
-                resultSet.getInt(TableConstant.PHOTO_COLUMN_ITEM_ID));
+                resultSet.getLong(TableConstant.PHOTO_COLUMN_ITEM_ID));
     }
 
     @Override
     void defineQueryAttributes(Photo entity, PreparedStatement statement) throws SQLException {
         statement.setString(1, entity.getFileName());
-        statement.setInt(2, entity.getItemId());
+        statement.setLong(2, entity.getItemId());
     }
 
     @Override
     public Photo findItemPhoto(int itemId) throws DAOException {
         return findEntity(TableConstant.PHOTO_QUERY_FIND_ITEM_PHOTO,
-                statement -> statement.setInt(1, itemId));
+                statement -> statement.setLong(1, itemId));
     }
 
     @Override
     public List<Photo> findAll(int itemId) throws DAOException {
         return findSpecificList(TableConstant.PHOTO_QUERY_FIND_ALL_FOR_ITEM,
-                statement -> statement.setInt(1, itemId));
+                statement -> statement.setLong(1, itemId));
     }
 
     @Override

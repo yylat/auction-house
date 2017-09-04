@@ -27,15 +27,15 @@ class DBManager {
      */
     private static final String BUNDLE_NAME = "config.database";
 
-
-    private static final String DRIVER_PROP_NAME = "db.driver";
-    private static final String URL_PROP_NAME = "db.url";
-    private static final String USER_PROP_NAME = "db.user";
-    private static final String PASSWORD_PROP_NAME = "db.password";
-    private static final String POOL_SIZE_PROP_NAME = "db.poolSize";
-    private static final String USE_UNICODE_PROP_NAME = "db.useUnicode";
-    private static final String ENCODING_PROP_NAME = "db.encoding";
-    private static final String USE_SSL_PROP_NAME = "db.useSSL";
+    private static final String BUNDLE_PROP_PREFIX = "db.";
+    private static final String DRIVER_PROP_NAME = "driver";
+    private static final String URL_PROP_NAME = "url";
+    private static final String USER_PROP_NAME = "user";
+    private static final String PASSWORD_PROP_NAME = "password";
+    private static final String POOL_SIZE_PROP_NAME = "poolSize";
+    private static final String USE_UNICODE_PROP_NAME = "useUnicode";
+    private static final String ENCODING_PROP_NAME = "encoding";
+    private static final String USE_SSL_PROP_NAME = "useSSL";
 
     private static final String DEFAULT_URL = "jdbc:mysql://localhost:3306/auction";
     private static final String DEFAULT_USE_UNICODE = "true";
@@ -78,50 +78,50 @@ class DBManager {
         dbInfo = new Properties();
 
         try {
-            dbInfo.setProperty(USER_PROP_NAME, resourceBundle.getString(USER_PROP_NAME));
-            dbInfo.setProperty(PASSWORD_PROP_NAME, resourceBundle.getString(PASSWORD_PROP_NAME));
+            dbInfo.setProperty(USER_PROP_NAME, resourceBundle.getString(BUNDLE_PROP_PREFIX + USER_PROP_NAME));
+            dbInfo.setProperty(PASSWORD_PROP_NAME, resourceBundle.getString(BUNDLE_PROP_PREFIX + PASSWORD_PROP_NAME));
         } catch (MissingResourceException e) {
             LOGGER.log(Level.FATAL, e);
             throw new RuntimeException();
         }
 
         try {
-            url = resourceBundle.getString(URL_PROP_NAME);
+            url = resourceBundle.getString(BUNDLE_PROP_PREFIX + URL_PROP_NAME);
         } catch (MissingResourceException e) {
             LOGGER.log(Level.ERROR, e);
             url = DEFAULT_URL;
         }
 
         try {
-            dbInfo.setProperty(USE_UNICODE_PROP_NAME, resourceBundle.getString(USE_UNICODE_PROP_NAME));
+            dbInfo.setProperty(USE_UNICODE_PROP_NAME, resourceBundle.getString(BUNDLE_PROP_PREFIX + USE_UNICODE_PROP_NAME));
         } catch (MissingResourceException e) {
             LOGGER.log(Level.ERROR, e);
             dbInfo.setProperty(USE_UNICODE_PROP_NAME, DEFAULT_USE_UNICODE);
         }
 
         try {
-            dbInfo.setProperty(ENCODING_PROP_NAME, resourceBundle.getString(ENCODING_PROP_NAME));
+            dbInfo.setProperty(ENCODING_PROP_NAME, resourceBundle.getString(BUNDLE_PROP_PREFIX + ENCODING_PROP_NAME));
         } catch (MissingResourceException e) {
             LOGGER.log(Level.ERROR, e);
             dbInfo.setProperty(ENCODING_PROP_NAME, DEFAULT_ENCODING);
         }
 
         try {
-            dbInfo.setProperty(USE_SSL_PROP_NAME, resourceBundle.getString(USE_SSL_PROP_NAME));
+            dbInfo.setProperty(USE_SSL_PROP_NAME, resourceBundle.getString(BUNDLE_PROP_PREFIX + USE_SSL_PROP_NAME));
         } catch (MissingResourceException e) {
             LOGGER.log(Level.ERROR, e);
             dbInfo.setProperty(USE_SSL_PROP_NAME, DEFAULT_USE_SSL);
         }
 
         try {
-            poolSize = Integer.parseInt(resourceBundle.getString(POOL_SIZE_PROP_NAME));
+            poolSize = Integer.parseInt(resourceBundle.getString(BUNDLE_PROP_PREFIX + POOL_SIZE_PROP_NAME));
         } catch (MissingResourceException e) {
             LOGGER.log(Level.ERROR, e);
             poolSize = DEFAULT_POOL_SIZE;
         }
 
         try {
-            driverName = resourceBundle.getString(DRIVER_PROP_NAME);
+            driverName = resourceBundle.getString(BUNDLE_PROP_PREFIX + DRIVER_PROP_NAME);
         } catch (MissingResourceException e) {
             LOGGER.log(Level.ERROR, e);
             driverName = DEFAULT_DRIVER_NAME;

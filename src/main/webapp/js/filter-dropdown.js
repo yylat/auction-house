@@ -17,6 +17,18 @@
     var applyFilter = document.getElementById("applyFilter");
     var filterForm = dropdown.querySelector("form");
 
-    applyFilter.addEventListener("click", validateForm.bind(null, filterForm))
+    applyFilter.addEventListener("click", validateForm.bind(null, filterForm));
+
+    var dateInputs = dropdown.querySelectorAll("input[type=\"date\"]");
+    var dateInputsLength = dateInputs.length;
+    for (var i = 0; i < dateInputsLength; i++) {
+        dateInputs[i].addEventListener("change", function () {
+            if (this.value) {
+                this.className += " has-value";
+            } else {
+                this.className = this.className.replace(" has-value", "");
+            }
+        });
+    }
 
 })();

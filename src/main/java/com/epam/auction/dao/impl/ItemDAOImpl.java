@@ -31,7 +31,7 @@ public class ItemDAOImpl extends GenericDAOImpl<Item> implements ItemDAO {
     @Override
     Item extractEntity(ResultSet resultSet) throws SQLException {
         return new Item(
-                resultSet.getInt(TableConstant.ITEM_COLUMN_ID),
+                resultSet.getLong(TableConstant.ITEM_COLUMN_ID),
                 resultSet.getString(TableConstant.ITEM_COLUMN_NAME),
                 resultSet.getString(TableConstant.ITEM_COLUMN_DESCRIPTION),
                 resultSet.getBigDecimal(TableConstant.ITEM_COLUMN_START_PRICE),
@@ -40,8 +40,8 @@ public class ItemDAOImpl extends GenericDAOImpl<Item> implements ItemDAO {
                 resultSet.getDate(TableConstant.ITEM_COLUMN_START_DATE),
                 resultSet.getDate(TableConstant.ITEM_COLUMN_CLOSE_DATE),
                 ItemStatus.define(resultSet.getInt(TableConstant.ITEM_COLUMN_STATUS_ID)),
-                resultSet.getInt(TableConstant.ITEM_COLUMN_CATEGORY_ID),
-                resultSet.getInt(TableConstant.ITEM_COLUMN_SELLER_ID));
+                resultSet.getLong(TableConstant.ITEM_COLUMN_CATEGORY_ID),
+                resultSet.getLong(TableConstant.ITEM_COLUMN_SELLER_ID));
     }
 
     @Override
@@ -121,6 +121,5 @@ public class ItemDAOImpl extends GenericDAOImpl<Item> implements ItemDAO {
         statement.setInt(++startParameterIndex, offset);
         statement.setInt(++startParameterIndex, limit);
     }
-
 
 }

@@ -73,7 +73,7 @@ public class ItemReceiverImpl implements ItemReceiver {
                 if (photosSaved) {
                     daoManager.commit();
                 }
-            } catch (DAOException | PhotoLoadingException e) {
+            } catch (DAOException | MethodNotSupportedException | PhotoLoadingException e) {
                 daoManager.rollback();
                 throw new ReceiverException(e);
             } finally {
@@ -368,7 +368,8 @@ public class ItemReceiverImpl implements ItemReceiver {
         itemDAO.update(item);
     }
 
-    private boolean savePhotos(PhotoDAO photoDAO, List<InputStream> files, long itemId) throws DAOException, PhotoLoadingException {
+    private boolean savePhotos(PhotoDAO photoDAO, List<InputStream> files, long itemId)
+            throws DAOException, MethodNotSupportedException, PhotoLoadingException {
         PhotoLoader photoLoader = new PhotoLoader();
         for (int i = 0; i < files.size(); i++) {
             if (!photoDAO.create(new Photo(photoLoader.savePhotoToServer(files.get(i), i), itemId))) {

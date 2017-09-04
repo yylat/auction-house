@@ -11,6 +11,7 @@ import com.epam.auction.entity.Item;
 import com.epam.auction.entity.ItemStatus;
 import com.epam.auction.entity.User;
 import com.epam.auction.exception.DAOException;
+import com.epam.auction.exception.MethodNotSupportedException;
 import com.epam.auction.exception.ReceiverException;
 import com.epam.auction.receiver.BidReceiver;
 import com.epam.auction.receiver.PaginationHelper;
@@ -59,7 +60,7 @@ public class BidReceiverImpl implements BidReceiver {
                 requestContent.setSessionAttribute(RequestConstant.WAS_SHOWN, false);
 
                 daoManager.commit();
-            } catch (DAOException e) {
+            } catch (DAOException | MethodNotSupportedException e) {
                 daoManager.rollback();
                 throw new ReceiverException(e);
             } finally {

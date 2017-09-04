@@ -37,6 +37,6 @@ public interface BidDAO extends GenericDAO<Bid> {
      * @return winning bid with item id
      * @throws DAOException if SQL exception occurred
      */
-    Bid findWinning(int itemId) throws DAOException;
+    Bid findWinning(long itemId) throws DAOException;
 
 }

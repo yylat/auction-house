@@ -21,15 +21,15 @@ public class ItemCategoryDAOImpl extends GenericDAOImpl<ItemCategory> implements
     @Override
     ItemCategory extractEntity(ResultSet resultSet) throws SQLException {
         return new ItemCategory(
-                resultSet.getInt(TableConstant.ITEM_CATEGORY_COLUMN_ID),
+                resultSet.getLong(TableConstant.ITEM_CATEGORY_COLUMN_ID),
                 resultSet.getString(TableConstant.ITEM_CATEGORY_COLUMN_DESCRIPTION),
-                resultSet.getInt(TableConstant.ITEM_CATEGORY_COLUMN_PARENT_CATEGORY_ID));
+                resultSet.getLong(TableConstant.ITEM_CATEGORY_COLUMN_PARENT_CATEGORY_ID));
     }
 
     @Override
     void defineQueryAttributes(ItemCategory entity, PreparedStatement statement) throws SQLException {
         statement.setString(1, entity.getDescription());
-        statement.setInt(2, entity.getParentItemCategoryId());
+        statement.setLong(2, entity.getParentItemCategoryId());
     }
 
 }

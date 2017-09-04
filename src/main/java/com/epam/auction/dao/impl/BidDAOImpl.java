@@ -48,17 +48,17 @@ public class BidDAOImpl extends GenericDAOImpl<Bid> implements BidDAO {
     @Override
     Bid extractEntity(ResultSet resultSet) throws SQLException {
         return new Bid(
-                resultSet.getInt(TableConstant.BID_COLUMN_ID),
-                resultSet.getInt(TableConstant.BID_COLUMN_ITEM_ID),
-                resultSet.getInt(TableConstant.BID_COLUMN_BIDDER_ID),
+                resultSet.getLong(TableConstant.BID_COLUMN_ID),
+                resultSet.getLong(TableConstant.BID_COLUMN_ITEM_ID),
+                resultSet.getLong(TableConstant.BID_COLUMN_BIDDER_ID),
                 resultSet.getBigDecimal(TableConstant.BID_COLUMN_BID_VALUE),
                 resultSet.getBoolean(TableConstant.BID_COLUMN_IS_WINNING));
     }
 
     @Override
     void defineQueryAttributes(Bid entity, PreparedStatement statement) throws SQLException {
-        statement.setInt(1, entity.getItemId());
-        statement.setInt(2, entity.getBidderId());
+        statement.setLong(1, entity.getItemId());
+        statement.setLong(2, entity.getBidderId());
         statement.setBigDecimal(3, entity.getBidValue());
     }
 
@@ -79,9 +79,9 @@ public class BidDAOImpl extends GenericDAOImpl<Bid> implements BidDAO {
     }
 
     @Override
-    public Bid findWinning(int itemId) throws DAOException {
+    public Bid findWinning(long itemId) throws DAOException {
         return findEntity(TableConstant.BID_QUERY_FIND_WINNING,
-                statement -> statement.setInt(1, itemId));
+                statement -> statement.setLong(1, itemId));
     }
 
 }

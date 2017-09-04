@@ -75,6 +75,7 @@ public class ConnectionPool {
                 } catch (SQLException e) {
                     LOGGER.log(Level.WARN, "Failure while trying to create lacking connection.", e);
                 }
+                attemptToAddIndex++;
             } while (attemptToAddIndex < lackingConnectionsAmount);
         }
 

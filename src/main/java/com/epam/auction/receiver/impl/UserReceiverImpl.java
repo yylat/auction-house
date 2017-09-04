@@ -33,7 +33,7 @@ public class UserReceiverImpl implements UserReceiver {
         try (DAOManager daoManager = new DAOManager(userDAO)) {
             if (userDAO.isExist(user)) {
                 requestContent.setSessionAttribute(RequestConstant.USER, user);
-            } else if (user.getIsBanned()) {
+            } else if (user.isBanned()) {
                 requestContent.setRequestAttribute(RequestConstant.BAN, true);
             } else {
                 requestContent.setRequestAttribute(RequestConstant.WRONG_USERNAME_PASSWORD, true);
@@ -77,7 +77,7 @@ public class UserReceiverImpl implements UserReceiver {
                     requestContent.setSessionAttribute(RequestConstant.WAS_SHOWN, false);
                     daoManager.commit();
                 }
-            } catch (DAOException e) {
+            } catch (DAOException | MethodNotSupportedException e) {
                 daoManager.rollback();
                 throw new ReceiverException(e);
             } finally {

@@ -24,24 +24,23 @@ public class NotificationDAOImpl extends GenericDAOImpl<Notification> implements
     @Override
     Notification extractEntity(ResultSet resultSet) throws SQLException {
         return new Notification(
-                resultSet.getInt(TableConstant.NOTIFICATION_COLUMN_ID),
+                resultSet.getLong(TableConstant.NOTIFICATION_COLUMN_ID),
                 Notification.NotificationType.define(resultSet.getInt(TableConstant.NOTIFICATION_COLUMN_TYPE)),
-                resultSet.getInt(TableConstant.NOTIFICATION_COLUMN_USER_ID),
-                resultSet.getInt(TableConstant.NOTIFICATION_COLUMN_ITEM_ID),
+                resultSet.getLong(TableConstant.NOTIFICATION_COLUMN_USER_ID),
+                resultSet.getLong(TableConstant.NOTIFICATION_COLUMN_ITEM_ID),
                 resultSet.getTimestamp(TableConstant.NOTIFICATION_COLUMN_DATE_TIME));
     }
 
     @Override
     void defineQueryAttributes(Notification entity, PreparedStatement statement) throws SQLException {
-
     }
 
     public boolean delete(long id) throws DAOException, MethodNotSupportedException {
         throw new MethodNotSupportedException();
     }
 
-    public boolean create(Notification entity) throws DAOException {
-        return false;
+    public boolean create(Notification entity) throws DAOException, MethodNotSupportedException {
+        throw new MethodNotSupportedException();
     }
 
     public boolean update(Notification entity) throws DAOException, MethodNotSupportedException {

@@ -29,7 +29,7 @@ public class UserDAOImpl extends GenericDAOImpl<User> implements UserDAO {
     @Override
     User extractEntity(ResultSet resultSet) throws SQLException {
         return new User(
-                resultSet.getInt(TableConstant.USER_COLUMN_ID),
+                resultSet.getLong(TableConstant.USER_COLUMN_ID),
                 resultSet.getString(TableConstant.USER_COLUMN_USERNAME),
                 resultSet.getString(TableConstant.USER_COLUMN_PASSWORD),
                 resultSet.getString(TableConstant.USER_COLUMN_LAST_NAME),
@@ -52,7 +52,7 @@ public class UserDAOImpl extends GenericDAOImpl<User> implements UserDAO {
         statement.setString(6, entity.getPhoneNumber());
         statement.setString(7, entity.getEmail());
         statement.setBigDecimal(8, entity.getBalance());
-        statement.setBoolean(9, entity.getIsBanned());
+        statement.setBoolean(9, entity.isBanned());
         statement.setInt(10, entity.getRole().ordinal());
     }
 
@@ -65,14 +65,14 @@ public class UserDAOImpl extends GenericDAOImpl<User> implements UserDAO {
 
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                user.setId(resultSet.getInt(TableConstant.USER_COLUMN_ID));
+                user.setId(resultSet.getLong(TableConstant.USER_COLUMN_ID));
                 user.setLastName(resultSet.getString(TableConstant.USER_COLUMN_LAST_NAME));
                 user.setMiddleName(resultSet.getString(TableConstant.USER_COLUMN_MIDDLE_NAME));
                 user.setFirstName(resultSet.getString(TableConstant.USER_COLUMN_FIRST_NAME));
                 user.setPhoneNumber(resultSet.getString(TableConstant.USER_COLUMN_PHONE_NUMBER));
                 user.setEmail(resultSet.getString(TableConstant.USER_COLUMN_EMAIL));
                 user.setBalance(resultSet.getBigDecimal(TableConstant.USER_COLUMN_BALANCE));
-                user.setIsBanned(resultSet.getBoolean(TableConstant.USER_COLUMN_IS_BANNED));
+                user.setBanned(resultSet.getBoolean(TableConstant.USER_COLUMN_IS_BANNED));
                 user.setRole(User.UserRole.define(resultSet.getInt(TableConstant.USER_COLUMN_USER_ROLE_ID)));
 
                 result = true;
@@ -110,7 +110,7 @@ public class UserDAOImpl extends GenericDAOImpl<User> implements UserDAO {
     public boolean updateUserStatus(boolean isBanned, int userId) throws DAOException {
         return executeUpdate(TableConstant.USER_QUERY_UPDATE_STATUS, statement -> {
             statement.setBoolean(1, isBanned);
-            statement.setInt(2, userId);
+            statement.setLong(2, userId);
         });
     }
 

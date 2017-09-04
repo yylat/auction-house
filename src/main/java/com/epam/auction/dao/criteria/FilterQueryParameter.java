@@ -17,8 +17,8 @@ public enum FilterQueryParameter {
     START_DATE_CEILING(TableConstant.ITEM_COLUMN_START_DATE, QueryOperator.LESS_OR_EQUAL, Date.class),
     CLOSE_DATE_FLOOR(TableConstant.ITEM_COLUMN_CLOSE_DATE, QueryOperator.MORE_OR_EQUAL, Date.class),
     CLOSE_DATE_CEILING(TableConstant.ITEM_COLUMN_CLOSE_DATE, QueryOperator.LESS_OR_EQUAL, Date.class),
-    CATEGORY_ID(TableConstant.ITEM_COLUMN_CATEGORY_ID, QueryOperator.EQUAL, Integer.class),
-    SELLER_ID(TableConstant.ITEM_COLUMN_SELLER_ID, QueryOperator.EQUAL, Integer.class),
+    CATEGORY_ID(TableConstant.ITEM_COLUMN_CATEGORY_ID, QueryOperator.EQUAL, Long.class),
+    SELLER_ID(TableConstant.ITEM_COLUMN_SELLER_ID, QueryOperator.EQUAL, Long.class),
     SEARCH_NAME(TableConstant.ITEM_COLUMN_NAME, QueryOperator.LIKE, String.class);
 
     private static class QueryOperator {

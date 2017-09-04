@@ -41,8 +41,8 @@ public abstract class GenericDAOImpl<T extends Entity> implements GenericDAO<T> 
         return findList(queryFindAll);
     }
 
-    public T findEntityById(int id) throws DAOException {
-        return findEntity(queryFindById, statement -> statement.setInt(1, id));
+    public T findEntityById(long id) throws DAOException {
+        return findEntity(queryFindById, statement -> statement.setLong(1, id));
     }
 
     public boolean delete(long id) throws DAOException, MethodNotSupportedException {
@@ -50,7 +50,7 @@ public abstract class GenericDAOImpl<T extends Entity> implements GenericDAO<T> 
                 statement -> statement.setLong(1, id));
     }
 
-    public boolean create(T entity) throws DAOException {
+    public boolean create(T entity) throws DAOException, MethodNotSupportedException {
         return executeCreate(queryCreate, entity, this::defineQueryAttributes);
     }
 
