@@ -1,4 +1,4 @@
-<fmt:message bundle="${msg}" key="label.projectTitle" var="projectTitle"/>
+
 <fmt:message bundle="${msg}" key="label.signIn" var="signIn"/>
 <fmt:message bundle="${msg}" key="label.signUp" var="signUp"/>
 <fmt:message bundle="${msg}" key="label.close" var="close"/>
@@ -18,6 +18,7 @@
 <fmt:message bundle="${msg}" key="menu.balance" var="balance"/>
 
 <fmt:message bundle="${msg}" key="label.hi" var="hi"/>
+
 
 <header>
     <div class="w3-row bottom-separator back-color">
@@ -50,7 +51,7 @@
                             </div>
 
                             <div class="pro-container w3-left-align w3-border-bottom pro-padding-bottom pro-padding-left">
-                                ${balance}: <span class="text-on-color money">${sessionScope.user.balance}</span>
+                                    ${balance}: <span class="text-on-color money">${sessionScope.user.balance}</span>
                             </div>
 
                             <a href="${pageContext.request.contextPath}/jsp/user/account.jsp"

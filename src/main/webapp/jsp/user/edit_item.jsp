@@ -6,7 +6,6 @@
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 <fmt:setBundle basename="/localization/message" var="msg"/>
 
-<fmt:message bundle="${msg}" key="label.projectTitle" var="projectTitle"/>
 <fmt:message bundle="${msg}" key="item.settings" var="itemSettings"/>
 <fmt:message bundle="${msg}" key="form.itemTitle" var="itemTitle"/>
 <fmt:message bundle="${msg}" key="form.itemTitleRule" var="itemTitleRule"/>
@@ -28,19 +27,11 @@
 <fmt:message bundle="${msg}" key="form.photosRule" var="photosRule"/>
 <fmt:message bundle="${msg}" key="form.photosSizeRule" var="photosSizeRule"/>
 <fmt:message bundle="${msg}" key="form.chooseFiles" var="chooseFiles"/>
-
+<fmt:message bundle="${msg}" key="form.blitzPriceRule" var="blitzPriceRule"/>
 
 <html>
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${projectTitle}</title>
-    <link rel="icon" href="${pageContext.request.contextPath}/img/ic_gavel_black.png">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/reset.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/w3.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
-</head>
+<%@ include file="/jsp/jspf/head.jsp" %>
 
 <body>
 
@@ -86,16 +77,16 @@
                 <div class="w3-row-padding bottom-padding">
                     <div class="w3-col m5">
                         <label><b>${startPrice}</b></label>
-                        <input name="start-price" class="w3-input" value="${sessionScope.item.startPrice}" type="number"
-                               step="0.001" min="0.000"
-                               max="99999999999999999999.999" required
+                        <input id="startPrice" name="start-price" class="w3-input"
+                               value="${sessionScope.item.startPrice}" type="number"
+                               step="1" min="1" max="99999999999999999999" required
                                title="${priceRule}"/>
                     </div>
                     <div class="w3-col m5">
                         <label><b>${blitzPrice}</b></label>
-                        <input name="blitz-price" class="w3-input" value="${sessionScope.item.blitzPrice}" type="number"
-                               step="0.001" min="0.000"
-                               max="99999999999999999999.999" required
+                        <input id="blitzPrice" name="blitz-price" class="w3-input"
+                               value="${sessionScope.item.blitzPrice}" type="number"
+                               step="1" min="1" max="99999999999999999999" required
                                title="${priceRule}"/>
                     </div>
                 </div>
@@ -178,6 +169,7 @@
 <%@ include file="/jsp/jspf/message.jsp" %>
 <%@ include file="/jsp/jspf/footer.jsp" %>
 
+<script src="${pageContext.request.contextPath}/js/price-validation.js"></script>
 <script src="${pageContext.request.contextPath}/js/date-validation.js"></script>
 <script src="${pageContext.request.contextPath}/js/controller/edit-item.controller.js"></script>
 <script src="${pageContext.request.contextPath}/js/custom-file-input.js"></script>

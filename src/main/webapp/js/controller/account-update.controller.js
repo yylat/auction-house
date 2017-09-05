@@ -11,4 +11,6 @@
         button.addEventListener("click", validateForm.bind(null, forms[i]));
     }
 
+
+
 }());

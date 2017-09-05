@@ -54,15 +54,7 @@
 
 <html>
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${projectTitle}| ${sessionScope.item.name}</title>
-    <link rel="icon" href="${pageContext.request.contextPath}/img/ic_gavel_black.png">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/reset.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/w3.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
-</head>
+<%@ include file="/jsp/jspf/head.jsp" %>
 
 <body>
 
@@ -71,6 +63,8 @@
 <main>
 
     <%@ include file="/jsp/jspf/sidebar.jsp" %>
+
+    <%@ include file="/jsp/jspf/confirm.jsp" %>
 
     <div class="w3-main main-left-margin">
 
@@ -107,7 +101,8 @@
                                 <div class="w3-bar">
                                     <c:if test="${(sessionScope.item.status == 'CREATED')
                                     || (sessionScope.item.status == 'CONFIRMED')}">
-                                        <form class="w3-bar-item"
+
+                                        <form class="w3-bar-item" id="deleteItemForm"
                                               action="${pageContext.request.contextPath}/controller">
                                             <input type="hidden" name="command" value="delete-item"/>
                                             <button class="w3-button pro-green w3-ripple">
@@ -160,9 +155,9 @@
                     <form action="${pageContext.request.contextPath}/controller" method="post">
                         <input type="hidden" name="command" value="make-bid"/>
                         <input type="hidden" name="itemId" value="${sessionScope.item.id}"/>
-                        <input name="bidValue" class="w3-input back-back-color w3-col m3 s4" type="number" step="0.001"
+                        <input name="bidValue" class="w3-input back-back-color w3-col m3 s4" type="number" step="1"
                                min="${sessionScope.item.actualPrice}"
-                               max="99999999999999999999.999" value="${sessionScope.item.actualPrice + 1}" required
+                               max="99999999999999999999" value="${sessionScope.item.actualPrice + 1}" required
                                title="${priceRule}"/>
                         <button class="w3-margin-left w3-button pro-red">
                                 ${makeBid}
@@ -236,7 +231,7 @@
     <script src="${pageContext.request.contextPath}/js/controller/sign.controller.js"></script>
 </c:if>
 
-<script src="${pageContext.request.contextPath}/js/slideshow.js"></script>
+<script src="${pageContext.request.contextPath}/js/controller/item.controller.js"></script>
 
 </body>
 

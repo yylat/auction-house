@@ -63,11 +63,9 @@ public interface UserDAO extends GenericDAO<User> {
      *
      * @param isBanned ban status
      * @param userId   user id
-     * @return <code>true</code> if ban status of the user with user id was updated successfully;
-     * <code>false</code> otherwise
      * @throws DAOException if SQL exception occurred
      */
-    boolean updateUserStatus(boolean isBanned, int userId) throws DAOException;
+    void updateUserStatus(boolean isBanned, int userId) throws DAOException;
 
     /**
      * Returns the number of all the users with username

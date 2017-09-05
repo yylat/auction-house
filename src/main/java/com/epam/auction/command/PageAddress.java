@@ -1,4 +1,4 @@
-package com.epam.auction.controller;
+package com.epam.auction.command;
 
 /**
  * Stores page addresses.

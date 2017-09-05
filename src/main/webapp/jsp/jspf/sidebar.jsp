@@ -120,7 +120,8 @@
 
     </c:if>
 
-    <a href="#" class="w3-bar-item pro-bottom-button pro-margin-bottom">${contactPage}</a>
+    <a href="${pageContext.request.contextPath}/jsp/contacts.jsp"
+       class="w3-bar-item pro-bottom-button pro-margin-bottom">${contactPage}</a>
 
 </div>
 

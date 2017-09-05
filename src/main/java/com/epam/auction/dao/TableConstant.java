@@ -114,6 +114,8 @@ public final class TableConstant {
             "SELECT `item_id`, `name`, `description`, `start_price`, `blitz_price`, `actual_price`, `start_date`, `close_date`, `item_status_id`, `item_category_id`, `seller_id` FROM `item`";
     public static final String ITEM_QUERY_FIND_BY_ID =
             "SELECT `item_id`, `name`, `description`, `start_price`, `blitz_price`, `actual_price`, `start_date`, `close_date`, `item_status_id`, `item_category_id`, `seller_id` FROM `item` WHERE `item_id` = ?";
+    public static final String ITEM_QUERY_DELETE =
+            "DELETE FROM `item` WHERE `item_id` = ?";
     public static final String ITEM_QUERY_CREATE =
             "INSERT INTO `item`(`name`, `description`, `start_price`, `blitz_price`, `actual_price`, `start_date`, `close_date`, `item_status_id`, `item_category_id`, `seller_id`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     public static final String ITEM_QUERY_UPDATE =

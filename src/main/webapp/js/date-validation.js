@@ -20,17 +20,20 @@
         else {
             startDate.setCustomValidity("");
             var curStartDate = new Date(startDate.value);
-            minAllowedClose.setDate(minAllowedStart.getDate() + 2);
+            minAllowedClose.setDate(curStartDate.getDate() + 2);
+            validateCloseDate();
         }
     });
 
-    closeDate.addEventListener("change", function () {
+    closeDate.addEventListener("change", validateCloseDate);
+
+    function validateCloseDate() {
         if (new Date(closeDate.value) < minAllowedClose) {
             closeDate.setCustomValidity(closeDate.title);
         }
         else {
-            startDate.setCustomValidity("");
+            closeDate.setCustomValidity("");
         }
-    });
+    }
 
 })();

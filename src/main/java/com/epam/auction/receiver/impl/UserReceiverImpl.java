@@ -1,6 +1,6 @@
 package com.epam.auction.receiver.impl;
 
-import com.epam.auction.command.RequestContent;
+import com.epam.auction.controller.RequestContent;
 import com.epam.auction.dao.UserDAO;
 import com.epam.auction.dao.impl.UserDAOImpl;
 import com.epam.auction.db.DAOManager;

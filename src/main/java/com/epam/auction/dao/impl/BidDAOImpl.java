@@ -20,28 +20,22 @@ public class BidDAOImpl extends GenericDAOImpl<Bid> implements BidDAO {
     }
 
     @Override
-    public boolean delete(long id) throws MethodNotSupportedException {
+    public void delete(long id) throws MethodNotSupportedException {
         throw new MethodNotSupportedException("Delete bid operation not supported.");
     }
 
     @Override
-    public boolean create(Bid entity) throws DAOException {
-        boolean result = false;
-
+    public void create(Bid entity) throws DAOException {
         try (CallableStatement statement = connection.prepareCall(TableConstant.BID_QUERY_CREATE)) {
             defineQueryAttributes(entity, statement);
-            if (statement.execute()) {
-                result = true;
-            }
+            statement.execute();
         } catch (SQLException e) {
             throw new DAOException(e);
         }
-
-        return result;
     }
 
     @Override
-    public boolean update(Bid entity) throws MethodNotSupportedException {
+    public void update(Bid entity) throws MethodNotSupportedException {
         throw new MethodNotSupportedException("Update bid operation not supported.");
     }
 

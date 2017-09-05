@@ -1,6 +1,6 @@
 package com.epam.auction.receiver.impl;
 
-import com.epam.auction.command.RequestContent;
+import com.epam.auction.controller.RequestContent;
 import com.epam.auction.dao.PhotoDAO;
 import com.epam.auction.dao.impl.PhotoDAOImpl;
 import com.epam.auction.db.DAOManager;
@@ -30,8 +30,10 @@ public class PhotoReceiverImpl implements PhotoReceiver {
 
         try (DAOManager daoManager = new DAOManager(photoDAO)) {
             photo = photoDAO.findItemPhoto(itemId);
-            PhotoLoader photoLoader = new PhotoLoader();
-            requestContent.setAjaxResponse(photoLoader.loadPhotoAsString(photo.getFileName()));
+            if (photo != null) {
+                PhotoLoader photoLoader = new PhotoLoader();
+                requestContent.setAjaxResponse(photoLoader.loadPhotoAsString(photo.getFileName()));
+            }
         } catch (DAOException | PhotoLoadingException e) {
             throw new ReceiverException(e);
         }
@@ -42,14 +44,17 @@ public class PhotoReceiverImpl implements PhotoReceiver {
         int itemId = Integer.valueOf(requestContent.getRequestParameter(RequestConstant.ITEM_ID)[0]);
 
         PhotoDAO photoDAO = new PhotoDAOImpl();
-        List<String> photos = new ArrayList<>();
+        List<String> photosFiles = new ArrayList<>();
 
         try (DAOManager daoManager = new DAOManager(photoDAO)) {
             PhotoLoader photoLoader = new PhotoLoader();
-            for (Photo photo : photoDAO.findAll(itemId)) {
-                photos.add(photoLoader.loadPhotoAsString(photo.getFileName()));
+            List<Photo> photos = photoDAO.findAll(itemId);
+            if (!photos.isEmpty()) {
+                for (Photo photo : photos) {
+                    photosFiles.add(photoLoader.loadPhotoAsString(photo.getFileName()));
+                }
             }
-            requestContent.setAjaxResponse(JSONConverter.objectAsJson(photos));
+            requestContent.setAjaxResponse(JSONConverter.objectAsJson(photosFiles));
         } catch (DAOException | PhotoLoadingException e) {
             throw new ReceiverException(e);
         }

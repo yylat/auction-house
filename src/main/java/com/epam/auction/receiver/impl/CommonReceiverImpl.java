@@ -1,8 +1,8 @@
 package com.epam.auction.receiver.impl;
 
-import com.epam.auction.receiver.RequestConstant;
-import com.epam.auction.command.RequestContent;
+import com.epam.auction.controller.RequestContent;
 import com.epam.auction.receiver.CommonReceiver;
+import com.epam.auction.receiver.RequestConstant;
 import com.epam.auction.util.LocaleType;
 
 import java.util.Locale;

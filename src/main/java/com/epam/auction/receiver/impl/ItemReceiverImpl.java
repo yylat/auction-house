@@ -1,6 +1,6 @@
 package com.epam.auction.receiver.impl;
 
-import com.epam.auction.command.RequestContent;
+import com.epam.auction.controller.RequestContent;
 import com.epam.auction.dao.ItemCategoryDAO;
 import com.epam.auction.dao.ItemDAO;
 import com.epam.auction.dao.PhotoDAO;
@@ -65,14 +65,13 @@ public class ItemReceiverImpl implements ItemReceiver {
             DAOManager daoManager = new DAOManager(true, itemDAO, photoDAO);
             daoManager.beginTransaction();
             try {
-                boolean itemCreated = itemDAO.create(item);
-                boolean photosSaved = true;
-                if (itemCreated && files != null) {
-                    photosSaved = savePhotos(photoDAO, files, item.getId());
+                itemDAO.create(item);
+
+                if (files != null) {
+                    savePhotos(photoDAO, files, item.getId());
                 }
-                if (photosSaved) {
-                    daoManager.commit();
-                }
+
+                daoManager.commit();
             } catch (DAOException | MethodNotSupportedException | PhotoLoadingException e) {
                 daoManager.rollback();
                 throw new ReceiverException(e);
@@ -344,10 +343,9 @@ public class ItemReceiverImpl implements ItemReceiver {
         daoManager.beginTransaction();
 
         try {
-            if (itemDAO.updateItemStatus(item.getId(), itemStatus)) {
-                item.setStatus(itemStatus);
-                daoManager.commit();
-            }
+            itemDAO.updateItemStatus(item.getId(), itemStatus);
+            item.setStatus(itemStatus);
+            daoManager.commit();
         } catch (DAOException e) {
             daoManager.rollback();
             throw new ReceiverException(e);
@@ -368,15 +366,12 @@ public class ItemReceiverImpl implements ItemReceiver {
         itemDAO.update(item);
     }
 
-    private boolean savePhotos(PhotoDAO photoDAO, List<InputStream> files, long itemId)
+    private void savePhotos(PhotoDAO photoDAO, List<InputStream> files, long itemId)
             throws DAOException, MethodNotSupportedException, PhotoLoadingException {
         PhotoLoader photoLoader = new PhotoLoader();
         for (int i = 0; i < files.size(); i++) {
-            if (!photoDAO.create(new Photo(photoLoader.savePhotoToServer(files.get(i), i), itemId))) {
-                return false;
-            }
+            photoDAO.create(new Photo(photoLoader.savePhotoToServer(files.get(i), i), itemId));
         }
-        return true;
     }
 
 }

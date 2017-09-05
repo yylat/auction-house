@@ -1,6 +1,6 @@
 package com.epam.auction.filter;
 
-import com.epam.auction.controller.PageAddress;
+import com.epam.auction.command.PageAddress;
 import com.epam.auction.entity.User;
 import com.epam.auction.receiver.RequestConstant;
 import org.apache.logging.log4j.Level;

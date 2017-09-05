@@ -19,6 +19,7 @@
 <fmt:message bundle="${msg}" key="form.photosSizeRule" var="photosSizeRule"/>
 <fmt:message bundle="${msg}" key="form.chooseFiles" var="chooseFiles"/>
 <fmt:message bundle="${msg}" key="form.addButton" var="addButton"/>
+<fmt:message bundle="${msg}" key="form.blitzPriceRule" var="blitzPriceRule"/>
 
 
 <div id="addItemModal" class="w3-modal pro-modal">
@@ -61,15 +62,15 @@
                     <div class="w3-row-padding">
                         <div class="w3-col m6">
                             <label><b>${startPrice}</b></label>
-                            <input name="start-price" class="w3-input" type="number" step="0.001" min="0.000"
-                                   max="99999999999999999999.999" required
+                            <input id="startPrice" name="start-price" class="w3-input" type="number" step="1"
+                                   min="1" max="99999999999999999999" required
                                    title="${priceRule}"/>
                         </div>
                         <div class="w3-col m6">
                             <label><b>${blitzPrice}</b></label>
-                            <input name="blitz-price" class="w3-input" type="number" step="0.001" min="0.000"
-                                   max="99999999999999999999.999" required
-                                   title="${priceRule}"/>
+                            <input id="blitzPrice" name="blitz-price" class="w3-input" type="number" step="1"
+                                   min="1" max="99999999999999999999" required
+                                   title="${priceRule}" data-blitz-rule="${blitzPriceRule}"/>
                         </div>
                     </div>
                 </div>
@@ -91,9 +92,9 @@
 
                 <div class="w3-section margin-bottom">
                     <div class="w3-container bottom-padding">
-                        <label for="categoriesList"><b>${category}</b></label>
+                        <label for="categoriesListForAdd"><b>${category}</b></label>
 
-                        <select name="category" id="categoriesList" class="w3-select">
+                        <select name="category" id="categoriesListForAdd" class="w3-select">
                             <option value="" disabled selected>${chooseCategory}</option>
                         </select>
 
@@ -127,6 +128,7 @@
     </div>
 </div>
 
-<script src="${pageContext.request.contextPath}/js/add-item.js"></script>
+<script src="${pageContext.request.contextPath}/js/price-validation.js"></script>
+<script src="${pageContext.request.contextPath}/js/controller/add-item.controller.js"></script>
 <script src="${pageContext.request.contextPath}/js/date-validation.js"></script>
 <script src="${pageContext.request.contextPath}/js/custom-file-input.js"></script>

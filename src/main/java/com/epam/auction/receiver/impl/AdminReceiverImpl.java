@@ -1,6 +1,6 @@
 package com.epam.auction.receiver.impl;
 
-import com.epam.auction.command.RequestContent;
+import com.epam.auction.controller.RequestContent;
 import com.epam.auction.dao.UserDAO;
 import com.epam.auction.dao.impl.UserDAOImpl;
 import com.epam.auction.db.DAOManager;
@@ -21,9 +21,8 @@ public class AdminReceiverImpl implements AdminReceiver {
 
         daoManager.beginTransaction();
         try {
-            if (userDAO.updateUserStatus(isBanned, userId)) {
-                daoManager.commit();
-            }
+            userDAO.updateUserStatus(isBanned, userId);
+            daoManager.commit();
         } catch (DAOException e) {
             daoManager.rollback();
             throw new ReceiverException();

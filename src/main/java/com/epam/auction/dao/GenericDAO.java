@@ -33,7 +33,7 @@ public interface GenericDAO<T extends Entity> {
     /**
      * Returns entity with id.
      *
-     * @param id id
+     * @param id entity id
      * @return entity with id
      * @throws DAOException if SQLException occurred
      */
@@ -42,34 +42,28 @@ public interface GenericDAO<T extends Entity> {
     /**
      * Deletes entity with id from database.
      *
-     * @param id id
-     * @return <code>true</code> if entity with id was deleted successfully;
-     * <code>false</code> otherwise
+     * @param id entity id
      * @throws DAOException                if SQLException occurred
      * @throws MethodNotSupportedException if delete operation not supported
      */
-    boolean delete(long id) throws DAOException, MethodNotSupportedException;
+    void delete(long id) throws DAOException, MethodNotSupportedException;
 
     /**
-     * Creates entity.
+     * Inserts entity into database.
      *
-     * @param entity entity
-     * @return <code>true</code> if entity was created successfully;
-     * <code>false</code> otherwise
+     * @param entity entity to insert
      * @throws DAOException                if SQLException occurred
      * @throws MethodNotSupportedException if create operation not supported
      */
-    boolean create(T entity) throws DAOException, MethodNotSupportedException;
+    void create(T entity) throws DAOException, MethodNotSupportedException;
 
     /**
      * Updates entity.
      *
-     * @param entity entity
-     * @return <code>true</code> if entity was updated successfully;
-     * <code>false</code> otherwise
+     * @param entity entity to update
      * @throws DAOException                if SQLException occurred
      * @throws MethodNotSupportedException if update operation not supported
      */
-    boolean update(T entity) throws DAOException, MethodNotSupportedException;
+    void update(T entity) throws DAOException, MethodNotSupportedException;
 
 }

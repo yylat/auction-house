@@ -18,11 +18,9 @@ public interface ItemDAO extends GenericDAO<Item> {
      *
      * @param itemId     item id
      * @param itemStatus item status
-     * @return <code>true</code> if item status was updated successfully;
-     * <code>false</code> otherwise
      * @throws DAOException if SQL exception occurred
      */
-    boolean updateItemStatus(long itemId, ItemStatus itemStatus) throws DAOException;
+    void updateItemStatus(long itemId, ItemStatus itemStatus) throws DAOException;
 
     /**
      * Returns the number of all the items with filter criteria.

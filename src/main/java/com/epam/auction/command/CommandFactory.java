@@ -1,5 +1,6 @@
 package com.epam.auction.command;
 
+import com.epam.auction.controller.RequestContent;
 import com.epam.auction.receiver.RequestConstant;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;

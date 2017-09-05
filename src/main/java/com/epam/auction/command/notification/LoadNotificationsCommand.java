@@ -1,19 +1,14 @@
 package com.epam.auction.command.notification;
 
 import com.epam.auction.command.AbstractCommand;
-import com.epam.auction.command.RequestContent;
-import com.epam.auction.controller.PageAddress;
-import com.epam.auction.controller.PageGuide;
-import com.epam.auction.controller.TransferMethod;
+import com.epam.auction.controller.RequestContent;
+import com.epam.auction.command.PageAddress;
+import com.epam.auction.command.PageGuide;
+import com.epam.auction.command.TransferMethod;
 import com.epam.auction.exception.ReceiverException;
 import com.epam.auction.receiver.Receiver;
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class LoadNotificationsCommand extends AbstractCommand {
-
-    private static final Logger LOGGER = LogManager.getLogger();
 
     public LoadNotificationsCommand(Receiver receiver) {
         super(receiver);
@@ -26,7 +21,7 @@ public class LoadNotificationsCommand extends AbstractCommand {
         try {
             doAction(requestContent);
         } catch (ReceiverException e) {
-            LOGGER.log(Level.ERROR, e.getMessage(), e);
+            handleReceiverException(pageGuide, e);
         }
 
         return pageGuide;

@@ -1,4 +1,4 @@
-package com.epam.auction.controller;
+package com.epam.auction.command;
 
 /**
  * Represents page and method to go to this page.
@@ -45,7 +45,7 @@ public class PageGuide {
      *
      * @return address of the page
      */
-    String getPageAddress() {
+    public String getPageAddress() {
         return pageAddress;
     }
 
@@ -63,7 +63,7 @@ public class PageGuide {
      *
      * @return transfer method
      */
-    TransferMethod getTransferMethod() {
+    public TransferMethod getTransferMethod() {
         return transferMethod;
     }
 

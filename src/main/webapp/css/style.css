@@ -553,6 +553,10 @@ b, strong {
     color: #8d8d8d;
 }
 
+.big-margin-top {
+    margin-top: 20vh;
+}
+
 @media (max-width: 993px) {
 
     main {

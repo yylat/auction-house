@@ -6,8 +6,6 @@
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 <fmt:setBundle basename="/localization/message" var="msg"/>
 
-<fmt:message bundle="${msg}" key="label.projectTitle" var="projectTitle"/>
-
 <fmt:message bundle="${msg}" key="menu.balanceReplenishment" var="balanceReplenishment"/>
 
 <fmt:message bundle="${msg}" key="balance.cardNumber" var="cardNumber"/>
@@ -19,15 +17,7 @@
 
 <html>
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${projectTitle}</title>
-    <link rel="icon" href="${pageContext.request.contextPath}/img/ic_gavel_black.png">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/reset.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/w3.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
-</head>
+<%@ include file="/jsp/jspf/head.jsp" %>
 
 <body>
 
@@ -76,8 +66,8 @@
                             <div class="w3-cell">
                                 <div class="w3-container bottom-padding">
                                     <label><b>${moneyAmount}</b></label>
-                                    <input name="moneyAmount" class="w3-input" type="number" step="0.001"
-                                           min="0.000" max="99999999999999999999.999" required
+                                    <input name="moneyAmount" class="w3-input" type="number" step="1"
+                                           min="1" max="99999999999999999999" required
                                            title="${priceRule}"/>
                                 </div>
                             </div>

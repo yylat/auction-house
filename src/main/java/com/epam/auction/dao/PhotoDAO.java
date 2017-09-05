@@ -32,10 +32,8 @@ public interface PhotoDAO extends GenericDAO<Photo> {
      * Deletes all photos with item id.
      *
      * @param itemId item id
-     * @return <code>true</code> if all photos with item id was deleted successfully;
-     * <code>false</code> otherwise
      * @throws DAOException if SQL exception occurred
      */
-    boolean deleteItemPhotos(long itemId) throws DAOException;
+    void deleteItemPhotos(long itemId) throws DAOException;
 
 }

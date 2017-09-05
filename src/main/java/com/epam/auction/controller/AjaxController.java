@@ -2,7 +2,8 @@ package com.epam.auction.controller;
 
 import com.epam.auction.command.AbstractCommand;
 import com.epam.auction.command.CommandFactory;
-import com.epam.auction.command.RequestContent;
+import com.epam.auction.command.PageAddress;
+import com.epam.auction.command.PageGuide;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -39,7 +40,7 @@ public class AjaxController extends HttpServlet {
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RequestContent requestContent = new RequestContent();
 
-        requestContent.extractValues(request);
+        requestContent.extractValuesFromAjax(request);
 
         CommandFactory commandFactory = new CommandFactory();
         AbstractCommand command = commandFactory.initCommand(requestContent);

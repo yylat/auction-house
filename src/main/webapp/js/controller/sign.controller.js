@@ -14,15 +14,23 @@
     var signInOpenButton = document.getElementById("signInOpenButton");
     var signInCloseButton = document.getElementById("signInCloseButton");
 
-    signInOpenButton.addEventListener("click", open.bind(null, signInModal));
-    signInCloseButton.addEventListener("click", close.bind(null, signInModal));
+    if (signInOpenButton) {
+        signInOpenButton.addEventListener("click", open.bind(null, signInModal));
+    }
+    if (signInOpenButton) {
+        signInCloseButton.addEventListener("click", close.bind(null, signInModal));
+    }
 
     var signUpModal = document.getElementById("signUpModal");
     var signUpOpenButton = document.getElementById("signUpOpenButton");
     var signUpCloseButton = document.getElementById("signUpCloseButton");
 
-    signUpOpenButton.addEventListener("click", open.bind(null, signUpModal));
-    signUpCloseButton.addEventListener("click", close.bind(null, signUpModal));
+    if (signUpOpenButton) {
+        signUpOpenButton.addEventListener("click", open.bind(null, signUpModal));
+    }
+    if (signUpCloseButton) {
+        signUpCloseButton.addEventListener("click", close.bind(null, signUpModal));
+    }
 
     /* ---------------------------------------------------------------------------------- */
 
@@ -37,8 +45,12 @@
     removeDefaultValidation(signInForm);
     removeDefaultValidation(signUpForm);
 
-    signInSubmitButton.addEventListener("click", validateForm.bind(null, signInForm));
-    signUpSubmitButton.addEventListener("click", validateForm.bind(null, signUpForm));
+    if (signInSubmitButton) {
+        signInSubmitButton.addEventListener("click", validateForm.bind(null, signInForm));
+    }
+    if (signUpSubmitButton) {
+        signUpSubmitButton.addEventListener("click", validateForm.bind(null, signInForm));
+    }
 
     /* ---------------------------------------------------------------------------------- */
 

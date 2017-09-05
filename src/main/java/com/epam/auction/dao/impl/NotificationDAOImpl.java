@@ -35,15 +35,15 @@ public class NotificationDAOImpl extends GenericDAOImpl<Notification> implements
     void defineQueryAttributes(Notification entity, PreparedStatement statement) throws SQLException {
     }
 
-    public boolean delete(long id) throws DAOException, MethodNotSupportedException {
+    public void delete(long id) throws DAOException, MethodNotSupportedException {
         throw new MethodNotSupportedException();
     }
 
-    public boolean create(Notification entity) throws DAOException, MethodNotSupportedException {
+    public void create(Notification entity) throws DAOException, MethodNotSupportedException {
         throw new MethodNotSupportedException();
     }
 
-    public boolean update(Notification entity) throws DAOException, MethodNotSupportedException {
+    public void update(Notification entity) throws DAOException, MethodNotSupportedException {
         throw new MethodNotSupportedException();
     }
 

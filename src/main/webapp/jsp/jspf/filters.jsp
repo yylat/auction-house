@@ -19,12 +19,12 @@
             ${actualPrice}
         </div>
         <div class="w3-container">
-            <input class="w3-input" name="actual-price-floor" type="number" step="0.001" min="0.000"
-                   max="99999999999999999999.999" placeholder="${from}"/>
+            <input class="w3-input" name="actual-price-floor" type="number" step="1" min="1"
+                   max="99999999999999999999" placeholder="${from}"/>
         </div>
         <div class="w3-container">
-            <input class="w3-input" name="actual-price-ceiling" type="number" step="0.001" min="0.000"
-                   max="99999999999999999999.999" placeholder="${to}"/>
+            <input class="w3-input" name="actual-price-ceiling" type="number" step="1" min="1"
+                   max="99999999999999999999" placeholder="${to}"/>
         </div>
     </div>
     <div class="w3-col m6">
@@ -32,12 +32,12 @@
             ${blitzPrice}
         </div>
         <div class="w3-container">
-            <input class="w3-input" name="blitz-price-floor" type="number" step="0.001" min="0.000"
-                   max="99999999999999999999.999" placeholder="${from}"/>
+            <input class="w3-input" name="blitz-price-floor" type="number" step="1" min="1"
+                   max="99999999999999999999" placeholder="${from}"/>
         </div>
         <div class="w3-container">
-            <input class="w3-input" name="blitz-price-ceiling" type="number" step="0.001" min="0.000"
-                   max="99999999999999999999.999" placeholder="${to}"/>
+            <input class="w3-input" name="blitz-price-ceiling" type="number" step="1" min="1"
+                   max="99999999999999999999" placeholder="${to}"/>
         </div>
     </div>
 </div>
@@ -81,14 +81,18 @@
                 <option value="actual-price">${actualPrice}</option>
                 <option value="blitz-price">${blitzPrice}</option>
             </select>
-            <input class="w3-radio" type="radio" name="order-type" value="desc" checked>${orderDesc}<br>
-            <input class="w3-radio" type="radio" name="order-type" value="asc">${orderAsc}
+            <label>
+                <input class="w3-radio" type="radio" name="order-type" value="desc" checked>${orderDesc}
+            </label>
+            <label>
+                <input class="w3-radio" type="radio" name="order-type" value="asc">${orderAsc}
+            </label>
         </div>
     </div>
     <div class="w3-col m6">
         <div class="w3-container">
-            <label for="categoriesList">${chooseCategory}</label>
-            <select name="category-id" id="categoriesList" class="w3-select">
+            <label for="categoriesListForSearch">${chooseCategory}</label>
+            <select name="category-id" id="categoriesListForSearch" class="w3-select">
                 <option value="" selected>${category}</option>
             </select>
         </div>
@@ -99,3 +103,5 @@
         </div>
     </div>
 </div>
+
+<script src="${pageContext.request.contextPath}/js/load-categories.js"></script>

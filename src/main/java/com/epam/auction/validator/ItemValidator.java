@@ -4,24 +4,25 @@ import com.epam.auction.entity.Item;
 import com.epam.auction.util.DateFixer;
 
 import java.math.BigDecimal;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.sql.Date;
+import java.util.Calendar;
 
 public class ItemValidator extends Validator {
 
     private static final String NAME_PATTERN = "['A-Za-zА-Яа-яЁё ]{2,45}";
 
-    private static final BigDecimal minPrice = new BigDecimal(0);
-    private static final BigDecimal maxPrice = new BigDecimal(999999999999999999999.999);
+    private static final BigDecimal minPrice = BigDecimal.ZERO;
+    private static final BigDecimal maxPrice = new BigDecimal(999999999999999999999.0);
 
-    private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private final Date minStartDate;
 
     public ItemValidator() {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DATE, 2);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
         this.minStartDate = new Date(calendar.getTimeInMillis());
     }
 
@@ -47,6 +48,19 @@ public class ItemValidator extends Validator {
             setValidationMessage("Price can be in range from " + minPrice + " to " + maxPrice + ". Value: [" + value + "].");
             return false;
         }
+    }
+
+    private boolean validateBlitzPrice(BigDecimal blitzPrice, BigDecimal startPrice) {
+        if (!validatePrice(blitzPrice)) {
+            if (blitzPrice.compareTo(startPrice) >= 1) {
+                return true;
+            } else {
+                setValidationMessage("Blitz price can't be less then start price. Blitz price: [" +
+                        blitzPrice + "], start price: [" + startPrice + "].");
+                return false;
+            }
+        }
+        return true;
     }
 
     public boolean validateStartDate(Date startDate) {

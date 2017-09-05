@@ -22,7 +22,7 @@ public class UserDAOImpl extends GenericDAOImpl<User> implements UserDAO {
     }
 
     @Override
-    public boolean delete(long id) throws DAOException, MethodNotSupportedException {
+    public void delete(long id) throws DAOException, MethodNotSupportedException {
         throw new MethodNotSupportedException();
     }
 
@@ -107,8 +107,8 @@ public class UserDAOImpl extends GenericDAOImpl<User> implements UserDAO {
     }
 
     @Override
-    public boolean updateUserStatus(boolean isBanned, int userId) throws DAOException {
-        return executeUpdate(TableConstant.USER_QUERY_UPDATE_STATUS, statement -> {
+    public void updateUserStatus(boolean isBanned, int userId) throws DAOException {
+        executeUpdate(TableConstant.USER_QUERY_UPDATE_STATUS, statement -> {
             statement.setBoolean(1, isBanned);
             statement.setLong(2, userId);
         });

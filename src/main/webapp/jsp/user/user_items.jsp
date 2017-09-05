@@ -22,23 +22,32 @@
 
 <html>
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${projectTitle}</title>
-    <link rel="icon" href="${pageContext.request.contextPath}/img/ic_gavel_black.png">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/reset.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/w3.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
-</head>
+<%@ include file="/jsp/jspf/head.jsp" %>
 
 <body>
 
-<ctg:items command="load-user-items" title="${items}">
-    <%@include file="/jsp/jspf/items.jsp" %>
-</ctg:items>
+<%@ include file="/jsp/jspf/header.jsp" %>
 
-<%@ include file="/jsp/jspf/item_modal.jsp" %>
+<main>
+    <%@ include file="/jsp/jspf/sidebar.jsp" %>
+    <div class="w3-main main-left-margin">
+
+        <div class="content">
+
+            <div class="w3-container w3-right pro-padding-bottom pro-add-button">
+                <button id="addItemOpenButton" class="w3-button pro-green">${addButton}</button>
+            </div>
+            <%@ include file="/jsp/jspf/item_modal.jsp" %>
+
+            <ctg:items command="load-user-items" title="${items}">
+                <%@include file="/jsp/jspf/items.jsp" %>
+            </ctg:items>
+        </div>
+
+    </div>
+</main>
+
+<%@ include file="/jsp/jspf/footer.jsp" %>
 
 </body>
 

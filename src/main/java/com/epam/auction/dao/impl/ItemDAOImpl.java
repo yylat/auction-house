@@ -7,7 +7,6 @@ import com.epam.auction.dao.criteria.OrderCriteria;
 import com.epam.auction.entity.Item;
 import com.epam.auction.entity.ItemStatus;
 import com.epam.auction.exception.DAOException;
-import com.epam.auction.exception.MethodNotSupportedException;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,13 +18,9 @@ public class ItemDAOImpl extends GenericDAOImpl<Item> implements ItemDAO {
     public ItemDAOImpl() {
         super(TableConstant.ITEM_QUERY_FIND_ALL,
                 TableConstant.ITEM_QUERY_FIND_BY_ID,
-                null,
+                TableConstant.ITEM_QUERY_DELETE,
                 TableConstant.ITEM_QUERY_CREATE,
                 TableConstant.ITEM_QUERY_UPDATE);
-    }
-
-    public boolean delete(long id) throws MethodNotSupportedException {
-        throw new MethodNotSupportedException("Delete item operation not supported.");
     }
 
     @Override
@@ -59,8 +54,8 @@ public class ItemDAOImpl extends GenericDAOImpl<Item> implements ItemDAO {
     }
 
     @Override
-    public boolean updateItemStatus(long itemId, ItemStatus itemStatus) throws DAOException {
-        return executeUpdate(TableConstant.ITEM_QUERY_UPDATE_STATUS, statement -> {
+    public void updateItemStatus(long itemId, ItemStatus itemStatus) throws DAOException {
+        executeUpdate(TableConstant.ITEM_QUERY_UPDATE_STATUS, statement -> {
             statement.setInt(1, itemStatus.ordinal());
             statement.setLong(2, itemId);
         });

@@ -8,6 +8,7 @@ import com.epam.auction.command.photo.*;
 import com.epam.auction.command.bid.LoadBidsCommand;
 import com.epam.auction.command.common.ChangeLocaleCommand;
 import com.epam.auction.command.user.*;
+import com.epam.auction.controller.RequestContent;
 import com.epam.auction.exception.ReceiverException;
 import com.epam.auction.receiver.*;
 import com.epam.auction.receiver.impl.*;

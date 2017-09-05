@@ -1,6 +1,6 @@
 package com.epam.auction.filter;
 
-import com.epam.auction.controller.PageAddress;
+import com.epam.auction.command.PageAddress;
 import com.epam.auction.entity.Item;
 import com.epam.auction.entity.ItemStatus;
 import com.epam.auction.entity.User;
