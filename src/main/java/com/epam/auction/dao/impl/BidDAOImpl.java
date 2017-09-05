@@ -9,8 +9,14 @@ import com.epam.auction.exception.MethodNotSupportedException;
 import java.sql.*;
 import java.util.List;
 
+/**
+ * Provides the base model implementation for `bid` table DAO.
+ */
 public class BidDAOImpl extends GenericDAOImpl<Bid> implements BidDAO {
 
+    /**
+     * Constructs dao for `bid` table.
+     */
     public BidDAOImpl() {
         super(TableConstant.BID_QUERY_FIND_ALL,
                 TableConstant.BID_QUERY_FIND_BY_ID,

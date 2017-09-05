@@ -6,10 +6,19 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Provides service to initialize command.
+ */
 public class CommandFactory {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
+    /**
+     * Creates command{@link AbstractCommand} from request parameter.
+     *
+     * @param requestContent request content
+     * @return command
+     */
     public AbstractCommand initCommand(RequestContent requestContent) {
         AbstractCommand command;
         String commandName = null;

@@ -11,8 +11,8 @@ public class ItemValidator extends Validator {
 
     private static final String NAME_PATTERN = "['A-Za-zА-Яа-яЁё ]{2,45}";
 
-    private static final BigDecimal minPrice = BigDecimal.ZERO;
-    private static final BigDecimal maxPrice = new BigDecimal(999999999999999999999.0);
+    private static final BigDecimal MIN_PRICE = BigDecimal.ZERO;
+    private static final BigDecimal MAX_PRICE = new BigDecimal(999999999999999999999.0);
 
     private final Date minStartDate;
 
@@ -42,10 +42,10 @@ public class ItemValidator extends Validator {
     }
 
     private boolean validatePrice(BigDecimal value) {
-        if (minPrice.compareTo(value) <= -1 && maxPrice.compareTo(value) >= 1) {
+        if (MIN_PRICE.compareTo(value) <= -1 && MAX_PRICE.compareTo(value) >= 1) {
             return true;
         } else {
-            setValidationMessage("Price can be in range from " + minPrice + " to " + maxPrice + ". Value: [" + value + "].");
+            setValidationMessage("Price can be in range from " + MIN_PRICE + " to " + MAX_PRICE + ". Value: [" + value + "].");
             return false;
         }
     }

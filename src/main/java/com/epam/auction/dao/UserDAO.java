@@ -21,20 +21,20 @@ public interface UserDAO extends GenericDAO<User> {
     boolean isExist(User user) throws DAOException;
 
     /**
-     * Returns <code>true</code> if username exists in database.
+     * Returns <code>true</code> if user with username exists in database.
      *
      * @param username username
-     * @return <code>true</code> if username exists in database;
+     * @return <code>true</code> if user with username exists in database;
      * <code>false</code> otherwise
      * @throws DAOException if SQL exception occurred
      */
     boolean isUsernameAlreadyExist(String username) throws DAOException;
 
     /**
-     * Returns <code>true</code> if email exists in database.
+     * Returns <code>true</code> if user with email exists in database.
      *
      * @param email email
-     * @return <code>true</code> if email exists in database;
+     * @return <code>true</code> if user with email exists in database;
      * <code>false</code> otherwise
      * @throws DAOException if SQL exception occurred
      */

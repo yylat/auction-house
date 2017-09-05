@@ -11,8 +11,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * Provides the base model implementation for `user` table DAO.
+ */
 public class UserDAOImpl extends GenericDAOImpl<User> implements UserDAO {
 
+    /**
+     * Constructs dao for `user` table.
+     */
     public UserDAOImpl() {
         super(TableConstant.USER_QUERY_FIND_ALL,
                 TableConstant.USER_QUERY_FIND_BY_ID,
@@ -130,6 +136,15 @@ public class UserDAOImpl extends GenericDAOImpl<User> implements UserDAO {
         });
     }
 
+    /**
+     * Returns <code>true</code> if user with parameter in database.
+     *
+     * @param parameter parameter
+     * @param query     query to execute
+     * @return <code>true</code> if user with parameter exists in database;
+     * <code>false</code> otherwise
+     * @throws DAOException if SQL exception occurred
+     */
     private boolean isAlreadyExist(String parameter, String query) throws DAOException {
         boolean result = false;
         try (PreparedStatement statement = connection.prepareStatement(query)) {

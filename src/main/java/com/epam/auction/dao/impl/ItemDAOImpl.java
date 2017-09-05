@@ -13,8 +13,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * Provides the base model implementation for `item` table DAO.
+ */
 public class ItemDAOImpl extends GenericDAOImpl<Item> implements ItemDAO {
 
+    /**
+     * Constructs dao for `item` table.
+     */
     public ItemDAOImpl() {
         super(TableConstant.ITEM_QUERY_FIND_ALL,
                 TableConstant.ITEM_QUERY_FIND_BY_ID,
@@ -64,7 +70,7 @@ public class ItemDAOImpl extends GenericDAOImpl<Item> implements ItemDAO {
     @Override
     public int countRows(FilterCriteria filterCriteria) throws DAOException {
         String query = TableConstant.ITEM_QUERY_FIND_ROWS_COUNT +
-                filterCriteria.buildWhereClause();
+                filterCriteria.getWhereClause();
         return countRows(query,
                 statement -> defineFilter(statement, 0, filterCriteria));
     }
@@ -72,7 +78,7 @@ public class ItemDAOImpl extends GenericDAOImpl<Item> implements ItemDAO {
     @Override
     public int countRows(long userId, FilterCriteria filterCriteria) throws DAOException {
         String query = TableConstant.ITEM_QUERY_PURCHASED_ROWS_COUNT +
-                filterCriteria.buildWhereClausePart();
+                filterCriteria.getWhereClausePart();
         return countRows(query, statement -> {
             statement.setLong(1, userId);
             defineFilter(statement, 2, filterCriteria);
@@ -83,8 +89,8 @@ public class ItemDAOImpl extends GenericDAOImpl<Item> implements ItemDAO {
     public List<Item> findItemsWithFilter(FilterCriteria filterCriteria, OrderCriteria orderCriteria,
                                           int offset, int limit) throws DAOException {
         String query = TableConstant.ITEM_QUERY_FIND_ALL +
-                filterCriteria.buildWhereClause() +
-                orderCriteria.getQueryPart() +
+                filterCriteria.getWhereClause() +
+                orderCriteria.getOrderByClause() +
                 TableConstant.ITEM_QUERY_LIMIT;
         return findSpecificList(query, statement -> defineFilterLimit(statement, 0, filterCriteria, offset, limit));
     }
@@ -92,8 +98,8 @@ public class ItemDAOImpl extends GenericDAOImpl<Item> implements ItemDAO {
     @Override
     public List<Item> findPurchasedItems(long userId, FilterCriteria filterCriteria, OrderCriteria orderCriteria, int offset, int limit) throws DAOException {
         String query = TableConstant.ITEM_QUERY_PURCHASED +
-                filterCriteria.buildWhereClausePart() +
-                orderCriteria.getQueryPart() +
+                filterCriteria.getWhereClausePart() +
+                orderCriteria.getOrderByClause() +
                 TableConstant.ITEM_QUERY_LIMIT;
         return findSpecificList(query, statement -> {
             statement.setLong(1, userId);
@@ -101,16 +107,34 @@ public class ItemDAOImpl extends GenericDAOImpl<Item> implements ItemDAO {
         });
     }
 
+    /**
+     * Sets filter parameters to prepared statement.
+     *
+     * @param statement           prepared statement
+     * @param startParameterIndex index to start set parameters
+     * @param filterCriteria      filter parameters
+     * @throws SQLException if can not set parameters to prepared statement
+     */
     private void defineFilter(PreparedStatement statement, int startParameterIndex, FilterCriteria filterCriteria)
             throws SQLException {
-        for (Object value : filterCriteria.getValues()) {
+        for (Object value : filterCriteria.getFilterValues()) {
             statement.setObject(++startParameterIndex, value);
         }
     }
 
+    /**
+     * Sets filter, offset and limit parameters to prepared statement.
+     *
+     * @param statement           prepared statement
+     * @param startParameterIndex index to start set parameters
+     * @param filterCriteria      filter parameters
+     * @param offset              offset parameter
+     * @param limit               limit parameter
+     * @throws SQLException if can not set parameters to prepared statement
+     */
     private void defineFilterLimit(PreparedStatement statement, int startParameterIndex,
                                    FilterCriteria filterCriteria, int offset, int limit) throws SQLException {
-        for (Object value : filterCriteria.getValues()) {
+        for (Object value : filterCriteria.getFilterValues()) {
             statement.setObject(++startParameterIndex, value);
         }
         statement.setInt(++startParameterIndex, offset);

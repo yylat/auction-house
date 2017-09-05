@@ -15,6 +15,10 @@ import com.epam.auction.receiver.impl.*;
 
 import java.util.Arrays;
 
+/**
+ * Stores command names, their command objects and
+ * receiver method to execute command.
+ */
 public enum CommandType {
 
     SIGN_UP(new SignUpCommand(new UserReceiverImpl())) {
@@ -222,18 +226,43 @@ public enum CommandType {
         }
     };
 
+    /**
+     * Command.
+     */
     private AbstractCommand command;
 
+    /**
+     * Constructs CommandType with command.
+     *
+     * @param command command
+     */
     CommandType(AbstractCommand command) {
         this.command = command;
     }
 
+    /**
+     * Returns command.
+     *
+     * @return command
+     */
     public AbstractCommand getCommand() {
         return command;
     }
 
+    /**
+     * Executes receiver method according to the command.
+     *
+     * @param requestContent request content
+     * @throws ReceiverException if can not do action
+     */
     public abstract void doReceiver(RequestContent requestContent) throws ReceiverException;
 
+    /**
+     * Returns CommandType object with command.
+     *
+     * @param command command
+     * @return CommandType object with command
+     */
     public static CommandType takeCommandType(AbstractCommand command) {
         return Arrays.stream(CommandType.values())
                 .filter(type -> type.getCommand().equals(command))

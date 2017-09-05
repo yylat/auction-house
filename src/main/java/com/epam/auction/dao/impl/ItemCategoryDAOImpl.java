@@ -8,8 +8,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Provides the base model implementation for `item_category` table DAO.
+ */
 public class ItemCategoryDAOImpl extends GenericDAOImpl<ItemCategory> implements ItemCategoryDAO {
 
+    /**
+     * Constructs dao for `item_category` table.
+     */
     public ItemCategoryDAOImpl() {
         super(TableConstant.ITEM_CATEGORY_QUERY_FIND_ALL,
                 TableConstant.ITEM_CATEGORY_QUERY_FIND_BY_ID,

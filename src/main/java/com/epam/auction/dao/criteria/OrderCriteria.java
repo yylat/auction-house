@@ -5,8 +5,14 @@ import com.epam.auction.dao.TableConstant;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Provides service to construct 'ORDER BY' SQL clause for `item` table.
+ */
 public class OrderCriteria {
 
+    /**
+     * Set of columns for sorting.
+     */
     private static final Set<String> orderedColumns = new HashSet<>();
 
     static {
@@ -17,36 +23,64 @@ public class OrderCriteria {
         orderedColumns.add(TableConstant.ITEM_COLUMN_CLOSE_DATE);
     }
 
+    /**
+     * Ascending sort type.
+     */
     private static final String TYPE_ASC = "ASC";
+    /**
+     * Descending sort type.
+     */
     private static final String TYPE_DESC = "DESC";
 
-    private String queryPart = " ORDER BY `item`.";
+    /**
+     * 'ORDER BY' clause.
+     */
+    private String orderByClause = " ORDER BY `item`.";
 
+    /**
+     * Constructs OrderCriteria.
+     */
     public OrderCriteria() {
-        queryPart += TableConstant.ITEM_COLUMN_ID;
-        queryPart += " " + TYPE_DESC;
+        orderByClause += TableConstant.ITEM_COLUMN_ID;
+        orderByClause += " " + TYPE_DESC;
     }
 
+    /**
+     * Constructs OrderCriteria with column to sort.
+     *
+     * @param column column to sort
+     */
     public OrderCriteria(String column) {
         column = column.toLowerCase().replaceAll("-", "_");
         if (orderedColumns.contains(column)) {
-            queryPart += column;
+            orderByClause += column;
         } else {
-            queryPart += TableConstant.ITEM_COLUMN_ID;
+            orderByClause += TableConstant.ITEM_COLUMN_ID;
         }
     }
 
+    /**
+     * Constructs OrderCriteria with column to sort and sort type.
+     *
+     * @param column column to sort
+     * @param type   sort type
+     */
     public OrderCriteria(String column, String type) {
         this(column);
         if (TYPE_ASC.equalsIgnoreCase(type.toLowerCase())) {
-            queryPart += " " + TYPE_ASC;
+            orderByClause += " " + TYPE_ASC;
         } else {
-            queryPart += " " + TYPE_DESC;
+            orderByClause += " " + TYPE_DESC;
         }
     }
 
-    public String getQueryPart() {
-        return queryPart;
+    /**
+     * Returns 'ORDER BY' SQL clause for `item` table.
+     *
+     * @return 'ORDER BY' SQL clause for `item` table
+     */
+    public String getOrderByClause() {
+        return orderByClause;
     }
 
 }

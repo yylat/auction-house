@@ -11,8 +11,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * Provides the base model implementation for `notification` table DAO.
+ */
 public class NotificationDAOImpl extends GenericDAOImpl<Notification> implements NotificationDAO {
 
+    /**
+     * Constructs dao for `notification` table.
+     */
     public NotificationDAOImpl() {
         super(TableConstant.NOTIFICATION_QUERY_FIND_ALL,
                 TableConstant.NOTIFICATION_QUERY_FIND_BY_ID,
@@ -35,14 +41,17 @@ public class NotificationDAOImpl extends GenericDAOImpl<Notification> implements
     void defineQueryAttributes(Notification entity, PreparedStatement statement) throws SQLException {
     }
 
+    @Override
     public void delete(long id) throws DAOException, MethodNotSupportedException {
         throw new MethodNotSupportedException();
     }
 
+    @Override
     public void create(Notification entity) throws DAOException, MethodNotSupportedException {
         throw new MethodNotSupportedException();
     }
 
+    @Override
     public void update(Notification entity) throws DAOException, MethodNotSupportedException {
         throw new MethodNotSupportedException();
     }

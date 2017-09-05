@@ -11,7 +11,7 @@ import java.util.List;
  * Provides the base model DAO interface.
  *
  * @param <T> indicates that for this instantiation of the DAO,
- *            we want to execute this type of Entity implementation
+ *            will be used this type of Entity implementation
  */
 public interface GenericDAO<T extends Entity> {
 

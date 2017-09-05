@@ -109,6 +109,10 @@ public class RequestContent {
         requestAttributes.put(key, value);
     }
 
+    public Map<String, String[]> getRequestParameters() {
+        return requestParameters;
+    }
+
     /**
      * Returns array of request parameters with key from
      * requestParameters map.

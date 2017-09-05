@@ -1,5 +1,8 @@
 package com.epam.auction.dao;
 
+/**
+ * Stores queries and column names.
+ */
 public final class TableConstant {
 
     private TableConstant() {
@@ -190,6 +193,5 @@ public final class TableConstant {
 
     public static final String PHOTO_QUERY_DELETE_ITEM_PHOTOS =
             "DELETE FROM `photo` WHERE `item_id` = ?";
-
 
 }

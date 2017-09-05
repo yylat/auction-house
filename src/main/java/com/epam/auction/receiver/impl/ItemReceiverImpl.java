@@ -5,7 +5,7 @@ import com.epam.auction.dao.ItemCategoryDAO;
 import com.epam.auction.dao.ItemDAO;
 import com.epam.auction.dao.PhotoDAO;
 import com.epam.auction.dao.criteria.FilterCriteria;
-import com.epam.auction.dao.criteria.FilterQueryParameter;
+import com.epam.auction.dao.criteria.FilterType;
 import com.epam.auction.dao.criteria.OrderCriteria;
 import com.epam.auction.dao.impl.ItemCategoryDAOImpl;
 import com.epam.auction.dao.impl.ItemDAOImpl;
@@ -20,8 +20,8 @@ import com.epam.auction.receiver.ItemReceiver;
 import com.epam.auction.receiver.PaginationHelper;
 import com.epam.auction.receiver.RequestConstant;
 import com.epam.auction.receiver.SiteManager;
-import com.epam.auction.util.JSONConverter;
 import com.epam.auction.util.DateFixer;
+import com.epam.auction.util.JSONConverter;
 import com.epam.auction.util.PhotoLoader;
 import com.epam.auction.validator.ItemValidator;
 
@@ -243,7 +243,7 @@ public class ItemReceiverImpl implements ItemReceiver {
         if (user != null) {
             FilterCriteria filterCriteria = new FilterCriteria();
             try {
-                filterCriteria.put(FilterQueryParameter.SELLER_ID, user.getId());
+                filterCriteria.put(FilterType.SELLER_ID, user.getId());
                 loadItems(requestContent, filterCriteria);
             } catch (WrongFilterParameterException e) {
                 throw new ReceiverException(e);
@@ -255,21 +255,22 @@ public class ItemReceiverImpl implements ItemReceiver {
     public void searchItems(RequestContent requestContent) throws ReceiverException {
         FilterCriteria filterCriteria = (FilterCriteria) requestContent.getSessionAttribute(RequestConstant.FILTER_CRITERIA);
         OrderCriteria orderCriteria = (OrderCriteria) requestContent.getSessionAttribute(RequestConstant.ORDER_CRITERIA);
-        filterCriteria.put(FilterQueryParameter.SEARCH_NAME,
+        filterCriteria.put(FilterType.SEARCH_NAME,
                 requestContent.getRequestParameter(RequestConstant.SEARCH_NAME)[0]);
         loadItems(requestContent, filterCriteria, orderCriteria);
     }
 
     private void extractFilterParameters(RequestContent requestContent, FilterCriteria filterCriteria) {
         if (requestContent.getRequestParameter(RequestConstant.INITIAL) == null) {
-            for (FilterQueryParameter filterQueryParameter : FilterQueryParameter.values()) {
+            for (FilterType filterType : FilterType.values()) {
                 String[] requestParameter = requestContent
-                        .getRequestParameter(filterQueryParameter.name().toLowerCase().replaceAll("_", "-"));
+                        .getRequestParameter(filterType.name().toLowerCase().replaceAll("_", "-"));
                 if (requestParameter != null && !requestParameter[0].isEmpty()) {
-                    filterCriteria.put(filterQueryParameter, requestParameter[0]);
+                    filterCriteria.put(filterType, requestParameter[0]);
                 }
             }
             requestContent.setSessionAttribute(RequestConstant.FILTER_CRITERIA, filterCriteria);
+
         } else {
             filterCriteria = (FilterCriteria) requestContent.getSessionAttribute(RequestConstant.FILTER_CRITERIA);
         }
@@ -300,7 +301,7 @@ public class ItemReceiverImpl implements ItemReceiver {
     private void loadItemsWithStatus(RequestContent requestContent, ItemStatus itemStatus) throws ReceiverException {
         FilterCriteria filterCriteria = new FilterCriteria();
         try {
-            filterCriteria.put(FilterQueryParameter.STATUS, itemStatus.ordinal());
+            filterCriteria.put(FilterType.STATUS, itemStatus.ordinal());
             loadItems(requestContent, filterCriteria);
         } catch (WrongFilterParameterException e) {
             throw new ReceiverException(e);
