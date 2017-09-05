@@ -1,13 +1,11 @@
 package com.epam.auction.receiver.impl;
 
 import com.epam.auction.controller.RequestContent;
-import com.epam.auction.dao.ItemCategoryDAO;
 import com.epam.auction.dao.ItemDAO;
 import com.epam.auction.dao.PhotoDAO;
 import com.epam.auction.dao.criteria.FilterCriteria;
 import com.epam.auction.dao.criteria.FilterType;
 import com.epam.auction.dao.criteria.OrderCriteria;
-import com.epam.auction.dao.impl.ItemCategoryDAOImpl;
 import com.epam.auction.dao.impl.ItemDAOImpl;
 import com.epam.auction.dao.impl.PhotoDAOImpl;
 import com.epam.auction.db.DAOManager;
@@ -21,27 +19,22 @@ import com.epam.auction.receiver.PaginationHelper;
 import com.epam.auction.receiver.RequestConstant;
 import com.epam.auction.receiver.SiteManager;
 import com.epam.auction.util.DateFixer;
-import com.epam.auction.util.JSONConverter;
 import com.epam.auction.util.PhotoLoader;
 import com.epam.auction.validator.ItemValidator;
+import com.epam.auction.validator.PhotoValidator;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.List;
+import java.util.Map;
 
 public class ItemReceiverImpl implements ItemReceiver {
 
-    @Override
-    public void loadCategories(RequestContent requestContent) throws ReceiverException {
-        ItemCategoryDAO itemCategoryDAO = new ItemCategoryDAOImpl();
-
-        try (DAOManager daoManager = new DAOManager(itemCategoryDAO)) {
-            requestContent.setAjaxResponse(JSONConverter.objectAsJson(itemCategoryDAO.findAll()));
-        } catch (DAOException e) {
-            throw new ReceiverException(e);
-        }
-    }
+    private static final Logger LOGGER = LogManager.getLogger();
 
     @Override
     public void createItem(RequestContent requestContent) throws ReceiverException {
@@ -57,7 +50,7 @@ public class ItemReceiverImpl implements ItemReceiver {
 
         ItemValidator itemValidator = new ItemValidator();
         if (itemValidator.validateItemParam(item)) {
-            List<InputStream> files = requestContent.getFiles();
+            Map<String, InputStream> files = requestContent.getFiles();
 
             ItemDAO itemDAO = new ItemDAOImpl();
             PhotoDAO photoDAO = new PhotoDAOImpl();
@@ -108,7 +101,8 @@ public class ItemReceiverImpl implements ItemReceiver {
 
         ItemValidator itemValidator = new ItemValidator();
 
-        if (itemValidator.validateItemParam(newTitle, newStartPrice, newBlitzPrice, newStartDate, newCloseDate)) {
+        if (itemValidator.validateItemParam(newTitle, newDescription,
+                newStartPrice, newBlitzPrice, newStartDate, newCloseDate)) {
             Item item = (Item) requestContent.getSessionAttribute(RequestConstant.ITEM);
             item.setName(newTitle);
             item.setDescription(newDescription);
@@ -137,7 +131,7 @@ public class ItemReceiverImpl implements ItemReceiver {
     public void addPhotos(RequestContent requestContent) throws ReceiverException {
         Item item = (Item) requestContent.getSessionAttribute(RequestConstant.ITEM);
 
-        List<InputStream> files = requestContent.getFiles();
+        Map<String, InputStream> files = requestContent.getFiles();
         if (files != null) {
 
             PhotoDAO photoDAO = new PhotoDAOImpl();
@@ -367,12 +361,20 @@ public class ItemReceiverImpl implements ItemReceiver {
         itemDAO.update(item);
     }
 
-    private void savePhotos(PhotoDAO photoDAO, List<InputStream> files, long itemId)
+    private void savePhotos(PhotoDAO photoDAO, Map<String, InputStream> files, long itemId)
             throws DAOException, MethodNotSupportedException, PhotoLoadingException {
         PhotoLoader photoLoader = new PhotoLoader();
-        for (int i = 0; i < files.size(); i++) {
-            photoDAO.create(new Photo(photoLoader.savePhotoToServer(files.get(i), i), itemId));
+        PhotoValidator photoValidator = new PhotoValidator();
+
+        int i = 0;
+        for (Map.Entry<String, InputStream> file : files.entrySet()) {
+            if (photoValidator.validatePhotoExtension(file.getKey())) {
+                photoDAO.create(new Photo(photoLoader.savePhotoToServer(file.getValue(), i++), itemId));
+            } else {
+                LOGGER.log(Level.WARN, photoValidator.getValidationMessage());
+            }
         }
+
     }
 
 }

@@ -1,21 +1,23 @@
 (function () {
 
-    var deleteConfirmed = false;
     var deleteItemForm = document.getElementById("deleteItemForm");
-    deleteItemForm.addEventListener("click", function (event) {
-        if (deleteConfirmed) {
-            deleteConfirmed = false;
-        }
-        else {
-            event.preventDefault();
-            confirmAction(function (result) {
-                if (result) {
-                    deleteConfirmed = true;
-                    deleteItemForm.submit();
-                }
-            });
-        }
-    });
+    if (deleteItemForm) {
+        var deleteConfirmed = false;
+        deleteItemForm.addEventListener("click", function (event) {
+            if (deleteConfirmed) {
+                deleteConfirmed = false;
+            }
+            else {
+                event.preventDefault();
+                confirmAction(function (result) {
+                    if (result) {
+                        deleteConfirmed = true;
+                        deleteItemForm.submit();
+                    }
+                });
+            }
+        });
+    }
 
 
     var photosContainer = document.getElementById("photos");

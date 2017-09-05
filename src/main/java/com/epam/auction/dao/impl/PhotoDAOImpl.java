@@ -30,13 +30,12 @@ public class PhotoDAOImpl extends GenericDAOImpl<Photo> implements PhotoDAO {
     Photo extractEntity(ResultSet resultSet) throws SQLException {
         return new Photo(
                 resultSet.getLong(TableConstant.PHOTO_COLUMN_ID),
-                resultSet.getString(TableConstant.PHOTO_COLUMN_FILE_NAME),
                 resultSet.getLong(TableConstant.PHOTO_COLUMN_ITEM_ID));
     }
 
     @Override
     void defineQueryAttributes(Photo entity, PreparedStatement statement) throws SQLException {
-        statement.setString(1, entity.getFileName());
+        statement.setLong(1, entity.getId());
         statement.setLong(2, entity.getItemId());
     }
 

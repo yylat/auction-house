@@ -67,6 +67,26 @@ public class User extends Entity {
     }
 
     /**
+     * Constructs user with username, password, last name,
+     * first name, phone number and email.
+     *
+     * @param username    username
+     * @param password    password
+     * @param lastName    last name
+     * @param firstName   first name
+     * @param phoneNumber phone number
+     * @param email       email
+     */
+    public User(String username, String password, String lastName, String firstName, String phoneNumber, String email) {
+        this.username = username;
+        this.password = password;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+    }
+
+    /**
      * Constructs user with username, password, last name, middle name,
      * first name, phone number and email.
      *

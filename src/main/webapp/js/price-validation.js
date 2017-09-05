@@ -4,16 +4,16 @@
     var minBlitzPrice;
 
     startPriceInput.addEventListener("change", function () {
-        minBlitzPrice = startPriceInput.value;
+        minBlitzPrice = parseInt(startPriceInput.value);
         validateBlitzPrice();
     });
 
     blitzPriceInput.addEventListener("change", validateBlitzPrice);
 
     function validateBlitzPrice() {
-        if (minBlitzPrice > blitzPriceInput.value) {
+        if (minBlitzPrice > parseInt(blitzPriceInput.value)) {
             blitzPriceInput.setCustomValidity(blitzPriceInput.getAttribute("data-blitz-rule"));
-        }else{
+        } else {
             blitzPriceInput.setCustomValidity("");
         }
     }

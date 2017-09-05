@@ -26,20 +26,37 @@ public class PhotoLoader {
         }
     }
 
-    public String savePhotoToServer(InputStream photoInputStream, int index) throws PhotoLoadingException {
+    public long savePhotoToServer(InputStream photoInputStream, int index) throws PhotoLoadingException {
         String fileName = currentDate + index;
         try {
             Files.copy(photoInputStream, Paths.get(UPLOAD_PATH + fileName));
         } catch (IOException e) {
             throw new PhotoLoadingException("Error trying to save photo.", e);
         }
-        return fileName;
+        return Long.valueOf(fileName);
     }
 
-    public String loadPhotoAsString(String fileName) throws PhotoLoadingException {
+    public void deletePhoto(String photoName) throws PhotoLoadingException {
+        String photoPath = UPLOAD_PATH + photoName;
+
+        File photo = new File(photoPath);
+
+        if (!photo.exists())
+            throw new PhotoLoadingException("Delete error: no such file or directory.");
+
+        if (!photo.canWrite())
+            throw new PhotoLoadingException("Delete error: write protected path.");
+
+        boolean result = photo.delete();
+
+        if (!result)
+            throw new PhotoLoadingException("Deletion failed.");
+    }
+
+    public String loadPhotoAsString(long photoId) throws PhotoLoadingException {
         String result;
 
-        try (InputStream inputStream = new FileInputStream(UPLOAD_PATH + fileName)) {
+        try (InputStream inputStream = new FileInputStream(UPLOAD_PATH + photoId)) {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             byte[] buffer = new byte[1024];
             int length;

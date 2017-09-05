@@ -11,6 +11,8 @@ public class ItemValidator extends Validator {
 
     private static final String NAME_PATTERN = "['A-Za-zА-Яа-яЁё ]{2,45}";
 
+    private static final String DESCRIPTION_ANTI_PATTERN = "<[^>]*>";
+
     private static final BigDecimal MIN_PRICE = BigDecimal.ZERO;
     private static final BigDecimal MAX_PRICE = new BigDecimal(999999999999999999999.0);
 
@@ -27,14 +29,16 @@ public class ItemValidator extends Validator {
     }
 
     public boolean validateItemParam(Item item) {
-        return validateItemParam(item.getName(),
+        return validateItemParam(item.getName(), item.getDescription(),
                 item.getStartPrice(), item.getBlitzPrice(),
                 item.getStartDate(), item.getCloseDate());
     }
 
-    public boolean validateItemParam(String name, BigDecimal startPrice, BigDecimal blitzPrice,
+    public boolean validateItemParam(String name, String description,
+                                     BigDecimal startPrice, BigDecimal blitzPrice,
                                      Date startDate, Date closeDate) {
         return validate(name, NAME_PATTERN) &&
+                !validate(description, DESCRIPTION_ANTI_PATTERN) &&
                 validatePrice(startPrice) &&
                 validatePrice(blitzPrice) &&
                 validateStartDate(startDate) &&

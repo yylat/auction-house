@@ -46,6 +46,7 @@ public class BidReceiverImpl implements BidReceiver {
                     if (bidValue.compareTo(user.getBalance()) <= 0) {
                         Bid bid = new Bid(itemId, user.getId(), bidValue);
                         bidDAO.create(bid);
+                        user.setBalance(user.getBalance().subtract(bidValue));
                         updateSessionItem(requestContent, bidValue);
                         requestContent.setSessionAttribute(RequestConstant.MESSAGE,
                                 messageProvider.getMessage(MessageProvider.BID_MADE_SUCCESSFULLY));

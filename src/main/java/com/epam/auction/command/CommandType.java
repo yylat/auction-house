@@ -57,10 +57,10 @@ public enum CommandType {
             ((ItemReceiver) getCommand().getReceiver()).loadUserItems(requestContent);
         }
     },
-    LOAD_CATEGORIES(new LoadUserItemsCommand(new ItemReceiverImpl())) {
+    LOAD_CATEGORIES(new LoadUserItemsCommand(new ItemCategoryReceiverImpl())) {
         @Override
         public void doReceiver(RequestContent requestContent) throws ReceiverException {
-            ((ItemReceiver) getCommand().getReceiver()).loadCategories(requestContent);
+            ((ItemCategoryReceiver) getCommand().getReceiver()).loadCategories(requestContent);
         }
     },
     CREATE_ITEM(new CreateItemCommand(new ItemReceiverImpl())) {

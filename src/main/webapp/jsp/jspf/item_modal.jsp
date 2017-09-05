@@ -20,7 +20,7 @@
 <fmt:message bundle="${msg}" key="form.chooseFiles" var="chooseFiles"/>
 <fmt:message bundle="${msg}" key="form.addButton" var="addButton"/>
 <fmt:message bundle="${msg}" key="form.blitzPriceRule" var="blitzPriceRule"/>
-
+<fmt:message bundle="${msg}" key="form.categoryRule" var="categoryRule"/>
 
 <div id="addItemModal" class="w3-modal pro-modal">
     <div class="w3-modal-content w3-card-4 w3-animate-zoom modal-content">
@@ -53,8 +53,8 @@
 
                     <div class="w3-container bottom-padding">
                         <label><b>${description}</b></label>
-                        <textarea class="w3-input w3-border" name="description" required
-                                  title="${descriptionRule}"></textarea>
+                        <textarea id="descriptionTextarea" class="w3-input w3-border" name="description"
+                                  required title="${descriptionRule}"></textarea>
                     </div>
                 </div>
 
@@ -94,7 +94,8 @@
                     <div class="w3-container bottom-padding">
                         <label for="categoriesListForAdd"><b>${category}</b></label>
 
-                        <select name="category" id="categoriesListForAdd" class="w3-select">
+                        <select name="category" id="categoriesListForAdd" class="w3-select"
+                                required title="${categoryRule}">
                             <option value="" disabled selected>${chooseCategory}</option>
                         </select>
 
@@ -105,7 +106,7 @@
                     <div class="w3-container bottom-padding">
                         <label><b>${photos}</b></label>
                         <input name="file" type="file" id="fileInput" class="inputfile"
-                               title="${photosRule}"
+                               accept="image/jpg,image/jpeg,image/png,image/gif" title="${photosRule}"
                                data-multiple-caption="{count} ${messageFilesSelected}"
                                data-size-message="${photosSizeRule}"
                                data-rule-message="${photosRule}" multiple/>

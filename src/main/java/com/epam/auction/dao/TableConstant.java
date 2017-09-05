@@ -174,22 +174,21 @@ public final class TableConstant {
     //    Photo table
 
     public static final String PHOTO_COLUMN_ID = "photo_id";
-    public static final String PHOTO_COLUMN_FILE_NAME = "file_name";
     public static final String PHOTO_COLUMN_ITEM_ID = "item_id";
 
     public static final String PHOTO_QUERY_FIND_ALL =
-            "SELECT `photo_id`, `file_name`, `item_id` FROM `photo`";
+            "SELECT `photo_id`, `item_id` FROM `photo`";
     public static final String PHOTO_QUERY_FIND_BY_ID =
-            "SELECT `photo_id`, `file_name`, `item_id` FROM `photo` WHERE `photo_id` = ?";
+            "SELECT `photo_id`, `item_id` FROM `photo` WHERE `photo_id` = ?";
     public static final String PHOTO_QUERY_DELETE =
             "DELETE FROM `photo` WHERE `photo_id` = ?";
     public static final String PHOTO_QUERY_CREATE =
-            "INSERT INTO `photo`(`file_name`, `item_id`) VALUES (?, ?)";
+            "INSERT INTO `photo`(`photo_id`, `item_id`) VALUES (?, ?)";
 
     public static final String PHOTO_QUERY_FIND_ITEM_PHOTO =
-            "SELECT `photo_id`, `file_name`, `item_id` FROM `photo` WHERE `item_id` = ? LIMIT 1";
+            "SELECT `photo_id`, `item_id` FROM `photo` WHERE `item_id` = ? LIMIT 1";
     public static final String PHOTO_QUERY_FIND_ALL_FOR_ITEM =
-            "SELECT `photo_id`, `file_name`, `item_id` FROM `photo` WHERE `item_id` = ?";
+            "SELECT `photo_id`, `item_id` FROM `photo` WHERE `item_id` = ?";
 
     public static final String PHOTO_QUERY_DELETE_ITEM_PHOTOS =
             "DELETE FROM `photo` WHERE `item_id` = ?";

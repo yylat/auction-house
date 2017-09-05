@@ -11,10 +11,12 @@ public class UserValidator extends Validator {
     private static final String PHONE_PATTERN = "[+][0-9]{11,12}";
 
     public boolean validateSignUpParam(User user) {
+        if (user.getMiddleName() != null && !user.getMiddleName().isEmpty()) {
+            return validate(user.getMiddleName(), NAME_PATTERN);
+        }
         return validate(user.getUsername(), USERNAME_PATTERN) &&
                 validate(user.getPassword(), PASSWORD_PATTERN) &&
                 validate(user.getLastName(), NAME_PATTERN) &&
-                validate(user.getMiddleName(), NAME_PATTERN) &&
                 validate(user.getFirstName(), NAME_PATTERN) &&
                 validate(user.getEmail(), EMAIL_PATTERN) &&
                 validate(user.getPhoneNumber(), PHONE_PATTERN);

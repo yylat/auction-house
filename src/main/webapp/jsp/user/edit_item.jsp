@@ -144,7 +144,7 @@
                     <div class="w3-col m6 w3-container">
                         <label><b>${photos}</b></label>
                         <input name="file" type="file" id="fileInput" class="inputfile"
-                               title="${photosRule}"
+                               title="${photosRule}" accept="image/jpg,image/jpeg,image/png,image/gif"
                                data-multiple-caption="{count} ${messageFilesSelected}"
                                data-size-message="${photosSizeRule}"
                                data-rule-message="${photosRule}" multiple/>

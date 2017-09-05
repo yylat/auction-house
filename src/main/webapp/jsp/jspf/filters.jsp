@@ -84,6 +84,7 @@
             <label>
                 <input class="w3-radio" type="radio" name="order-type" value="desc" checked>${orderDesc}
             </label>
+            <br>
             <label>
                 <input class="w3-radio" type="radio" name="order-type" value="asc">${orderAsc}
             </label>

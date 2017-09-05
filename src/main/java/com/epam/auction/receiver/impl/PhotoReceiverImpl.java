@@ -32,7 +32,7 @@ public class PhotoReceiverImpl implements PhotoReceiver {
             photo = photoDAO.findItemPhoto(itemId);
             if (photo != null) {
                 PhotoLoader photoLoader = new PhotoLoader();
-                requestContent.setAjaxResponse(photoLoader.loadPhotoAsString(photo.getFileName()));
+                requestContent.setAjaxResponse(photoLoader.loadPhotoAsString(photo.getId()));
             }
         } catch (DAOException | PhotoLoadingException e) {
             throw new ReceiverException(e);
@@ -51,7 +51,7 @@ public class PhotoReceiverImpl implements PhotoReceiver {
             List<Photo> photos = photoDAO.findAll(itemId);
             if (!photos.isEmpty()) {
                 for (Photo photo : photos) {
-                    photosFiles.add(photoLoader.loadPhotoAsString(photo.getFileName()));
+                    photosFiles.add(photoLoader.loadPhotoAsString(photo.getId()));
                 }
             }
             requestContent.setAjaxResponse(JSONConverter.objectAsJson(photosFiles));
@@ -70,7 +70,7 @@ public class PhotoReceiverImpl implements PhotoReceiver {
         try (DAOManager daoManager = new DAOManager(photoDAO)) {
             PhotoLoader photoLoader = new PhotoLoader();
             for (Photo photo : photoDAO.findAll(itemId)) {
-                photos.put(photo.getId(), photoLoader.loadPhotoAsString(photo.getFileName()));
+                photos.put(photo.getId(), photoLoader.loadPhotoAsString(photo.getId()));
             }
             requestContent.setAjaxResponse(JSONConverter.objectAsJson(photos));
         } catch (DAOException | PhotoLoadingException e) {
@@ -88,12 +88,14 @@ public class PhotoReceiverImpl implements PhotoReceiver {
 
             daoManager.beginTransaction();
 
+            PhotoLoader photoLoader = new PhotoLoader();
             try {
-                for (String photoForDelete : photosToDelete) {
-                    photoDAO.delete(Integer.valueOf(photoForDelete));
+                for (String photoToDelete : photosToDelete) {
+                    photoDAO.delete(Long.valueOf(photoToDelete));
+                    photoLoader.deletePhoto(photoToDelete);
                 }
                 daoManager.commit();
-            } catch (DAOException | MethodNotSupportedException e) {
+            } catch (DAOException | PhotoLoadingException | MethodNotSupportedException e) {
                 daoManager.rollback();
                 throw new ReceiverException(e);
             } finally {

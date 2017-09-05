@@ -1,10 +1,13 @@
 package com.epam.auction.controller;
 
 import com.epam.auction.command.AbstractCommand;
+import com.epam.auction.command.CommandFactory;
 import com.epam.auction.command.PageGuide;
 import com.epam.auction.command.TransferMethod;
 import com.epam.auction.receiver.RequestConstant;
-import com.epam.auction.command.CommandFactory;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -15,8 +18,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Provides service for uploading photos to server.
@@ -26,6 +29,8 @@ import java.util.List;
         maxFileSize = 1024 * 1024 * 5,
         maxRequestSize = 1024 * 1024 * 20)
 public class PhotoUploadController extends HttpServlet {
+
+    private static final Logger LOGGER = LogManager.getLogger();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -42,6 +47,8 @@ public class PhotoUploadController extends HttpServlet {
      * @see MainController#processRequest(HttpServletRequest, HttpServletResponse)
      */
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        final long maxFileSize = 2 * 1024 * 1024;
+
         RequestContent requestContent = new RequestContent();
 
         requestContent.extractValues(request);
@@ -49,10 +56,14 @@ public class PhotoUploadController extends HttpServlet {
         CommandFactory commandFactory = new CommandFactory();
         AbstractCommand command = commandFactory.initCommand(requestContent);
 
-        List<InputStream> files = new ArrayList<>();
+        Map<String, InputStream> files = new HashMap<>();
         for (Part part : request.getParts()) {
             if (part.getSubmittedFileName() != null && part.getSize() > 0) {
-                files.add(part.getInputStream());
+                if (maxFileSize > part.getSize()) {
+                    files.put(part.getSubmittedFileName(), part.getInputStream());
+                } else {
+                    LOGGER.log(Level.WARN, "Unacceptable photo file size.");
+                }
             }
         }
         if (!files.isEmpty()) {

@@ -4,7 +4,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -38,7 +37,7 @@ public class RequestContent {
     /**
      * Contains uploaded files.
      */
-    private List<InputStream> files;
+    private Map<String, InputStream> files;
 
     /**
      * Extracts request attributes, parameters and session attributes
@@ -194,7 +193,7 @@ public class RequestContent {
      *
      * @return uploaded files
      */
-    public List<InputStream> getFiles() {
+    public Map<String, InputStream> getFiles() {
         return files;
     }
 
@@ -203,7 +202,7 @@ public class RequestContent {
      *
      * @param files uploaded files
      */
-    void setFiles(List<InputStream> files) {
+    void setFiles(Map<String, InputStream> files) {
         this.files = files;
     }
 

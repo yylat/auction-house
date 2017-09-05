@@ -49,10 +49,14 @@ public class UserReceiverImpl implements UserReceiver {
                 requestContent.getRequestParameter(RequestConstant.USERNAME)[0],
                 requestContent.getRequestParameter(RequestConstant.PASSWORD)[0],
                 requestContent.getRequestParameter(RequestConstant.LAST_NAME)[0],
-                requestContent.getRequestParameter(RequestConstant.MIDDLE_NAME)[0],
                 requestContent.getRequestParameter(RequestConstant.FIRST_NAME)[0],
                 requestContent.getRequestParameter(RequestConstant.PHONE_NUMBER)[0],
                 requestContent.getRequestParameter(RequestConstant.EMAIL)[0]);
+
+        String middleName = requestContent.getRequestParameter(RequestConstant.MIDDLE_NAME)[0];
+        if (middleName != null && !middleName.isEmpty()) {
+            user.setMiddleName(middleName);
+        }
 
         UserValidator validator = new UserValidator();
         if (validator.validateSignUpParam(user)) {
