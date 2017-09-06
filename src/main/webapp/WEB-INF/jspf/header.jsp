@@ -1,4 +1,3 @@
-
 <fmt:message bundle="${msg}" key="label.signIn" var="signIn"/>
 <fmt:message bundle="${msg}" key="label.signUp" var="signUp"/>
 <fmt:message bundle="${msg}" key="label.close" var="close"/>
@@ -51,7 +50,9 @@
                             </div>
 
                             <div class="pro-container w3-left-align w3-border-bottom pro-padding-bottom pro-padding-left">
-                                    ${balance}: <span class="text-on-color money">${sessionScope.user.balance}</span>
+                                    ${balance}: <span class="text-on-color"><ctg:money
+
+                                    value="${sessionScope.user.balance}"/></span>
                             </div>
 
                             <a href="${pageContext.request.contextPath}/jsp/user/account.jsp"

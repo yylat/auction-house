@@ -20,27 +20,27 @@
 
 <html>
 
-<%@ include file="/jsp/jspf/head.jsp" %>
+<%@ include file="/WEB-INF/jspf/head.jsp" %>
 
 <body>
 
-<%@ include file="/jsp/jspf/header.jsp" %>
+<%@ include file="/WEB-INF/jspf/header.jsp" %>
 
 <main>
-    <%@ include file="/jsp/jspf/sidebar.jsp" %>
+    <%@ include file="/WEB-INF/jspf/sidebar.jsp" %>
     <div class="w3-main main-left-margin">
 
 
         <div class="content">
             <ctg:items command="load-purchased-items" title="${purchasedItems}">
-                <%@include file="/jsp/jspf/items.jsp" %>
+                <%@include file="/WEB-INF/jspf/items.jsp" %>
             </ctg:items>
         </div>
 
     </div>
 </main>
 
-<%@ include file="/jsp/jspf/footer.jsp" %>
+<%@ include file="/WEB-INF/jspf/footer.jsp" %>
 
 </body>
 

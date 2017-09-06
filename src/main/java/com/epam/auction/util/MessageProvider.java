@@ -3,6 +3,9 @@ package com.epam.auction.util;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+/**
+ * Provides access to localized messages from properties file.
+ */
 public class MessageProvider {
 
     public static final String BID_MADE_SUCCESSFULLY = "message.bidMadeSuccessfully";
@@ -15,11 +18,22 @@ public class MessageProvider {
 
     private ResourceBundle resourceBundle;
 
+    /**
+     * Constructs MessageProvider for locale.
+     *
+     * @param locale locale
+     */
     public MessageProvider(Locale locale) {
         this.resourceBundle = ResourceBundle.getBundle(BUNDLE_NAME, locale,
                 ResourceBundle.Control.getNoFallbackControl(ResourceBundle.Control.FORMAT_DEFAULT));
     }
 
+    /**
+     * Returns message with key from propeties file.
+     *
+     * @param key message key
+     * @return message with key
+     */
     public String getMessage(String key) {
         return resourceBundle.getString(key);
     }

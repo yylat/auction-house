@@ -1,4 +1,4 @@
-package com.epam.auction.receiver;
+package com.epam.auction.util;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -25,16 +25,17 @@ public class SiteManager {
     private static final int DEFAULT_NOTIFICATIONS_FOR_PAGE = 20;
     private static final int DEFAULT_USERS_FOR_PAGE = 10;
 
-    private static SiteManager instance = new SiteManager();
-
     private String uploadPath;
     private int itemsForPage;
     private int bidsForPage;
     private int notificationsForPage;
     private int usersForPage;
 
-    private SiteManager() {
+    private static class Holder {
+        private static final SiteManager INSTANCE = new SiteManager();
+    }
 
+    private SiteManager() {
         ResourceBundle resourceBundle = ResourceBundle.getBundle(BUNDLE_NAME);
 
         try {
@@ -72,7 +73,7 @@ public class SiteManager {
     }
 
     public static SiteManager getInstance() {
-        return instance;
+        return Holder.INSTANCE;
     }
 
     public String getUploadPath() {
@@ -94,4 +95,5 @@ public class SiteManager {
     public int getUsersForPage() {
         return usersForPage;
     }
+
 }

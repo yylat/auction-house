@@ -6,24 +6,18 @@ import com.epam.auction.dao.ItemDAO;
 import com.epam.auction.dao.impl.BidDAOImpl;
 import com.epam.auction.dao.impl.ItemDAOImpl;
 import com.epam.auction.db.DAOManager;
-import com.epam.auction.entity.Bid;
-import com.epam.auction.entity.Item;
-import com.epam.auction.entity.ItemStatus;
-import com.epam.auction.entity.User;
+import com.epam.auction.entity.*;
 import com.epam.auction.exception.DAOException;
 import com.epam.auction.exception.MethodNotSupportedException;
 import com.epam.auction.exception.ReceiverException;
 import com.epam.auction.receiver.BidReceiver;
-import com.epam.auction.receiver.PaginationHelper;
 import com.epam.auction.receiver.RequestConstant;
-import com.epam.auction.receiver.SiteManager;
+import com.epam.auction.util.SiteManager;
 import com.epam.auction.util.MessageProvider;
 
 import java.math.BigDecimal;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class BidReceiverImpl implements BidReceiver {
 
@@ -89,12 +83,14 @@ public class BidReceiverImpl implements BidReceiver {
                 List<Bid> bids = bidDAO.findUsersBids(user.getId(),
                         paginationHelper.findOffset(), paginationHelper.getLimit());
 
-                Map<Bid, Item> bidItemMap = new LinkedHashMap<>();
-                for (Bid bid : bids) {
-                    bidItemMap.put(bid, itemDAO.findEntityById(bid.getItemId()));
+                Set<Long> itemsIds = bids.stream().map(Bid::getItemId).collect(Collectors.toSet());
+                Map<Long, Item> items = new HashMap<>();
+                for (long itemId : itemsIds) {
+                    items.put(itemId, itemDAO.findEntityById(itemId));
                 }
 
-                requestContent.setRequestAttribute(RequestConstant.BID_ITEM_MAP, bidItemMap);
+                requestContent.setRequestAttribute(RequestConstant.BIDS, bids);
+                requestContent.setRequestAttribute(RequestConstant.ITEMS, items);
             } catch (DAOException e) {
                 throw new ReceiverException(e);
             }

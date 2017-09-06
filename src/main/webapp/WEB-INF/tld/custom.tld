@@ -10,11 +10,26 @@
     <short-name>ctg</short-name>
     <uri>customtags</uri>
     <tag>
-        <name>initials</name>
-        <tag-class>com.epam.auction.tag.InitialsTag</tag-class>
+        <name>money</name>
+        <tag-class>com.epam.auction.tag.MoneyTag</tag-class>
         <body-content>empty</body-content>
         <attribute>
-            <name>user</name>
+            <name>value</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+    <tag>
+        <name>date</name>
+        <tag-class>com.epam.auction.tag.DateTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>date</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>locale</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>

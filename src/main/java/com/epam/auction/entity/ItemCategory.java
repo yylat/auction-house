@@ -73,16 +73,18 @@ public class ItemCategory extends Entity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
 
         ItemCategory that = (ItemCategory) o;
 
-        return parentItemCategoryId == that.parentItemCategoryId &&
-                (description != null ? description.equals(that.description) : that.description == null);
+        return parentItemCategoryId == that.parentItemCategoryId
+                && (description != null ? description.equals(that.description) : that.description == null);
     }
 
     @Override
     public int hashCode() {
-        int result = description != null ? description.hashCode() : 0;
+        int result = super.hashCode();
+        result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (int) (parentItemCategoryId ^ (parentItemCategoryId >>> 32));
         return result;
     }

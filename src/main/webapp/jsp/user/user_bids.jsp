@@ -16,7 +16,7 @@
 <fmt:message bundle="${msg}" key="item.actualPrice" var="actualPrice"/>
 <fmt:message bundle="${msg}" key="form.yourBid" var="yourBid"/>
 
-<c:if test="${requestScope.bidItemMap == null}">
+<c:if test="${requestScope.bids == null}">
     <jsp:forward page="${pageContext.request.contextPath}/controller">
         <jsp:param name="command" value="load-bids"/>
     </jsp:forward>
@@ -24,15 +24,15 @@
 
 <html>
 
-<%@ include file="/jsp/jspf/head.jsp" %>
+<%@ include file="/WEB-INF/jspf/head.jsp" %>
 
 <body>
 
-<%@ include file="/jsp/jspf/header.jsp" %>
+<%@ include file="/WEB-INF/jspf/header.jsp" %>
 
 <main>
 
-    <%@ include file="/jsp/jspf/sidebar.jsp" %>
+    <%@ include file="/WEB-INF/jspf/sidebar.jsp" %>
 
     <div class="w3-main main-left-margin">
 
@@ -51,7 +51,7 @@
             <div class="w3-row-padding">
 
                 <c:choose>
-                    <c:when test="${empty requestScope.bidItemMap}">
+                    <c:when test="${empty requestScope.bids}">
                         <p>${noBidsYet}</p>
                     </c:when>
                     <c:otherwise>
@@ -73,26 +73,26 @@
                                     </tr>
                                     </thead>
 
-                                    <c:forEach var="entry" items="${requestScope.bidItemMap}">
+                                    <c:forEach var="bid" items="${requestScope.bids}">
                                         <tr>
                                             <td>
                                                 <form action="${pageContext.request.contextPath}/controller">
                                                     <input type="hidden" name="command" value="load-item"/>
                                                     <input type="hidden" name="itemId"
-                                                           value="${entry.value.id}"/>
+                                                           value="${requestScope.items[bid.itemId].id}"/>
                                                     <button class="link-button">
-                                                            ${entry.value.name}
+                                                            ${requestScope.items[bid.itemId].name}
                                                     </button>
                                                 </form>
                                             </td>
                                             <td>
-                                                <div class="text-on-color money">
-                                                        ${entry.value.actualPrice}
+                                                <div class="text-on-color">
+                                                    <ctg:money value="${requestScope.items[bid.itemId].actualPrice}"/>
                                                 </div>
                                             </td>
                                             <td>
-                                                <div class="text-on-color money">
-                                                        ${entry.key.bidValue}
+                                                <div class="text-on-color">
+                                                    <ctg:money value="${bid.bidValue}"/>
                                                 </div>
                                             </td>
                                         </tr>
@@ -123,7 +123,7 @@
 
 </main>
 
-<%@ include file="/jsp/jspf/footer.jsp" %>
+<%@ include file="/WEB-INF/jspf/footer.jsp" %>
 
 <script src="${pageContext.request.contextPath}/js/pagination.js"></script>
 

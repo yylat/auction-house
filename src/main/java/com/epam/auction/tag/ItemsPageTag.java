@@ -6,13 +6,32 @@ import javax.servlet.jsp.tagext.BodyContent;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 import java.io.IOException;
 
+/**
+ * Provides service to process body of the tag: paste page title
+ * and command for filter and pagination in specific places.
+ */
 public class ItemsPageTag extends BodyTagSupport {
 
+    /**
+     * Pattern to insert command for pagination.
+     */
     private static final String PAGINATION_COMMAND_PATTERN = "data-command=\"\"";
+    /**
+     * Pattern to insert command for filter.
+     */
     private static final String FILTER_COMMAND_PATTERN = "name=\"command\" value=\"\"";
+    /**
+     * Pattern to insert title.
+     */
     private static final String TITLE_PATTERN = "//title-place//";
 
+    /**
+     * Page title.
+     */
     private String title;
+    /**
+     * Command name.
+     */
     private String command;
 
     public void setTitle(String title) {

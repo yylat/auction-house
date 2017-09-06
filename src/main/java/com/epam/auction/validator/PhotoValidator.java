@@ -14,8 +14,6 @@ public class PhotoValidator extends Validator {
         ACCEPTABLE_PHOTO_TYPES.add("gif");
     }
 
-    private static final double MAX_PHOTO_SIZE = 2.1 * 1024 * 1024;
-
     public boolean validatePhotoExtension(String photoName) {
         String extension = photoName.substring(photoName.lastIndexOf(".") + 1).toLowerCase();
         if (ACCEPTABLE_PHOTO_TYPES.contains(extension)) {

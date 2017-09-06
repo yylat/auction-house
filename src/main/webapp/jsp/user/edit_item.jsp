@@ -31,15 +31,15 @@
 
 <html>
 
-<%@ include file="/jsp/jspf/head.jsp" %>
+<%@ include file="/WEB-INF/jspf/head.jsp" %>
 
 <body>
 
-<%@ include file="/jsp/jspf/header.jsp" %>
+<%@ include file="/WEB-INF/jspf/header.jsp" %>
 
 <main>
 
-    <%@ include file="/jsp/jspf/sidebar.jsp" %>
+    <%@ include file="/WEB-INF/jspf/sidebar.jsp" %>
 
     <div class="w3-main main-left-margin">
 
@@ -61,7 +61,7 @@
                     <div class="w3-col m6 w3-container bottom-padding">
                         <label><b>${itemTitle}</b></label>
                         <input class="w3-input" value="${sessionScope.item.name}" name="title" required
-                               pattern="[A-Za-zА-Яа-яЁё0-9-_ ]{2,40}"
+                               pattern="['A-Za-zА-Яа-яЁё0-9_\\- ]{2,45}"
                                title="${itemTitleRule}"/>
                     </div>
                 </div>
@@ -166,8 +166,8 @@
 
 </main>
 
-<%@ include file="/jsp/jspf/message.jsp" %>
-<%@ include file="/jsp/jspf/footer.jsp" %>
+<%@ include file="/WEB-INF/jspf/message.jsp" %>
+<%@ include file="/WEB-INF/jspf/footer.jsp" %>
 
 <script src="${pageContext.request.contextPath}/js/price-validation.js"></script>
 <script src="${pageContext.request.contextPath}/js/date-validation.js"></script>

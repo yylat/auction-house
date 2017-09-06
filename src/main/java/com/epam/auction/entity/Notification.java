@@ -124,6 +124,7 @@ public class Notification extends Entity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
 
         Notification that = (Notification) o;
 
@@ -135,7 +136,8 @@ public class Notification extends Entity {
 
     @Override
     public int hashCode() {
-        int result = type != null ? type.hashCode() : 0;
+        int result = super.hashCode();
+        result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (int) (userId ^ (userId >>> 32));
         result = 31 * result + (int) (itemId ^ (itemId >>> 32));
         result = 31 * result + (dateTime != null ? dateTime.hashCode() : 0);
@@ -172,7 +174,7 @@ public class Notification extends Entity {
          * Bid won.
          * Item sold.
          */
-        BID_WIN,
+        BID_WON,
         /**
          * Bid was beaten.
          */

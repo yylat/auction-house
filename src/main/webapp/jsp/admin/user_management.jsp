@@ -29,15 +29,15 @@
 
 <html>
 
-<%@ include file="/jsp/jspf/head.jsp" %>
+<%@ include file="/WEB-INF/jspf/head.jsp" %>
 
 <body>
 
-<%@ include file="/jsp/jspf/header.jsp" %>
+<%@ include file="/WEB-INF/jspf/header.jsp" %>
 
 <main>
 
-    <%@ include file="/jsp/jspf/sidebar.jsp" %>
+    <%@ include file="/WEB-INF/jspf/sidebar.jsp" %>
 
     <div class="w3-main main-left-margin">
 
@@ -52,7 +52,7 @@
                 <div class="w3-row w3-padding w3-margin-left">
                     <div class="w3-col l5 m7 s10">
                         <input class="w3-input back-back-color" placeholder="${search}" name="username" required
-                               pattern="[A-Za-z][A-Za-z0-9.//-]{1,20}"
+                               pattern="[A-Za-z][A-Za-z0-9.\\-]{1,20}"
                                title="${usernameRule}"/>
                     </div>
                     <div class="w3-col s1">
@@ -132,7 +132,7 @@
 
 </main>
 
-<%@ include file="/jsp/jspf/footer.jsp" %>
+<%@ include file="/WEB-INF/jspf/footer.jsp" %>
 
 <script src="${pageContext.request.contextPath}/js/pagination.js"></script>
 <script src="${pageContext.request.contextPath}/js/controller/search.controller.js"></script>

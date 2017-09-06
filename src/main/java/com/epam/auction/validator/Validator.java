@@ -15,7 +15,7 @@ abstract class Validator {
     }
 
     boolean validate(String verifiable, String pattern) {
-        if (Pattern.compile(pattern).matcher(verifiable).find()) {
+        if (Pattern.compile(pattern).matcher(verifiable).matches()) {
             return true;
         } else {
             this.validationMessage = "Not valid parameter: [" + verifiable + "].";

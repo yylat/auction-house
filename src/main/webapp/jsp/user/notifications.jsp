@@ -17,11 +17,11 @@
 <fmt:message bundle="${msg}" key="notification.item_sold" var="item_sold"/>
 <fmt:message bundle="${msg}" key="notification.no_bids_for_item" var="no_bids_for_item"/>
 <fmt:message bundle="${msg}" key="notification.seller_canceled_auction" var="seller_canceled_auction"/>
-<fmt:message bundle="${msg}" key="notification.bid_win" var="bid_win"/>
+<fmt:message bundle="${msg}" key="notification.bid_won" var="bid_won"/>
 <fmt:message bundle="${msg}" key="notification.bid_beaten" var="bid_beaten"/>
 
 
-<c:if test="${requestScope.notificationItemMap == null}">
+<c:if test="${requestScope.notifications == null}">
     <jsp:forward page="${pageContext.request.contextPath}/controller">
         <jsp:param name="command" value="load-notifications"/>
     </jsp:forward>
@@ -29,15 +29,15 @@
 
 <html>
 
-<%@ include file="/jsp/jspf/head.jsp" %>
+<%@ include file="/WEB-INF/jspf/head.jsp" %>
 
 <body>
 
-<%@ include file="/jsp/jspf/header.jsp" %>
+<%@ include file="/WEB-INF/jspf/header.jsp" %>
 
 <main>
 
-    <%@ include file="/jsp/jspf/sidebar.jsp" %>
+    <%@ include file="/WEB-INF/jspf/sidebar.jsp" %>
 
     <div class="w3-main main-left-margin">
 
@@ -55,33 +55,39 @@
 
             <div class="w3-container" id="notificationsList">
                 <c:choose>
-                    <c:when test="${empty requestScope.notificationItemMap}">
+                    <c:when test="${empty requestScope.notifications}">
                         <p>${noNotificationsYet}</p>
                     </c:when>
                     <c:otherwise>
-                        <div class="pro-margin-bottom">
-                            <c:forEach var="entry" items="${requestScope.notificationItemMap}">
+                        <div class="w3-margin-top pro-margin-bottom">
 
-                                <div class="w3-container notification w3-margin">
-                                    <form action="${pageContext.request.contextPath}/controller">
-                                        <input type="hidden" name="command" value="load-item"/>
-                                        <input type="hidden" name="itemId"
-                                               value="${entry.value.id}"/>
-                                        <div class="w3-container w3-cell">
-                                                ${entry.key.dateTime}
-                                        </div>
-                                        <div class="w3-container w3-cell">
-                                                ${pageScope[entry.key.type.toString().toLowerCase()]}
-                                        </div>
-                                        <div class="w3-container w3-cell">
-                                            <button class="link-button">
-                                                (${entry.value.name})
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
+                            <div class="w3-responsive">
+                                <table class="w3-table w3-striped">
 
-                            </c:forEach>
+                                    <c:forEach var="notification" items="${requestScope.notifications}">
+                                        <tr>
+                                            <td>
+                                                <ctg:date date="${notification.dateTime}"
+                                                          locale="${sessionScope.locale}"/>
+                                            </td>
+                                            <td>
+                                                    ${pageScope[notification.type.toString().toLowerCase()]}
+                                            </td>
+                                            <td>
+                                                <form action="${pageContext.request.contextPath}/controller">
+                                                    <input type="hidden" name="command" value="load-item"/>
+                                                    <input type="hidden" name="itemId"
+                                                           value="${requestScope.items[notification.itemId].id}"/>
+                                                    <button class="link-button">
+                                                            ${requestScope.items[notification.itemId].name}
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    </c:forEach>
+
+                                </table>
+                            </div>
                         </div>
 
                         <div class="page-bar w3-center">
@@ -95,6 +101,7 @@
 
                     </c:otherwise>
                 </c:choose>
+
             </div>
 
         </div>
@@ -103,13 +110,13 @@
 
 </main>
 
-<%@ include file="/jsp/jspf/footer.jsp" %>
+<%@ include file="/WEB-INF/jspf/footer.jsp" %>
 
 <script src="${pageContext.request.contextPath}/js/pagination.js"></script>
 
 <c:if test="${sessionScope.user == null}">
-    <%@ include file="/jsp/jspf/sign_in.jsp" %>
-    <%@ include file="/jsp/jspf/sign_up.jsp" %>
+    <%@ include file="/WEB-INF/jspf/sign_in.jsp" %>
+    <%@ include file="/WEB-INF/jspf/sign_up.jsp" %>
     <script src="${pageContext.request.contextPath}/js/controller/sign.controller.js"></script>
 </c:if>
 

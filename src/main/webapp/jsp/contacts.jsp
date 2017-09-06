@@ -14,22 +14,27 @@
 
 <html>
 
-<%@ include file="/jsp/jspf/head.jsp" %>
+<%@ include file="/WEB-INF/jspf/head.jsp" %>
 
 <body>
 
-<%@ include file="/jsp/jspf/header.jsp" %>
+<%@ include file="/WEB-INF/jspf/header.jsp" %>
 
 <main>
-    <%@ include file="/jsp/jspf/sidebar.jsp" %>
+    <%@ include file="/WEB-INF/jspf/sidebar.jsp" %>
 
     <div class="w3-main main-left-margin">
         <div class="content">
-            <div class="w3-container w3-margin middle-title uppercase">
-                <b>${contacts}</b>
-            </div>
+
 
             <div class="big-margin-top">
+
+                <div class="w3-container w3-margin middle-title uppercase">
+                    <div class="w3-center">
+                        <b>${contacts}</b>
+                    </div>
+                </div>
+
                 <div class="w3-container w3-margin">
                     <div class="w3-center small-title">
                         <span class="capitalize">${ourEmail}:</span> auction.house.web@gmail.com
@@ -54,11 +59,11 @@
 
 </main>
 
-<%@ include file="/jsp/jspf/footer.jsp" %>
+<%@ include file="/WEB-INF/jspf/footer.jsp" %>
 
-<%@ include file="/jsp/jspf/sign_in.jsp" %>
+<%@ include file="/WEB-INF/jspf/sign_in.jsp" %>
 
-<%@ include file="/jsp/jspf/sign_up.jsp" %>
+<%@ include file="/WEB-INF/jspf/sign_up.jsp" %>
 
 <script src="${pageContext.request.contextPath}/js/controller/sign.controller.js"></script>
 

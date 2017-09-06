@@ -54,17 +54,17 @@
 
 <html>
 
-<%@ include file="/jsp/jspf/head.jsp" %>
+<%@ include file="/WEB-INF/jspf/head.jsp" %>
 
 <body>
 
-<%@ include file="/jsp/jspf/header.jsp" %>
+<%@ include file="/WEB-INF/jspf/header.jsp" %>
 
 <main>
 
-    <%@ include file="/jsp/jspf/sidebar.jsp" %>
+    <%@ include file="/WEB-INF/jspf/sidebar.jsp" %>
 
-    <%@ include file="/jsp/jspf/confirm.jsp" %>
+    <%@ include file="/WEB-INF/jspf/confirm.jsp" %>
 
     <div class="w3-main main-left-margin">
 
@@ -147,7 +147,7 @@
 
             <div class="w3-container w3-margin middle-title">
                 ${actualPrice}:
-                <div class="text-on-color money">${sessionScope.item.actualPrice}</div>
+                <div class="text-on-color"><ctg:money value="${sessionScope.item.actualPrice}"/></div>
             </div>
 
             <c:if test="${(sessionScope.item.status == 'ACTIVE') && (sessionScope.user != null) && (sessionScope.user.id != sessionScope.item.sellerId)}">
@@ -183,11 +183,11 @@
                         <div class="w3-container w3-padding pro-lightgrey">${prices}</div>
                         <div class="w3-container w3-padding">
                             ${itemStartPrice}:
-                            <div class="text-on-color money">${sessionScope.item.startPrice}</div>
+                            <div class="text-on-color"><ctg:money value="${sessionScope.item.startPrice}"/></div>
                         </div>
                         <div class="w3-container w3-padding">
                             ${itemBlitzPrice}:
-                            <div class="text-on-color money">${sessionScope.item.blitzPrice}</div>
+                            <div class="text-on-color"><ctg:money value="${sessionScope.item.blitzPrice}"/></div>
                         </div>
                     </div>
 
@@ -221,13 +221,13 @@
 
 </main>
 
-<%@ include file="/jsp/jspf/message.jsp" %>
+<%@ include file="/WEB-INF/jspf/message.jsp" %>
 
-<%@ include file="/jsp/jspf/footer.jsp" %>
+<%@ include file="/WEB-INF/jspf/footer.jsp" %>
 
 <c:if test="${sessionScope.user == null}">
-    <%@ include file="/jsp/jspf/sign_in.jsp" %>
-    <%@ include file="/jsp/jspf/sign_up.jsp" %>
+    <%@ include file="/WEB-INF/jspf/sign_in.jsp" %>
+    <%@ include file="/WEB-INF/jspf/sign_up.jsp" %>
     <script src="${pageContext.request.contextPath}/js/controller/sign.controller.js"></script>
 </c:if>
 

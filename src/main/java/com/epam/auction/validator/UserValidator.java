@@ -4,19 +4,17 @@ import com.epam.auction.entity.User;
 
 public class UserValidator extends Validator {
 
-    private static final String USERNAME_PATTERN = "[A-Za-z][A-Za-z0-9.//-]{5,20}";
+    private static final String USERNAME_PATTERN = "[A-Za-z][A-Za-z0-9.\\-]{4,20}";
     private static final String PASSWORD_PATTERN = "(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,30}";
     private static final String NAME_PATTERN = "[A-Za-zА-Яа-яЁё]{2,45}";
     private static final String EMAIL_PATTERN = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}$";
     private static final String PHONE_PATTERN = "[+][0-9]{11,12}";
 
     public boolean validateSignUpParam(User user) {
-        if (user.getMiddleName() != null && !user.getMiddleName().isEmpty()) {
-            return validate(user.getMiddleName(), NAME_PATTERN);
-        }
         return validate(user.getUsername(), USERNAME_PATTERN) &&
                 validate(user.getPassword(), PASSWORD_PATTERN) &&
                 validate(user.getLastName(), NAME_PATTERN) &&
+                validateMiddleName(user.getMiddleName()) &&
                 validate(user.getFirstName(), NAME_PATTERN) &&
                 validate(user.getEmail(), EMAIL_PATTERN) &&
                 validate(user.getPhoneNumber(), PHONE_PATTERN);
@@ -36,9 +34,13 @@ public class UserValidator extends Validator {
 
     public boolean validateProfile(String lastName, String middleName, String firstName, String phoneNumber) {
         return validate(lastName, NAME_PATTERN) &&
-                validate(middleName, NAME_PATTERN) &&
+                validateMiddleName(middleName) &&
                 validate(firstName, NAME_PATTERN) &&
                 validate(phoneNumber, PHONE_PATTERN);
+    }
+
+    private boolean validateMiddleName(String middleName) {
+        return middleName == null || middleName.isEmpty() || validate(middleName, NAME_PATTERN);
     }
 
 }

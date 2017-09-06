@@ -54,7 +54,7 @@
                 <div class="w3-container bottom-padding">
                     <label><b>${username}</b></label>
                     <input class="w3-input" placeholder="${username} *" name="username" required
-                           pattern="[A-Za-z][A-Za-z0-9.//-]{5,20}"
+                           pattern="[A-Za-z][A-Za-z0-9.\\-]{4,20}"
                            title="${usernameRule}"/>
                 </div>
 
@@ -133,7 +133,7 @@
     </div>
 </div>
 
-<%@ include file="/jsp/jspf/message.jsp" %>
+<%@ include file="/WEB-INF/jspf/message.jsp" %>
 
 <script src="${pageContext.request.contextPath}/js/repeat-password.js"></script>
 

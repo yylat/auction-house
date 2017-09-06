@@ -34,7 +34,7 @@
                 <form class="w3-container filter-window"
                       action="${pageContext.request.contextPath}/controller" method="post">
                     <input type="hidden" name="command" value=""/>
-                    <%@include file="/jsp/jspf/filters.jsp" %>
+                    <%@include file="/WEB-INF/jspf/filters.jsp" %>
                 </form>
             </div>
         </div>
@@ -96,7 +96,7 @@
                                     <div class="w3-row">
                                         <div class="w3-col s6 w3-padding-small">
                                                 ${actualPrice}: <span
-                                                class="text-on-color money">${item.actualPrice}
+                                                class="text-on-color"><ctg:money value="${item.actualPrice}"/>
                                         </span>
                                         </div>
                                         <div class="w3-col s6 w3-padding-small">
@@ -107,8 +107,8 @@
                                     <div class="w3-row">
                                         <div class="w3-col s6 w3-padding-small">
                                                 ${blitzPrice}: <span
-                                                class="text-on-color money">${item.blitzPrice}</span>
-
+                                                class="text-on-color"><ctg:money value="${item.blitzPrice}"/>
+                                                </span>
                                         </div>
                                         <div class="w3-col s6 w3-padding-small">
                                                 ${closeDate}: <span>${item.closeDate}</span>

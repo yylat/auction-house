@@ -6,10 +6,11 @@ import com.epam.auction.util.DateFixer;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.Calendar;
+import java.util.regex.Pattern;
 
 public class ItemValidator extends Validator {
 
-    private static final String NAME_PATTERN = "['A-Za-zА-Яа-яЁё ]{2,45}";
+    private static final String NAME_PATTERN = "['A-Za-zА-Яа-яЁё0-9_\\- ]{2,45}";
 
     private static final String DESCRIPTION_ANTI_PATTERN = "<[^>]*>";
 
@@ -37,15 +38,28 @@ public class ItemValidator extends Validator {
     public boolean validateItemParam(String name, String description,
                                      BigDecimal startPrice, BigDecimal blitzPrice,
                                      Date startDate, Date closeDate) {
-        return validate(name, NAME_PATTERN) &&
-                !validate(description, DESCRIPTION_ANTI_PATTERN) &&
+        return validateName(name) &&
+                validateDescription(description) &&
                 validatePrice(startPrice) &&
-                validatePrice(blitzPrice) &&
+                validateBlitzPrice(blitzPrice, startPrice) &&
                 validateStartDate(startDate) &&
                 validateCloseDate(closeDate, startDate);
     }
 
-    private boolean validatePrice(BigDecimal value) {
+    public boolean validateName(String name) {
+        return validate(name, NAME_PATTERN);
+    }
+
+    public boolean validateDescription(String description) {
+        if (Pattern.compile(DESCRIPTION_ANTI_PATTERN).matcher(description).find()) {
+            setValidationMessage("No code allowed in item description.");
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public boolean validatePrice(BigDecimal value) {
         if (MIN_PRICE.compareTo(value) <= -1 && MAX_PRICE.compareTo(value) >= 1) {
             return true;
         } else {
@@ -54,8 +68,8 @@ public class ItemValidator extends Validator {
         }
     }
 
-    private boolean validateBlitzPrice(BigDecimal blitzPrice, BigDecimal startPrice) {
-        if (!validatePrice(blitzPrice)) {
+    public boolean validateBlitzPrice(BigDecimal blitzPrice, BigDecimal startPrice) {
+        if (validatePrice(blitzPrice)) {
             if (blitzPrice.compareTo(startPrice) >= 1) {
                 return true;
             } else {

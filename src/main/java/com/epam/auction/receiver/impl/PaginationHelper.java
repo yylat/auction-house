@@ -1,21 +1,22 @@
-package com.epam.auction.receiver;
+package com.epam.auction.receiver.impl;
 
 import com.epam.auction.controller.RequestContent;
+import com.epam.auction.receiver.RequestConstant;
 
-public class PaginationHelper {
+class PaginationHelper {
 
     private int page;
     private int limit;
 
-    public PaginationHelper(int limit) {
+    PaginationHelper(int limit) {
         this.limit = limit;
     }
 
-    public int getLimit() {
+    int getLimit() {
         return limit;
     }
 
-    public void definePage(RequestContent requestContent) {
+    void definePage(RequestContent requestContent) {
         String[] page = requestContent.getRequestParameter(RequestConstant.PAGE);
         if (page != null) {
             this.page = Integer.valueOf(page[0]);
@@ -25,15 +26,15 @@ public class PaginationHelper {
         requestContent.setRequestAttribute(RequestConstant.PAGE, this.page);
     }
 
-    public void definePages(RequestContent requestContent, int totalUnits) {
+    void definePages(RequestContent requestContent, int totalUnits) {
         requestContent.setSessionAttribute(RequestConstant.PAGES, (totalUnits / this.limit) + 1);
     }
 
-    public int findOffset() {
+    int findOffset() {
         return (page - 1) * limit;
     }
 
-    public boolean pagesNumberDefined(RequestContent requestContent) {
+    boolean pagesNumberDefined(RequestContent requestContent) {
         return !(requestContent.getRequestParameter(RequestConstant.INITIAL) == null) &&
                 requestContent.getSessionAttribute(RequestConstant.PAGES) != null;
     }

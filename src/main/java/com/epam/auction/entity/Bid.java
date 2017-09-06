@@ -153,17 +153,20 @@ public class Bid extends Entity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
 
         Bid bid = (Bid) o;
 
         return itemId == bid.itemId
                 && bidderId == bid.bidderId
-                && isWinning == bid.isWinning && (bidValue != null ? bidValue.equals(bid.bidValue) : bid.bidValue == null);
+                && isWinning == bid.isWinning
+                && (bidValue != null ? bidValue.equals(bid.bidValue) : bid.bidValue == null);
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (itemId ^ (itemId >>> 32));
+        int result = super.hashCode();
+        result = 31 * result + (int) (itemId ^ (itemId >>> 32));
         result = 31 * result + (int) (bidderId ^ (bidderId >>> 32));
         result = 31 * result + (bidValue != null ? bidValue.hashCode() : 0);
         result = 31 * result + (isWinning ? 1 : 0);

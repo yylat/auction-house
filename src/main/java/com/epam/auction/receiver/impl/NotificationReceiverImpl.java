@@ -12,13 +12,11 @@ import com.epam.auction.entity.User;
 import com.epam.auction.exception.DAOException;
 import com.epam.auction.exception.ReceiverException;
 import com.epam.auction.receiver.NotificationReceiver;
-import com.epam.auction.receiver.PaginationHelper;
 import com.epam.auction.receiver.RequestConstant;
-import com.epam.auction.receiver.SiteManager;
+import com.epam.auction.util.SiteManager;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class NotificationReceiverImpl implements NotificationReceiver {
 
@@ -41,16 +39,19 @@ public class NotificationReceiverImpl implements NotificationReceiver {
                 List<Notification> notifications = notificationDAO.findUsersNotifications(user.getId(),
                         paginationHelper.findOffset(), paginationHelper.getLimit());
 
-                Map<Notification, Item> notificationItemMap = new LinkedHashMap<>();
-                for (Notification notification : notifications) {
-                    notificationItemMap.put(notification, itemDAO.findEntityById(notification.getItemId()));
+                Set<Long> itemsIds = notifications.stream().map(Notification::getItemId).collect(Collectors.toSet());
+                Map<Long, Item> items = new HashMap<>();
+                for (long itemId : itemsIds) {
+                    items.put(itemId, itemDAO.findEntityById(itemId));
                 }
 
-                requestContent.setRequestAttribute(RequestConstant.NOTIFICATION_ITEM_MAP, notificationItemMap);
+                requestContent.setRequestAttribute(RequestConstant.NOTIFICATIONS, notifications);
+                requestContent.setRequestAttribute(RequestConstant.ITEMS, items);
             } catch (DAOException e) {
                 throw new ReceiverException(e);
             }
         }
+
     }
 
 }

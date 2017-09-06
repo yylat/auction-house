@@ -17,15 +17,15 @@
 
 <html>
 
-<%@ include file="/jsp/jspf/head.jsp" %>
+<%@ include file="/WEB-INF/jspf/head.jsp" %>
 
 <body>
 
-<%@ include file="/jsp/jspf/header.jsp" %>
+<%@ include file="/WEB-INF/jspf/header.jsp" %>
 
 <main>
 
-    <%@ include file="/jsp/jspf/sidebar.jsp" %>
+    <%@ include file="/WEB-INF/jspf/sidebar.jsp" %>
 
     <div class="w3-main main-left-margin">
 
@@ -92,8 +92,8 @@
 
 </main>
 
-<%@ include file="/jsp/jspf/message.jsp" %>
-<%@ include file="/jsp/jspf/footer.jsp" %>
+<%@ include file="/WEB-INF/jspf/message.jsp" %>
+<%@ include file="/WEB-INF/jspf/footer.jsp" %>
 
 <script src="${pageContext.request.contextPath}/js/controller/balance.controller.js"></script>
 

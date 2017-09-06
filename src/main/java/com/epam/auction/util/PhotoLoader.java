@@ -1,7 +1,9 @@
 package com.epam.auction.util;
 
 import com.epam.auction.exception.PhotoLoadingException;
-import com.epam.auction.receiver.SiteManager;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -9,7 +11,12 @@ import java.nio.file.Paths;
 import java.util.Base64;
 import java.util.Date;
 
+/**
+ *
+ */
 public class PhotoLoader {
+
+    private static final Logger LOGGER = LogManager.getLogger();
 
     private static final String UPLOAD_PATH = SiteManager.getInstance().getUploadPath();
 
@@ -22,7 +29,10 @@ public class PhotoLoader {
     public static void createUploadFolder() {
         File uploadDirectory = new File(UPLOAD_PATH);
         if (!uploadDirectory.exists()) {
-            uploadDirectory.mkdirs();
+            if (!uploadDirectory.mkdirs()) {
+                LOGGER.log(Level.ERROR, "Can't create directory to store photos.");
+                throw new RuntimeException();
+            }
         }
     }
 

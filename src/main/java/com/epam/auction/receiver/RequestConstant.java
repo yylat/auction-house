@@ -36,8 +36,8 @@ public final class RequestConstant {
     public static final String ITEMS = "items";
     public static final String CATEGORY = "category";
 
-    public static final String BID_ITEM_MAP = "bidItemMap";
-    public static final String NOTIFICATION_ITEM_MAP = "notificationItemMap";
+    public static final String BIDS = "bids";
+    public static final String NOTIFICATIONS = "notifications";
 
     public static final String TITLE = "title";
     public static final String DESCRIPTION = "description";

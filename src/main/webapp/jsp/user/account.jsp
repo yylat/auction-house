@@ -35,15 +35,15 @@
 
 <html>
 
-<%@ include file="/jsp/jspf/head.jsp" %>
+<%@ include file="/WEB-INF/jspf/head.jsp" %>
 
 <body>
 
-<%@ include file="/jsp/jspf/header.jsp" %>
+<%@ include file="/WEB-INF/jspf/header.jsp" %>
 
 <main>
 
-    <%@ include file="/jsp/jspf/sidebar.jsp" %>
+    <%@ include file="/WEB-INF/jspf/sidebar.jsp" %>
 
     <div class="w3-main main-left-margin">
 
@@ -61,7 +61,7 @@
 
                         <input class="w3-input w3-margin-bottom" value="${sessionScope.user.username}" name="username"
                                required
-                               pattern="[A-Za-z][A-Za-z0-9.//-]{5,20}"
+                               pattern="[A-Za-z][A-Za-z0-9.\\-]{4,20}"
                                title="${usernameRule}"/>
                         <button class="w3-button pro-green w3-margin-bottom">${changeUsername}</button>
                         <c:if test="${sessionScope.usernameAlreadyExist == true}">
@@ -179,9 +179,9 @@
 
 </main>
 
-<%@ include file="/jsp/jspf/message.jsp" %>
+<%@ include file="/WEB-INF/jspf/message.jsp" %>
 
-<%@ include file="/jsp/jspf/footer.jsp" %>
+<%@ include file="/WEB-INF/jspf/footer.jsp" %>
 
 <script src="${pageContext.request.contextPath}/js/repeat-password.js"></script>
 <script src="${pageContext.request.contextPath}/js/controller/account-update.controller.js"></script>
