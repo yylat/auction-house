@@ -10,6 +10,8 @@ import java.util.List;
  */
 public interface BidDAO extends GenericDAO<Bid> {
 
+    public void create(Bid entity, long winningBidId) throws DAOException;
+
     /**
      * Returns a range of all the bids with bidder id.
      *

@@ -70,7 +70,10 @@ public final class TableConstant {
     public static final String BID_QUERY_FIND_BY_ID =
             "SELECT `bid_id`, `item_id`, `bidder_id`, `bid_value`, `is_winning` FROM `bid` WHERE `bid_id` = ?";
     public static final String BID_QUERY_CREATE =
-            "{CALL insert_bid (?, ?, ?)}";
+            "INSERT INTO `bid` (`item_id`, `bidder_id`, `bid_value`) VALUES (?, ?, ?)";
+
+    public static final String BID_QUERY_INSERT_BID =
+            "{CALL insert_bid (?, ?, ?, ?)}";
 
     public static final String BID_QUERY_FIND_FOR_USER_LIMIT =
             BID_QUERY_FIND_ALL + " WHERE `bidder_id` = ? ORDER BY `bid_id` DESC LIMIT ?, ?";

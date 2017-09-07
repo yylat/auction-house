@@ -439,6 +439,14 @@ input::placeholder {
     font-size: 0.8em;
 }
 
+.empty-design-button {
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
 .reset-button {
     font-size: 0.8em;
     background: none;

@@ -11,6 +11,7 @@ public class MessageProvider {
     public static final String BID_MADE_SUCCESSFULLY = "message.bidMadeSuccessfully";
     public static final String NOT_ENOUGH_MONEY = "message.notEnoughMoney";
     public static final String YOUR_BID_IS_WINNING = "message.yourBidIsWinning";
+    public static final String WINNING_BID_CHANGED = "message.winningBidChanged";
 
     public static final String SUCCESSFUL_REGISTRATION = "message.successfulRegistration";
 

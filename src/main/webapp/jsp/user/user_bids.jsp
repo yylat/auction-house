@@ -16,6 +16,15 @@
 <fmt:message bundle="${msg}" key="item.actualPrice" var="actualPrice"/>
 <fmt:message bundle="${msg}" key="form.yourBid" var="yourBid"/>
 
+<fmt:message bundle="${msg}" key="status.title" var="statusTitle"/>
+<fmt:message bundle="${msg}" key="status.created" var="created"/>
+<fmt:message bundle="${msg}" key="status.confirmed" var="confirmed"/>
+<fmt:message bundle="${msg}" key="status.active" var="active"/>
+<fmt:message bundle="${msg}" key="status.sold" var="sold"/>
+<fmt:message bundle="${msg}" key="status.canceled" var="canceled"/>
+<fmt:message bundle="${msg}" key="status.ended" var="ended"/>
+<fmt:message bundle="${msg}" key="status.not_confirmed" var="not_confirmed"/>
+
 <c:if test="${requestScope.bids == null}">
     <jsp:forward page="${pageContext.request.contextPath}/controller">
         <jsp:param name="command" value="load-bids"/>
@@ -65,6 +74,9 @@
                                                 ${item}
                                         </th>
                                         <th>
+                                                ${statusTitle}
+                                        </th>
+                                        <th>
                                                 ${actualPrice}
                                         </th>
                                         <th>
@@ -80,10 +92,15 @@
                                                     <input type="hidden" name="command" value="load-item"/>
                                                     <input type="hidden" name="itemId"
                                                            value="${requestScope.items[bid.itemId].id}"/>
-                                                    <button class="link-button">
-                                                            ${requestScope.items[bid.itemId].name}
+                                                    <button class="empty-design-button">
+                                                        <span class="link-button">
+                                                                ${requestScope.items[bid.itemId].name}
+                                                        </span>
                                                     </button>
                                                 </form>
+                                            </td>
+                                            <td>
+                                                    ${pageScope[requestScope.items[bid.itemId].status.toString().toLowerCase()]}
                                             </td>
                                             <td>
                                                 <div class="text-on-color">

@@ -78,8 +78,10 @@
                                                     <input type="hidden" name="command" value="load-item"/>
                                                     <input type="hidden" name="itemId"
                                                            value="${requestScope.items[notification.itemId].id}"/>
-                                                    <button class="link-button">
-                                                            ${requestScope.items[notification.itemId].name}
+                                                    <button class="empty-design-button">
+                                                        <span class="link-button">
+                                                                ${requestScope.items[notification.itemId].name}
+                                                        </span>
                                                     </button>
                                                 </form>
                                             </td>

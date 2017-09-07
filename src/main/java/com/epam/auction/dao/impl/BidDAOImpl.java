@@ -31,16 +31,6 @@ public class BidDAOImpl extends GenericDAOImpl<Bid> implements BidDAO {
     }
 
     @Override
-    public void create(Bid entity) throws DAOException {
-        try (CallableStatement statement = connection.prepareCall(TableConstant.BID_QUERY_CREATE)) {
-            defineQueryAttributes(entity, statement);
-            statement.execute();
-        } catch (SQLException e) {
-            throw new DAOException(e);
-        }
-    }
-
-    @Override
     public void update(Bid entity) throws MethodNotSupportedException {
         throw new MethodNotSupportedException("Update bid operation not supported.");
     }
@@ -60,6 +50,20 @@ public class BidDAOImpl extends GenericDAOImpl<Bid> implements BidDAO {
         statement.setLong(1, entity.getItemId());
         statement.setLong(2, entity.getBidderId());
         statement.setBigDecimal(3, entity.getBidValue());
+    }
+
+    @Override
+    public void create(Bid entity, long winningBidId) throws DAOException {
+        try (CallableStatement statement = connection.prepareCall(TableConstant.BID_QUERY_INSERT_BID)) {
+            statement.setLong(1, entity.getItemId());
+            statement.setLong(2, entity.getBidderId());
+            statement.setBigDecimal(3, entity.getBidValue());
+            statement.setLong(4, winningBidId);
+
+            statement.execute();
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        }
     }
 
     @Override

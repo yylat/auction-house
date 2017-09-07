@@ -17,6 +17,8 @@ import com.epam.auction.util.MessageProvider;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
 public class BidReceiverImpl implements BidReceiver {
@@ -25,7 +27,7 @@ public class BidReceiverImpl implements BidReceiver {
     public void makeBid(RequestContent requestContent) throws ReceiverException {
         User user = (User) requestContent.getSessionAttribute(RequestConstant.USER);
         if (user != null) {
-            int itemId = Integer.valueOf(requestContent.getRequestParameter(RequestConstant.ITEM_ID)[0]);
+            Item item = (Item) requestContent.getSessionAttribute(RequestConstant.ITEM);
             BigDecimal bidValue = new BigDecimal(requestContent.getRequestParameter(RequestConstant.BID_VALUE)[0]);
 
             BidDAO bidDAO = new BidDAOImpl();
@@ -33,25 +35,12 @@ public class BidReceiverImpl implements BidReceiver {
 
             daoManager.beginTransaction();
             try {
-                MessageProvider messageProvider = new MessageProvider((Locale) requestContent.getSessionAttribute(RequestConstant.LOCALE));
+                MessageProvider messageProvider =
+                        new MessageProvider((Locale) requestContent.getSessionAttribute(RequestConstant.LOCALE));
 
-                Bid winningBid = bidDAO.findWinning(itemId);
-                if (winningBid == null || winningBid.getBidderId() != user.getId()) {
-                    if (bidValue.compareTo(user.getBalance()) <= 0) {
-                        Bid bid = new Bid(itemId, user.getId(), bidValue);
-                        bidDAO.create(bid);
-                        user.setBalance(user.getBalance().subtract(bidValue));
-                        updateSessionItem(requestContent, bidValue);
-                        requestContent.setSessionAttribute(RequestConstant.MESSAGE,
-                                messageProvider.getMessage(MessageProvider.BID_MADE_SUCCESSFULLY));
-                    } else {
-                        requestContent.setSessionAttribute(RequestConstant.MESSAGE,
-                                messageProvider.getMessage(MessageProvider.NOT_ENOUGH_MONEY));
-                    }
-                } else {
-                    requestContent.setSessionAttribute(RequestConstant.MESSAGE,
-                            messageProvider.getMessage(MessageProvider.YOUR_BID_IS_WINNING));
-                }
+                String resultMessage = makeBid(bidDAO, item, user, bidValue, messageProvider);
+
+                requestContent.setSessionAttribute(RequestConstant.MESSAGE, resultMessage);
                 requestContent.setSessionAttribute(RequestConstant.WAS_SHOWN, false);
 
                 daoManager.commit();
@@ -97,8 +86,46 @@ public class BidReceiverImpl implements BidReceiver {
         }
     }
 
-    private void updateSessionItem(RequestContent requestContent, BigDecimal bidValue) {
-        Item item = (Item) requestContent.getSessionAttribute(RequestConstant.ITEM);
+    private String makeBid(BidDAO bidDAO, Item item, User user, BigDecimal bidValue,
+                           MessageProvider messageProvider) throws MethodNotSupportedException, DAOException {
+        Lock lock = new ReentrantLock();
+        lock.lock();
+        String resultMessage;
+        try {
+            if (bidValue.compareTo(user.getBalance()) <= 0) {
+                Bid winningBid = bidDAO.findWinning(item.getId());
+
+                if (winningBid == null) {
+                    bidDAO.create(new Bid(item.getId(), user.getId(), bidValue));
+
+                    resultMessage = messageProvider.getMessage(MessageProvider.BID_MADE_SUCCESSFULLY);
+                    user.setBalance(user.getBalance().subtract(bidValue));
+                    updateSessionItem(item, bidValue);
+
+                } else if (winningBid.getBidderId() == user.getId()) {
+                    resultMessage = messageProvider.getMessage(MessageProvider.YOUR_BID_IS_WINNING);
+
+                } else if (winningBid.getBidValue().compareTo(bidValue) <= 0) {
+                    bidDAO.create(new Bid(item.getId(), user.getId(), bidValue), winningBid.getId());
+
+                    resultMessage = messageProvider.getMessage(MessageProvider.BID_MADE_SUCCESSFULLY);
+                    user.setBalance(user.getBalance().subtract(bidValue));
+                    updateSessionItem(item, bidValue);
+
+                } else {
+                    resultMessage = messageProvider.getMessage(MessageProvider.WINNING_BID_CHANGED);
+                    updateSessionItem(item, winningBid.getBidValue());
+                }
+            } else {
+                resultMessage = messageProvider.getMessage(MessageProvider.NOT_ENOUGH_MONEY);
+            }
+        } finally {
+            lock.unlock();
+        }
+        return resultMessage;
+    }
+
+    private void updateSessionItem(Item item, BigDecimal bidValue) {
         item.setActualPrice(bidValue);
         if (bidValue.compareTo(item.getBlitzPrice()) >= 0) {
             item.setStatus(ItemStatus.SOLD);
