@@ -122,6 +122,8 @@
     <script src="${pageContext.request.contextPath}/js/controller/sign.controller.js"></script>
 </c:if>
 
+<c:set scope="session" var="currentPage" value="/jsp/user/notifications.jsp"/>
+
 </body>
 
 </html>

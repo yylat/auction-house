@@ -97,6 +97,8 @@
 
 <script src="${pageContext.request.contextPath}/js/controller/balance.controller.js"></script>
 
+<c:set scope="session" var="currentPage" value="/jsp/user/balance.jsp"/>
+
 </body>
 
 </html>

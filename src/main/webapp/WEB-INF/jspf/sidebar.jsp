@@ -51,10 +51,6 @@
         </c:choose>
     </div>
 
-    <a href="${pageContext.request.contextPath}/jsp/active_items.jsp"
-       class="w3-bar-item pro-bottom-button">${homePage}
-    </a>
-
     <c:if test="${sessionScope.user.role == 'ADMIN'}">
         <div class="w3-bar-item">
             <div class="capitalize">

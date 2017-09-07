@@ -4,7 +4,6 @@ import com.epam.auction.command.AbstractCommand;
 import com.epam.auction.command.CommandFactory;
 import com.epam.auction.command.PageGuide;
 import com.epam.auction.command.TransferMethod;
-import com.epam.auction.receiver.RequestConstant;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -71,8 +70,6 @@ public class PhotoUploadController extends HttpServlet {
         }
 
         PageGuide pageGuide = command.execute(requestContent);
-
-        requestContent.setSessionAttribute(RequestConstant.CURRENT_PAGE, pageGuide.getPageAddress());
 
         requestContent.insertAttributes(request);
 

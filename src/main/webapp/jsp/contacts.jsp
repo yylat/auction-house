@@ -67,6 +67,7 @@
 
 <script src="${pageContext.request.contextPath}/js/controller/sign.controller.js"></script>
 
+<c:set scope="session" var="currentPage" value="/jsp/contacts.jsp"/>
 
 </body>
 </html>

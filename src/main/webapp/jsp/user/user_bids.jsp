@@ -144,6 +144,8 @@
 
 <script src="${pageContext.request.contextPath}/js/pagination.js"></script>
 
+<c:set scope="session" var="currentPage" value="/jsp/user/user_bids.jsp"/>
+
 </body>
 
 </html>

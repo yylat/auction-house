@@ -4,7 +4,6 @@ import com.epam.auction.command.AbstractCommand;
 import com.epam.auction.command.CommandFactory;
 import com.epam.auction.command.PageGuide;
 import com.epam.auction.command.TransferMethod;
-import com.epam.auction.receiver.RequestConstant;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -46,8 +45,6 @@ public class MainController extends HttpServlet {
         AbstractCommand command = commandFactory.initCommand(requestContent);
 
         PageGuide pageGuide = command.execute(requestContent);
-
-        requestContent.setSessionAttribute(RequestConstant.CURRENT_PAGE, pageGuide.getPageAddress());
 
         requestContent.insertAttributes(request);
 

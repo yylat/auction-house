@@ -25,16 +25,9 @@
                 <div class="small-title">
                     Details:
                 </div>
-                <c:choose>
-                    <c:when test="${pageContext.exception == null}">
-                        <p>
-                                ${error}
-                        </p>
-                    </c:when>
-                    <c:otherwise>
-                        <p>${pageContext.exception}</p>
-                    </c:otherwise>
-                </c:choose>
+                <p>
+                    404 Error
+                </p>
             </div>
         </div>
 
@@ -50,7 +43,7 @@
 
 <script src="${pageContext.request.contextPath}/js/controller/sign.controller.js"></script>
 
-<c:set scope="session" var="currentPage" value="/jsp/error.jsp"/>
+<c:set scope="session" var="currentPage" value="/jsp/error_404.jsp"/>
 
 </body>
 </html>

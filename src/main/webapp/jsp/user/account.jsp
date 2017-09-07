@@ -186,6 +186,8 @@
 <script src="${pageContext.request.contextPath}/js/repeat-password.js"></script>
 <script src="${pageContext.request.contextPath}/js/controller/account-update.controller.js"></script>
 
+<c:set scope="session" var="currentPage" value="/jsp/user/account.jsp"/>
+
 </body>
 
 </html>

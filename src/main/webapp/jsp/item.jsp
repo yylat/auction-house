@@ -81,7 +81,6 @@
 
                                     <form class="w3-bar-item" action="${pageContext.request.contextPath}/controller">
                                         <input type="hidden" name="command" value="approve-item"/>
-                                        <input type="hidden" name="itemId" value="${sessionScope.item.id}"/>
                                         <button class="w3-button pro-green w3-ripple">
                                                 ${approve}
                                         </button>
@@ -232,6 +231,8 @@
 </c:if>
 
 <script src="${pageContext.request.contextPath}/js/controller/item.controller.js"></script>
+
+<c:set scope="session" var="currentPage" value="/jsp/item.jsp"/>
 
 </body>
 

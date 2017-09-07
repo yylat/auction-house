@@ -20,19 +20,22 @@ public class CommandFactory {
      * @return command
      */
     public AbstractCommand initCommand(RequestContent requestContent) {
-        AbstractCommand command;
+        AbstractCommand command = CommandType.LOAD_ACTIVE_ITEMS.getCommand();
+        String[] commandsNames = null;
         String commandName = null;
         try {
-            commandName = requestContent.getRequestParameter(RequestConstant.COMMAND)[0];
-            CommandType commandType = CommandType.valueOf(commandName.toUpperCase().replaceAll("-", "_"));
-            command = commandType.getCommand();
+            commandsNames = requestContent.getRequestParameter(RequestConstant.COMMAND);
+            if (commandsNames != null) {
+                commandName = requestContent.getRequestParameter(RequestConstant.COMMAND)[0];
+                CommandType commandType = CommandType.valueOf(commandName.toUpperCase().replaceAll("-", "_"));
+                command = commandType.getCommand();
+            }
         } catch (IllegalArgumentException e) {
-            if (commandName == null) {
+            if (commandsNames == null || commandName == null) {
                 LOGGER.log(Level.WARN, "No command attribute in request.");
             } else {
                 LOGGER.log(Level.WARN, "Unknown command attribute [" + commandName + "] in request.");
             }
-            command = CommandType.LOAD_ACTIVE_ITEMS.getCommand();
         }
         return command;
     }

@@ -7,7 +7,7 @@ public final class RequestConstant {
 
     public static final String COMMAND = "command";
 
-    public static final String CURRENT_PAGE = "current-page";
+    public static final String CURRENT_PAGE = "currentPage";
 
     public static final String LOCALE_LANG = "lang";
 
