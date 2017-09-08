@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
+﻿<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="ctg" uri="/customtags" %>
@@ -60,16 +60,15 @@
                 <div class="w3-row-padding bottom-padding">
                     <div class="w3-col m6 w3-container bottom-padding">
                         <label><b>${itemTitle}</b></label>
-                        <input class="w3-input" value="${sessionScope.item.name}" name="title" required
-                               pattern="['A-Za-zА-Яа-яЁё0-9_\\- ]{2,45}"
-                               title="${itemTitleRule}"/>
+                        <input id="itemTitle" class="w3-input" value="${sessionScope.item.name}" name="title"
+                               required pattern="['A-Za-zА-Яа-яЁё0-9_\- ]{2,45}" title="${itemTitleRule}"/>
                     </div>
                 </div>
 
                 <div class="w3-row-padding bottom-padding">
                     <div class="w3-col m6 w3-container">
                         <label><b>${description}</b></label>
-                        <textarea class="w3-input w3-border" name="description" required
+                        <textarea id="descriptionTextarea" class="w3-input w3-border" name="description" required
                                   title="${descriptionRule}">${sessionScope.item.description}</textarea>
                     </div>
                 </div>

@@ -47,7 +47,7 @@
                     <div class="w3-container bottom-padding">
                         <label><b>${itemTitle}</b></label>
                         <input class="w3-input" placeholder="${itemTitle}" name="title" required
-                               pattern="['A-Za-zА-Яа-яЁё0-9_\\- ]{2,45}"
+                               pattern="['A-Za-zА-Яа-яЁё0-9_\- ]{2,45}"
                                title="${itemTitleRule}"/>
                     </div>
 

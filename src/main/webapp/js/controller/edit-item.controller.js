@@ -4,6 +4,18 @@
 
     var updateItemForm = document.getElementById("updateItemForm");
     var updateItemButton = updateItemForm.querySelector("button");
+    updateItemButton.addEventListener("click", function () {
+        var descriptionTextarea = document.getElementById("descriptionTextarea");
+        if (descriptionTextarea) {
+            var regExp = /<[^>]*>/;
+            if (regExp.test(descriptionTextarea.value)) {
+                descriptionTextarea.setCustomValidity(descriptionTextarea.getAttribute("title"));
+            }
+            else {
+                descriptionTextarea.setCustomValidity("");
+            }
+        }
+    });
     updateItemButton.addEventListener("click", validateForm.bind(null, updateItemForm));
 
     var deletePhotosForm = document.getElementById("deletePhotosForm");

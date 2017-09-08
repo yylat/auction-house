@@ -30,9 +30,9 @@ public class UserReceiverImpl implements UserReceiver {
         UserDAO userDAO = new UserDAOImpl();
 
         try (DAOManager daoManager = new DAOManager(userDAO)) {
-            if (userDAO.isExist(user)) {
+            if (userDAO.isExist(user) && !user.getIsBanned()) {
                 requestContent.setSessionAttribute(RequestConstant.USER, user);
-            } else if (user.isBanned()) {
+            } else if (user.getIsBanned()) {
                 requestContent.setRequestAttribute(RequestConstant.BAN, true);
             } else {
                 requestContent.setRequestAttribute(RequestConstant.WRONG_USERNAME_PASSWORD, true);

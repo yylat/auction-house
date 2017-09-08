@@ -123,6 +123,8 @@ public class ItemReceiverImpl implements ItemReceiver {
             } finally {
                 daoManager.endTransaction();
             }
+        } else {
+            throw new ReceiverException(itemValidator.getValidationMessage());
         }
     }
 

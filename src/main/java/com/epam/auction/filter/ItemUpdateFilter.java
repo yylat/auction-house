@@ -23,13 +23,12 @@ import java.io.IOException;
 
 @WebFilter(dispatcherTypes = {DispatcherType.REQUEST, DispatcherType.FORWARD},
         urlPatterns = {"/jsp/user/edit_item.jsp"})
-public class ItemUpdateAccessFilter implements Filter {
+public class ItemUpdateFilter implements Filter {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-
     }
 
     @Override
@@ -54,6 +53,5 @@ public class ItemUpdateAccessFilter implements Filter {
 
     @Override
     public void destroy() {
-
     }
 }

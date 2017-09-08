@@ -314,7 +314,7 @@ public class User extends Entity {
      * @return <code>true</code> if user is banned;
      * <code>false</code> otherwise
      */
-    public boolean isBanned() {
+    public boolean getIsBanned() {
         return isBanned;
     }
 
@@ -323,7 +323,7 @@ public class User extends Entity {
      *
      * @param banned ban status
      */
-    public void setBanned(boolean banned) {
+    public void setIsBanned(boolean banned) {
         isBanned = banned;
     }
 

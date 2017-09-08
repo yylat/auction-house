@@ -58,7 +58,7 @@ public class UserDAOImpl extends GenericDAOImpl<User> implements UserDAO {
         statement.setString(6, entity.getPhoneNumber());
         statement.setString(7, entity.getEmail());
         statement.setBigDecimal(8, entity.getBalance());
-        statement.setBoolean(9, entity.isBanned());
+        statement.setBoolean(9, entity.getIsBanned());
         statement.setInt(10, entity.getRole().ordinal());
     }
 
@@ -78,7 +78,7 @@ public class UserDAOImpl extends GenericDAOImpl<User> implements UserDAO {
                 user.setPhoneNumber(resultSet.getString(TableConstant.USER_COLUMN_PHONE_NUMBER));
                 user.setEmail(resultSet.getString(TableConstant.USER_COLUMN_EMAIL));
                 user.setBalance(resultSet.getBigDecimal(TableConstant.USER_COLUMN_BALANCE));
-                user.setBanned(resultSet.getBoolean(TableConstant.USER_COLUMN_IS_BANNED));
+                user.setIsBanned(resultSet.getBoolean(TableConstant.USER_COLUMN_IS_BANNED));
                 user.setRole(User.UserRole.define(resultSet.getInt(TableConstant.USER_COLUMN_USER_ROLE_ID)));
 
                 result = true;

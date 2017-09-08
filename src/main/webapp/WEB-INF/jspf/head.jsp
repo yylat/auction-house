@@ -1,7 +1,7 @@
 <fmt:message bundle="${msg}" key="label.projectTitle" var="projectTitle"/>
 
 <head>
-    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${projectTitle}</title>
     <link rel="icon" href="${pageContext.request.contextPath}/img/ic_gavel_black.png">
