@@ -1,9 +1,10 @@
 package com.epam.auction.receiver.impl;
 
 import com.epam.auction.controller.RequestContent;
+import com.epam.auction.dao.impl.DAOFactory;
 import com.epam.auction.dao.UserDAO;
-import com.epam.auction.dao.impl.UserDAOImpl;
 import com.epam.auction.db.DAOManager;
+import com.epam.auction.entity.Item;
 import com.epam.auction.entity.User;
 import com.epam.auction.exception.DAOException;
 import com.epam.auction.exception.MethodNotSupportedException;
@@ -15,11 +16,10 @@ import com.epam.auction.util.StringEncoder;
 import com.epam.auction.util.MessageProvider;
 import com.epam.auction.validator.UserValidator;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Locale;
 
-public class UserReceiverImpl implements UserReceiver {
+class UserReceiverImpl implements UserReceiver {
 
     @Override
     public void signIn(RequestContent requestContent) throws ReceiverException {
@@ -27,7 +27,7 @@ public class UserReceiverImpl implements UserReceiver {
                 requestContent.getRequestParameter(RequestConstant.USERNAME)[0],
                 StringEncoder.encode(requestContent.getRequestParameter(RequestConstant.PASSWORD)[0]));
 
-        UserDAO userDAO = new UserDAOImpl();
+        UserDAO userDAO = DAOFactory.getInstance().getUserDAO();
 
         try (DAOManager daoManager = new DAOManager(userDAO)) {
             if (userDAO.isExist(user) && !user.getIsBanned()) {
@@ -61,7 +61,7 @@ public class UserReceiverImpl implements UserReceiver {
         if (validator.validateSignUpParam(user)) {
             user.setPassword(StringEncoder.encode(user.getPassword()));
 
-            UserDAO userDAO = new UserDAOImpl();
+            UserDAO userDAO = DAOFactory.getInstance().getUserDAO();
             DAOManager daoManager = new DAOManager(true, userDAO);
 
             daoManager.beginTransaction();
@@ -99,31 +99,6 @@ public class UserReceiverImpl implements UserReceiver {
     }
 
     @Override
-    public void replenishBalance(RequestContent requestContent) throws ReceiverException {
-        User user = (User) requestContent.getSessionAttribute(RequestConstant.USER);
-
-        if (user != null) {
-            BigDecimal sumToAdd = new BigDecimal(requestContent.getRequestParameter(RequestConstant.MONEY_AMOUNT)[0]);
-
-            UserDAO userDAO = new UserDAOImpl();
-            DAOManager daoManager = new DAOManager(true, userDAO);
-
-            daoManager.beginTransaction();
-            try {
-                user.setBalance(user.getBalance().add(sumToAdd));
-                userDAO.update(user);
-                daoManager.commit();
-            } catch (DAOException | MethodNotSupportedException e) {
-                daoManager.rollback();
-                throw new ReceiverException(e);
-            } finally {
-                daoManager.endTransaction();
-            }
-        }
-
-    }
-
-    @Override
     public void changeUsername(RequestContent requestContent) throws ReceiverException {
         User user = (User) requestContent.getSessionAttribute(RequestConstant.USER);
 
@@ -134,7 +109,7 @@ public class UserReceiverImpl implements UserReceiver {
             if (userValidator.validateUsername(newUsername)) {
                 user.setUsername(newUsername);
 
-                UserDAO userDAO = new UserDAOImpl();
+                UserDAO userDAO = DAOFactory.getInstance().getUserDAO();
                 DAOManager daoManager = new DAOManager(true, userDAO);
 
                 daoManager.beginTransaction();
@@ -168,7 +143,7 @@ public class UserReceiverImpl implements UserReceiver {
             if (userValidator.validateEmail(newEmail)) {
                 user.setEmail(newEmail);
 
-                UserDAO userDAO = new UserDAOImpl();
+                UserDAO userDAO = DAOFactory.getInstance().getUserDAO();
                 DAOManager daoManager = new DAOManager(true, userDAO);
 
                 daoManager.beginTransaction();
@@ -205,7 +180,7 @@ public class UserReceiverImpl implements UserReceiver {
                 if (userValidator.validatePassword(newPassword)) {
                     user.setPassword(StringEncoder.encode(newPassword));
 
-                    UserDAO userDAO = new UserDAOImpl();
+                    UserDAO userDAO = DAOFactory.getInstance().getUserDAO();
                     DAOManager daoManager = new DAOManager(true, userDAO);
 
                     simpleUserUpdate(user, daoManager, userDAO);
@@ -235,7 +210,7 @@ public class UserReceiverImpl implements UserReceiver {
                 user.setFirstName(newFirstName);
                 user.setPhoneNumber(newPhoneNumber);
 
-                UserDAO userDAO = new UserDAOImpl();
+                UserDAO userDAO = DAOFactory.getInstance().getUserDAO();
                 DAOManager daoManager = new DAOManager(true, userDAO);
 
                 simpleUserUpdate(user, daoManager, userDAO);
@@ -248,7 +223,7 @@ public class UserReceiverImpl implements UserReceiver {
         User user = (User) requestContent.getSessionAttribute(RequestConstant.USER);
 
         if (user != null) {
-            UserDAO userDAO = new UserDAOImpl();
+            UserDAO userDAO = DAOFactory.getInstance().getUserDAO();
 
             try (DAOManager daoManager = new DAOManager(userDAO)) {
                 PaginationHelper paginationHelper = new PaginationHelper(SiteManager.getInstance().getUsersForPage());
@@ -273,7 +248,7 @@ public class UserReceiverImpl implements UserReceiver {
         String username = requestContent.getRequestParameter(RequestConstant.USERNAME)[0];
 
         if (user != null) {
-            UserDAO userDAO = new UserDAOImpl();
+            UserDAO userDAO = DAOFactory.getInstance().getUserDAO();
 
             try (DAOManager daoManager = new DAOManager(userDAO)) {
                 PaginationHelper paginationHelper = new PaginationHelper(SiteManager.getInstance().getUsersForPage());
@@ -289,6 +264,20 @@ public class UserReceiverImpl implements UserReceiver {
             } catch (DAOException e) {
                 throw new ReceiverException(e);
             }
+        }
+    }
+
+    @Override
+    public void showProfile(RequestContent requestContent) throws ReceiverException {
+        long sellerId = ((Item) requestContent.getSessionAttribute(RequestConstant.ITEM)).getSellerId();
+
+        UserDAO userDAO = DAOFactory.getInstance().getUserDAO();
+
+        try (DAOManager daoManager = new DAOManager(userDAO)) {
+            requestContent.setRequestAttribute(RequestConstant.PROFILE,
+                    userDAO.findEntityById(sellerId));
+        } catch (DAOException e) {
+            throw new ReceiverException(e);
         }
     }
 

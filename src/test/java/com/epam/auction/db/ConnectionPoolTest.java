@@ -1,11 +1,14 @@
 package com.epam.auction.db;
 
-public class ConnectionPoolTest {
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.Test;
 
-    @BeforeClass
-    public static void init(){
-        ConnectionPool.init();
-    }
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsNull.notNullValue;
+
+
+public class ConnectionPoolTest {
 
     @Test
     public void initTest() {

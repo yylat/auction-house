@@ -4,6 +4,7 @@ import com.epam.auction.dao.ItemDAO;
 import com.epam.auction.dao.TableConstant;
 import com.epam.auction.dao.criteria.FilterCriteria;
 import com.epam.auction.dao.criteria.OrderCriteria;
+import com.epam.auction.entity.DeliveryStatus;
 import com.epam.auction.entity.Item;
 import com.epam.auction.entity.ItemStatus;
 import com.epam.auction.exception.DAOException;
@@ -16,12 +17,12 @@ import java.util.List;
 /**
  * Provides the base model implementation for `item` table DAO.
  */
-public class ItemDAOImpl extends GenericDAOImpl<Item> implements ItemDAO {
+class ItemDAOImpl extends GenericDAOImpl<Item> implements ItemDAO {
 
     /**
      * Constructs dao for `item` table.
      */
-    public ItemDAOImpl() {
+    ItemDAOImpl() {
         super(TableConstant.ITEM_QUERY_FIND_ALL,
                 TableConstant.ITEM_QUERY_FIND_BY_ID,
                 TableConstant.ITEM_QUERY_DELETE,
@@ -42,7 +43,8 @@ public class ItemDAOImpl extends GenericDAOImpl<Item> implements ItemDAO {
                 resultSet.getDate(TableConstant.ITEM_COLUMN_CLOSE_DATE),
                 ItemStatus.define(resultSet.getInt(TableConstant.ITEM_COLUMN_STATUS_ID)),
                 resultSet.getLong(TableConstant.ITEM_COLUMN_CATEGORY_ID),
-                resultSet.getLong(TableConstant.ITEM_COLUMN_SELLER_ID));
+                resultSet.getLong(TableConstant.ITEM_COLUMN_SELLER_ID),
+                DeliveryStatus.define(resultSet.getInt(TableConstant.ITEM_COLUMN_DELIVERY_STATUS_ID)));
     }
 
     @Override
@@ -57,6 +59,7 @@ public class ItemDAOImpl extends GenericDAOImpl<Item> implements ItemDAO {
         statement.setInt(8, entity.getStatus().ordinal());
         statement.setLong(9, entity.getItemCategoryId());
         statement.setLong(10, entity.getSellerId());
+        statement.setInt(11, entity.getDeliveryStatus().ordinal());
     }
 
     @Override
@@ -104,6 +107,14 @@ public class ItemDAOImpl extends GenericDAOImpl<Item> implements ItemDAO {
         return findSpecificList(query, statement -> {
             statement.setLong(1, userId);
             defineFilterLimit(statement, 1, filterCriteria, offset, limit);
+        });
+    }
+
+    @Override
+    public void updateDeliveryStatus(long itemId, DeliveryStatus deliveryStatus) throws DAOException {
+        executeUpdate(TableConstant.ITEM_QUERY_UPDATE_DELIVERY_STATUS, statement -> {
+            statement.setInt(1, deliveryStatus.ordinal());
+            statement.setLong(2, itemId);
         });
     }
 

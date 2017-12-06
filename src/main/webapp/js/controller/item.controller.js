@@ -1,24 +1,37 @@
 (function () {
 
-    var deleteItemForm = document.getElementById("deleteItemForm");
-    if (deleteItemForm) {
-        var deleteConfirmed = false;
-        deleteItemForm.addEventListener("click", function (event) {
-            if (deleteConfirmed) {
-                deleteConfirmed = false;
+    function setConfirmRequest(actionForm) {
+        var actionConfirmed = false;
+        actionForm.addEventListener("click", function (event) {
+            if (actionConfirmed) {
+                actionConfirmed = false;
             }
             else {
                 event.preventDefault();
                 confirmAction(function (result) {
                     if (result) {
-                        deleteConfirmed = true;
-                        deleteItemForm.submit();
+                        actionConfirmed = true;
+                        actionForm.submit();
                     }
                 });
             }
         });
     }
 
+    var deleteItemForm = document.getElementById("deleteItemForm");
+    if (deleteItemForm) {
+        setConfirmRequest(deleteItemForm);
+    }
+
+    var confirmDeliveryForm = document.getElementById("confirmDeliveryForm");
+    if (confirmDeliveryForm) {
+        setConfirmRequest(confirmDeliveryForm);
+    }
+
+    var reportViolationForm = document.getElementById("reportViolationForm");
+    if (reportViolationForm) {
+        setConfirmRequest(reportViolationForm);
+    }
 
     var photosContainer = document.getElementById("photos");
 

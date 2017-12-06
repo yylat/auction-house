@@ -7,14 +7,10 @@
 <fmt:setBundle basename="/localization/message" var="msg"/>
 
 <fmt:message bundle="${msg}" key="label.projectTitle" var="projectTitle"/>
-
 <fmt:message bundle="${msg}" key="menu.myItems" var="items"/>
-
 <fmt:message bundle="${msg}" key="message.noItemsYet" var="noItemsYet"/>
-
 <fmt:message bundle="${msg}" key="label.approve" var="approve"/>
 <fmt:message bundle="${msg}" key="label.discard" var="discard"/>
-
 <fmt:message bundle="${msg}" key="form.itemTitle" var="itemTitle"/>
 <fmt:message bundle="${msg}" key="form.description" var="description"/>
 <fmt:message bundle="${msg}" key="form.startPrice" var="startPrice"/>
@@ -23,7 +19,6 @@
 <fmt:message bundle="${msg}" key="form.closeDate" var="closeDate"/>
 <fmt:message bundle="${msg}" key="form.category" var="category"/>
 <fmt:message bundle="${msg}" key="form.photos" var="photos"/>
-
 <fmt:message bundle="${msg}" key="item.actualPrice" var="actualPrice"/>
 <fmt:message bundle="${msg}" key="item.prices" var="prices"/>
 <fmt:message bundle="${msg}" key="item.dates" var="dates"/>
@@ -31,18 +26,12 @@
 <fmt:message bundle="${msg}" key="item.blitzPrice" var="itemBlitzPrice"/>
 <fmt:message bundle="${msg}" key="item.startDate" var="itemStartDate"/>
 <fmt:message bundle="${msg}" key="item.closeDate" var="itemCloseDate"/>
-
 <fmt:message bundle="${msg}" key="item.edit" var="edit"/>
-
 <fmt:message bundle="${msg}" key="form.priceRule" var="priceRule"/>
-
 <fmt:message bundle="${msg}" key="message.noPhotosForItem" var="noPhotosForItem"/>
-
 <fmt:message bundle="${msg}" key="label.makeBid" var="makeBid"/>
-
 <fmt:message bundle="${msg}" key="item.delete" var="delete"/>
 <fmt:message bundle="${msg}" key="item.cancelAuction" var="cancelAuction"/>
-
 <fmt:message bundle="${msg}" key="status.title" var="statusTitle"/>
 <fmt:message bundle="${msg}" key="status.created" var="created"/>
 <fmt:message bundle="${msg}" key="status.confirmed" var="confirmed"/>
@@ -51,6 +40,8 @@
 <fmt:message bundle="${msg}" key="status.canceled" var="canceled"/>
 <fmt:message bundle="${msg}" key="status.ended" var="ended"/>
 <fmt:message bundle="${msg}" key="status.not_confirmed" var="not_confirmed"/>
+<fmt:message bundle="${msg}" key="status.delivered" var="delivered"/>
+<fmt:message bundle="${msg}" key="status.violation" var="violation"/>
 
 <html>
 
@@ -73,33 +64,29 @@
             <div class="w3-row-padding w3-margin-top">
 
                 <div class="w3-container w3-right">
-
-                    <c:if test="${sessionScope.user!=null}">
-                        <c:choose>
-                            <c:when test="${(sessionScope.item.status == 'CREATED') && (sessionScope.user.role == 'ADMIN')}">
-                                <div class="w3-bar">
-
-                                    <form class="w3-bar-item" action="${pageContext.request.contextPath}/controller">
+                    <div class="w3-bar">
+                        <c:if test="${sessionScope.user!=null}">
+                            <c:choose>
+                                <c:when test="${(sessionScope.item.status == 'CREATED') && (sessionScope.user.role == 'ADMIN')}">
+                                    <form class="w3-bar-item"
+                                          action="${pageContext.request.contextPath}/controller">
                                         <input type="hidden" name="command" value="approve-item"/>
                                         <button class="w3-button pro-green w3-ripple">
                                                 ${approve}
                                         </button>
                                     </form>
 
-                                    <form class="w3-bar-item" action="${pageContext.request.contextPath}/controller">
+                                    <form class="w3-bar-item"
+                                          action="${pageContext.request.contextPath}/controller">
                                         <input type="hidden" name="command" value="discard-item"/>
                                         <input type="hidden" name="itemId" value="${sessionScope.item.id}"/>
                                         <button class="w3-button pro-green w3-ripple">
                                                 ${discard}
                                         </button>
                                     </form>
-
-                                </div>
-                            </c:when>
-                            <c:when test="${(sessionScope.user.id == sessionScope.item.sellerId)}">
-                                <div class="w3-bar">
-                                    <c:if test="${(sessionScope.item.status == 'CREATED')
-                                    || (sessionScope.item.status == 'CONFIRMED')}">
+                                </c:when>
+                                <c:when test="${(sessionScope.user.id == sessionScope.item.sellerId)}">
+                                    <c:if test="${(sessionScope.item.status == 'CREATED') || (sessionScope.item.status == 'CONFIRMED')}">
 
                                         <form class="w3-bar-item" id="deleteItemForm"
                                               action="${pageContext.request.contextPath}/controller">
@@ -128,10 +115,103 @@
                                             </button>
                                         </form>
                                     </c:if>
-                                </div>
-                            </c:when>
-                        </c:choose>
-                    </c:if>
+
+                                    <c:if test="${sessionScope.item.status == 'SOLD'}">
+                                        <c:choose>
+                                            <c:when test="${(sessionScope.item.deliveryStatus == 'NO_DELIVERY')
+                                                || (sessionScope.item.deliveryStatus == 'BUYER_C')
+                                                || (sessionScope.item.deliveryStatus == 'BUYER_RV')}">
+                                                <form class="w3-bar-item" id="confirmDeliveryForm"
+                                                      action="${pageContext.request.contextPath}/controller">
+                                                    <input type="hidden" name="command" value="confirm-delivery"/>
+                                                    <input type="hidden" name="is-seller" value="true"/>
+                                                    <button class="w3-button pro-green w3-ripple">
+                                                        confirm delivery
+                                                    </button>
+                                                </form>
+                                                <form class="w3-bar-item" id="reportViolationForm"
+                                                      action="${pageContext.request.contextPath}/controller">
+                                                    <input type="hidden" name="command" value="report-violation"/>
+                                                    <input type="hidden" name="is-seller" value="true"/>
+                                                    <button class="w3-button pro-sand w3-ripple">
+                                                        report violation
+                                                    </button>
+                                                </form>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <c:if test="${(sessionScope.item.deliveryStatus == 'SELLER_C')
+                                                    || (sessionScope.item.deliveryStatus == 'SELLER_BUYER_C')}">
+                                                    <div class="w3-bar-item">
+                                                        <button class="w3-button pro-green w3-ripple w3-disabled">
+                                                            delivery confirmed
+                                                        </button>
+                                                    </div>
+                                                </c:if>
+                                                <c:if test="${(sessionScope.item.deliveryStatus == 'SELLER_RV')
+                                                    || (sessionScope.item.deliveryStatus == 'SELLER_BUYER_RV')}">
+                                                    <div class="w3-bar-item">
+                                                        <button class="w3-button pro-sand w3-ripple w3-disabled">
+                                                            violation reported
+                                                        </button>
+                                                    </div>
+                                                </c:if>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:if>
+                                </c:when>
+                                <c:when test="${sessionScope.item.status == 'SOLD'}">
+                                    <form class="w3-bar-item"
+                                          action="${pageContext.request.contextPath}/controller">
+                                        <input type="hidden" name="command" value="show_profile"/>
+                                        <button class="w3-button pro-green w3-ripple">
+                                            show Seller Contacts
+                                        </button>
+                                    </form>
+
+                                    <c:choose>
+                                        <c:when test="${(sessionScope.item.deliveryStatus == 'NO_DELIVERY')
+                                                || (sessionScope.item.deliveryStatus == 'SELLER_C')
+                                                || (sessionScope.item.deliveryStatus == 'SELLER_RV')}">
+                                            <form class="w3-bar-item" id="confirmDeliveryForm"
+                                                  action="${pageContext.request.contextPath}/controller">
+                                                <input type="hidden" name="command" value="confirm-delivery"/>
+                                                <input type="hidden" name="is-seller" value="false"/>
+                                                <button class="w3-button pro-green w3-ripple">
+                                                    confirm delivery
+                                                </button>
+                                            </form>
+                                            <form class="w3-bar-item" id="reportViolationForm"
+                                                  action="${pageContext.request.contextPath}/controller">
+                                                <input type="hidden" name="command" value="report-violation"/>
+                                                <input type="hidden" name="is-seller" value="false"/>
+                                                <button class="w3-button pro-sand w3-ripple">
+                                                    report violation
+                                                </button>
+                                            </form>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <c:if test="${(sessionScope.item.deliveryStatus == 'BUYER_C')
+                                                    || (sessionScope.item.deliveryStatus == 'SELLER_BUYER_C')}">
+                                                <div class="w3-bar-item">
+                                                    <button class="w3-button pro-green w3-ripple w3-disabled">
+                                                        delivery confirmed
+                                                    </button>
+                                                </div>
+                                            </c:if>
+                                            <c:if test="${(sessionScope.item.deliveryStatus == 'BUYER_RV')
+                                                    || (sessionScope.item.deliveryStatus == 'SELLER_BUYER_RV')}">
+                                                <div class="w3-bar-item">
+                                                    <button class="w3-button pro-sand w3-ripple w3-disabled">
+                                                        violation reported
+                                                    </button>
+                                                </div>
+                                            </c:if>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </c:when>
+                            </c:choose>
+                        </c:if>
+                    </div>
                 </div>
 
             </div>

@@ -36,7 +36,11 @@ public enum ItemStatus {
     /**
      * Item didn't approve.
      */
-    NOT_CONFIRMED;
+    NOT_CONFIRMED,
+
+    DELIVERED,
+
+    VIOLATION;
 
     /**
      * Returns status of the item with id (ordinal number in enum).

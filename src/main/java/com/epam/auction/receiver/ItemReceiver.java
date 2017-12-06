@@ -121,4 +121,8 @@ public interface ItemReceiver extends Receiver {
      */
     void searchItems(RequestContent requestContent) throws ReceiverException;
 
+    void confirmDelivery(RequestContent requestContent) throws ReceiverException;
+
+    void reportViolation(RequestContent requestContent) throws ReceiverException;
+
 }

@@ -1,8 +1,8 @@
 package com.epam.auction.receiver.impl;
 
 import com.epam.auction.controller.RequestContent;
+import com.epam.auction.dao.impl.DAOFactory;
 import com.epam.auction.dao.PhotoDAO;
-import com.epam.auction.dao.impl.PhotoDAOImpl;
 import com.epam.auction.db.DAOManager;
 import com.epam.auction.entity.Photo;
 import com.epam.auction.exception.DAOException;
@@ -19,13 +19,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PhotoReceiverImpl implements PhotoReceiver {
+class PhotoReceiverImpl implements PhotoReceiver {
 
     @Override
     public void loadPhoto(RequestContent requestContent) throws ReceiverException {
         int itemId = Integer.valueOf(requestContent.getRequestParameter(RequestConstant.ITEM_ID)[0]);
 
-        PhotoDAO photoDAO = new PhotoDAOImpl();
+        PhotoDAO photoDAO = DAOFactory.getInstance().getPhotoDAO();
         Photo photo;
 
         try (DAOManager daoManager = new DAOManager(photoDAO)) {
@@ -43,7 +43,7 @@ public class PhotoReceiverImpl implements PhotoReceiver {
     public void loadAllPhotos(RequestContent requestContent) throws ReceiverException {
         int itemId = Integer.valueOf(requestContent.getRequestParameter(RequestConstant.ITEM_ID)[0]);
 
-        PhotoDAO photoDAO = new PhotoDAOImpl();
+        PhotoDAO photoDAO = DAOFactory.getInstance().getPhotoDAO();
         List<String> photosFiles = new ArrayList<>();
 
         try (DAOManager daoManager = new DAOManager(photoDAO)) {
@@ -64,7 +64,7 @@ public class PhotoReceiverImpl implements PhotoReceiver {
     public void loadPhotosForDelete(RequestContent requestContent) throws ReceiverException {
         int itemId = Integer.valueOf(requestContent.getRequestParameter(RequestConstant.ITEM_ID)[0]);
 
-        PhotoDAO photoDAO = new PhotoDAOImpl();
+        PhotoDAO photoDAO = DAOFactory.getInstance().getPhotoDAO();
         Map<Long, String> photos = new HashMap<>();
 
         try (DAOManager daoManager = new DAOManager(photoDAO)) {
@@ -83,7 +83,7 @@ public class PhotoReceiverImpl implements PhotoReceiver {
         String[] photosToDelete = requestContent.getRequestParameter(RequestConstant.PHOTO_ID);
 
         if (photosToDelete != null) {
-            PhotoDAO photoDAO = new PhotoDAOImpl();
+            PhotoDAO photoDAO = DAOFactory.getInstance().getPhotoDAO();
             DAOManager daoManager = new DAOManager(true, photoDAO);
 
             daoManager.beginTransaction();

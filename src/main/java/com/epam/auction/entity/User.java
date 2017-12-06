@@ -37,10 +37,6 @@ public class User extends Entity {
      */
     private String email;
     /**
-     * Balance.
-     */
-    private BigDecimal balance = new BigDecimal(0);
-    /**
      * Boolean value that detect is user account deleted or not ("0" - not deleted, "1" - deleted).
      */
     private boolean isBanned = false;
@@ -136,7 +132,7 @@ public class User extends Entity {
 
     /**
      * Constructs user with id, username, password, last name, middle name,
-     * first name, phone number, email, balance, ban status and role.
+     * first name, phone number, email, ban status and role.
      *
      * @param id          id
      * @param username    username
@@ -146,11 +142,10 @@ public class User extends Entity {
      * @param firstName   first name
      * @param phoneNumber phone number
      * @param email       email
-     * @param balance     balance
      * @param isBanned    ban status
      * @param role        role
      */
-    public User(long id, String username, String password, String lastName, String middleName, String firstName, String phoneNumber, String email, BigDecimal balance, boolean isBanned, UserRole role) {
+    public User(long id, String username, String password, String lastName, String middleName, String firstName, String phoneNumber, String email, boolean isBanned, UserRole role) {
         super(id);
         this.username = username;
         this.password = password;
@@ -159,7 +154,6 @@ public class User extends Entity {
         this.firstName = firstName;
         this.phoneNumber = phoneNumber;
         this.email = email;
-        this.balance = balance;
         this.isBanned = isBanned;
         this.role = role;
     }
@@ -291,24 +285,6 @@ public class User extends Entity {
     }
 
     /**
-     * Returns balance.
-     *
-     * @return balance
-     */
-    public BigDecimal getBalance() {
-        return balance;
-    }
-
-    /**
-     * Sets balance.
-     *
-     * @param balance balance
-     */
-    public void setBalance(BigDecimal balance) {
-        this.balance = balance;
-    }
-
-    /**
      * Returns <code>true</code> if user is banned.
      *
      * @return <code>true</code> if user is banned;
@@ -362,7 +338,6 @@ public class User extends Entity {
                 && (firstName != null ? firstName.equals(user.firstName) : user.firstName == null)
                 && (phoneNumber != null ? phoneNumber.equals(user.phoneNumber) : user.phoneNumber == null)
                 && (email != null ? email.equals(user.email) : user.email == null)
-                && (balance != null ? balance.equals(user.balance) : user.balance == null)
                 && role == user.role;
     }
 
@@ -376,7 +351,6 @@ public class User extends Entity {
         result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
         result = 31 * result + (phoneNumber != null ? phoneNumber.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
-        result = 31 * result + (balance != null ? balance.hashCode() : 0);
         result = 31 * result + (isBanned ? 1 : 0);
         result = 31 * result + (role != null ? role.hashCode() : 0);
         return result;

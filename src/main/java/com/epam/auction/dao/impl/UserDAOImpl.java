@@ -14,12 +14,12 @@ import java.util.List;
 /**
  * Provides the base model implementation for `user` table DAO.
  */
-public class UserDAOImpl extends GenericDAOImpl<User> implements UserDAO {
+class UserDAOImpl extends GenericDAOImpl<User> implements UserDAO {
 
     /**
      * Constructs dao for `user` table.
      */
-    public UserDAOImpl() {
+    UserDAOImpl() {
         super(TableConstant.USER_QUERY_FIND_ALL,
                 TableConstant.USER_QUERY_FIND_BY_ID,
                 null,
@@ -43,7 +43,6 @@ public class UserDAOImpl extends GenericDAOImpl<User> implements UserDAO {
                 resultSet.getString(TableConstant.USER_COLUMN_FIRST_NAME),
                 resultSet.getString(TableConstant.USER_COLUMN_PHONE_NUMBER),
                 resultSet.getString(TableConstant.USER_COLUMN_EMAIL),
-                resultSet.getBigDecimal(TableConstant.USER_COLUMN_BALANCE),
                 resultSet.getBoolean(TableConstant.USER_COLUMN_IS_BANNED),
                 User.UserRole.define(resultSet.getInt(TableConstant.USER_COLUMN_USER_ROLE_ID)));
     }
@@ -57,9 +56,8 @@ public class UserDAOImpl extends GenericDAOImpl<User> implements UserDAO {
         statement.setString(5, entity.getFirstName());
         statement.setString(6, entity.getPhoneNumber());
         statement.setString(7, entity.getEmail());
-        statement.setBigDecimal(8, entity.getBalance());
-        statement.setBoolean(9, entity.getIsBanned());
-        statement.setInt(10, entity.getRole().ordinal());
+        statement.setBoolean(8, entity.getIsBanned());
+        statement.setInt(9, entity.getRole().ordinal());
     }
 
     @Override
@@ -77,7 +75,6 @@ public class UserDAOImpl extends GenericDAOImpl<User> implements UserDAO {
                 user.setFirstName(resultSet.getString(TableConstant.USER_COLUMN_FIRST_NAME));
                 user.setPhoneNumber(resultSet.getString(TableConstant.USER_COLUMN_PHONE_NUMBER));
                 user.setEmail(resultSet.getString(TableConstant.USER_COLUMN_EMAIL));
-                user.setBalance(resultSet.getBigDecimal(TableConstant.USER_COLUMN_BALANCE));
                 user.setIsBanned(resultSet.getBoolean(TableConstant.USER_COLUMN_IS_BANNED));
                 user.setRole(User.UserRole.define(resultSet.getInt(TableConstant.USER_COLUMN_USER_ROLE_ID)));
 

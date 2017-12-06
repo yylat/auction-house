@@ -11,10 +11,8 @@
 
 <fmt:message bundle="${msg}" key="menu.account" var="account"/>
 <fmt:message bundle="${msg}" key="menu.logOut" var="logOut"/>
-<fmt:message bundle="${msg}" key="menu.balanceReplenishment" var="balanceReplenishment"/>
 
 <fmt:message bundle="${msg}" key="menu.management" var="management"/>
-<fmt:message bundle="${msg}" key="menu.balance" var="balance"/>
 
 <fmt:message bundle="${msg}" key="label.hi" var="hi"/>
 
@@ -49,12 +47,6 @@
                                     ${hi}, ${sessionScope.user.username}
                             </div>
 
-                            <div class="pro-container w3-left-align w3-border-bottom pro-padding-bottom pro-padding-left">
-                                    ${balance}: <span class="text-on-color"><ctg:money
-
-                                    value="${sessionScope.user.balance}"/></span>
-                            </div>
-
                             <a href="${pageContext.request.contextPath}/jsp/user/account.jsp"
                                class="w3-bar-item w3-button pro-hover-green w3-ripple">
                                     ${account}
@@ -63,10 +55,6 @@
                                 <input type="hidden" name="command" value="load-notifications">
                                 <button class="w3-bar-item w3-button pro-hover-green w3-ripple">${notifications}</button>
                             </form>
-                            <a href="${pageContext.request.contextPath}/jsp/user/balance.jsp"
-                               class="w3-bar-item w3-button pro-hover-green w3-ripple">
-                                    ${balanceReplenishment}
-                            </a>
                             <form action="${pageContext.request.contextPath}/controller">
                                 <input type="hidden" name="command" value="log-out">
                                 <button class="w3-bar-item w3-button pro-hover-green w3-ripple">${logOut}</button>

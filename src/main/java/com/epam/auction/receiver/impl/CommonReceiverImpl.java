@@ -7,7 +7,7 @@ import com.epam.auction.util.LocaleType;
 
 import java.util.Locale;
 
-public class CommonReceiverImpl implements CommonReceiver {
+class CommonReceiverImpl implements CommonReceiver {
 
     @Override
     public void changeLocale(RequestContent requestContent) {

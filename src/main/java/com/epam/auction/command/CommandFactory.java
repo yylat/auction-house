@@ -26,7 +26,7 @@ public class CommandFactory {
         try {
             commandsNames = requestContent.getRequestParameter(RequestConstant.COMMAND);
             if (commandsNames != null) {
-                commandName = requestContent.getRequestParameter(RequestConstant.COMMAND)[0];
+                commandName = commandsNames[0];
                 CommandType commandType = CommandType.valueOf(commandName.toUpperCase().replaceAll("-", "_"));
                 command = commandType.getCommand();
             }

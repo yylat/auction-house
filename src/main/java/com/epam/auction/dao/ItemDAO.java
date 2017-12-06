@@ -2,6 +2,7 @@ package com.epam.auction.dao;
 
 import com.epam.auction.dao.criteria.FilterCriteria;
 import com.epam.auction.dao.criteria.OrderCriteria;
+import com.epam.auction.entity.DeliveryStatus;
 import com.epam.auction.entity.Item;
 import com.epam.auction.entity.ItemStatus;
 import com.epam.auction.exception.DAOException;
@@ -67,5 +68,7 @@ public interface ItemDAO extends GenericDAO<Item> {
      */
     List<Item> findPurchasedItems(long userId, FilterCriteria filterCriteria, OrderCriteria orderCriteria,
                                   int offset, int limit) throws DAOException;
+
+    void updateDeliveryStatus(long itemId, DeliveryStatus deliveryStatus) throws DAOException;
 
 }

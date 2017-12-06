@@ -52,6 +52,8 @@ public class Item extends Entity {
      */
     private long sellerId;
 
+    private DeliveryStatus deliveryStatus = DeliveryStatus.NO_DELIVERY;
+
     /**
      * Constructs item without parameters.
      */
@@ -119,7 +121,10 @@ public class Item extends Entity {
      * @param itemCategoryId item category id
      * @param sellerId       seller id
      */
-    public Item(long id, String name, String description, BigDecimal startPrice, BigDecimal blitzPrice, BigDecimal actualPrice, Date startDate, Date closeDate, ItemStatus status, long itemCategoryId, long sellerId) {
+    public Item(long id, String name, String description,
+                BigDecimal startPrice, BigDecimal blitzPrice, BigDecimal actualPrice,
+                Date startDate, Date closeDate, ItemStatus status,
+                long itemCategoryId, long sellerId, DeliveryStatus deliveryStatus) {
         super(id);
         this.name = name;
         this.description = description;
@@ -131,6 +136,7 @@ public class Item extends Entity {
         this.status = status;
         this.itemCategoryId = itemCategoryId;
         this.sellerId = sellerId;
+        this.deliveryStatus = deliveryStatus;
     }
 
     /**
@@ -313,6 +319,14 @@ public class Item extends Entity {
         this.sellerId = sellerId;
     }
 
+    public DeliveryStatus getDeliveryStatus() {
+        return deliveryStatus;
+    }
+
+    public void setDeliveryStatus(DeliveryStatus deliveryStatus) {
+        this.deliveryStatus = deliveryStatus;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -330,7 +344,7 @@ public class Item extends Entity {
                 && (actualPrice != null ? actualPrice.equals(item.actualPrice) : item.actualPrice == null)
                 && (startDate != null ? startDate.equals(item.startDate) : item.startDate == null)
                 && (closeDate != null ? closeDate.equals(item.closeDate) : item.closeDate == null)
-                && status == item.status;
+                && status == item.status && deliveryStatus == item.deliveryStatus;
     }
 
     @Override
@@ -346,6 +360,8 @@ public class Item extends Entity {
         result = 31 * result + (status != null ? status.hashCode() : 0);
         result = 31 * result + (int) (itemCategoryId ^ (itemCategoryId >>> 32));
         result = 31 * result + (int) (sellerId ^ (sellerId >>> 32));
+        result = 31 * result + (deliveryStatus != null ? deliveryStatus.hashCode() : 0);
         return result;
     }
+
 }

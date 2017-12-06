@@ -1,10 +1,9 @@
 package com.epam.auction.receiver.impl;
 
 import com.epam.auction.controller.RequestContent;
+import com.epam.auction.dao.impl.DAOFactory;
 import com.epam.auction.dao.ItemDAO;
 import com.epam.auction.dao.NotificationDAO;
-import com.epam.auction.dao.impl.ItemDAOImpl;
-import com.epam.auction.dao.impl.NotificationDAOImpl;
 import com.epam.auction.db.DAOManager;
 import com.epam.auction.entity.Item;
 import com.epam.auction.entity.Notification;
@@ -18,15 +17,15 @@ import com.epam.auction.util.SiteManager;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class NotificationReceiverImpl implements NotificationReceiver {
+class NotificationReceiverImpl implements NotificationReceiver {
 
     @Override
     public void loadNotifications(RequestContent requestContent) throws ReceiverException {
         User user = (User) requestContent.getSessionAttribute(RequestConstant.USER);
 
         if (user != null) {
-            NotificationDAO notificationDAO = new NotificationDAOImpl();
-            ItemDAO itemDAO = new ItemDAOImpl();
+            NotificationDAO notificationDAO = DAOFactory.getInstance().getNotificationDAO();
+            ItemDAO itemDAO = DAOFactory.getInstance().getItemDAO();
 
             try (DAOManager daoManager = new DAOManager(notificationDAO, itemDAO)) {
 

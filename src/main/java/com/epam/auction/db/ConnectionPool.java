@@ -87,35 +87,25 @@ public class ConnectionPool {
     }
 
     /**
-     * Returns ConnectionPool instance.
+     * Returns ConnectionPool instance. Initialize instance if it doesn't.
      *
      * @return instance
      */
     public static ConnectionPool getInstance() {
-        return instance;
-    }
-
-    /**
-     * Initialize ConnectionPool with double-checked locking.
-     */
-    public static void init() {
         if (!isInitialized.get()) {
             lock.lock();
             try {
                 if (instance == null) {
                     instance = new ConnectionPool();
-                } else {
-                    LOGGER.log(Level.WARN, "Attempt to create initialized connection pool instance.");
+                    isInitialized.set(true);
+                    LOGGER.log(Level.INFO, "Connection pool initialized successfully.");
                 }
-
-                isInitialized.set(true);
-                LOGGER.log(Level.INFO, "Connection pool initialized successfully.");
+                return instance;
             } finally {
                 lock.unlock();
             }
-        } else {
-            LOGGER.log(Level.WARN, "Attempt to initialize already initialized connection pool.");
         }
+        return instance;
     }
 
     /**

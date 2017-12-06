@@ -12,7 +12,6 @@ public class ServletContextListenerImpl implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
-        ConnectionPool.init();
         PhotoLoader.createUploadFolder();
     }
 

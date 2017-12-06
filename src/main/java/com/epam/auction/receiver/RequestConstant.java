@@ -45,15 +45,10 @@ public final class RequestConstant {
     public static final String BLITZ_PRICE = "blitz-price";
     public static final String START_DATE = "start-date";
     public static final String CLOSE_DATE = "close-date";
-    public static final String CATEGORY_ID = "category-id";
 
     public static final String ITEM_ID = "itemId";
 
-    public static final String PHOTO = "photo";
-
     public static final String PHOTO_ID = "photo-id";
-
-    public static final String ITEM_STATUS = "item-status";
 
     public static final String ITEM = "item";
 
@@ -67,8 +62,6 @@ public final class RequestConstant {
 
     public static final String LOCALE = "locale";
 
-    public static final String MONEY_AMOUNT = "moneyAmount";
-
     public static final String ORDER_BY = "order-by";
     public static final String ORDER_TYPE = "order-type";
 
@@ -77,5 +70,9 @@ public final class RequestConstant {
     public static final String INITIAL = "initial";
 
     public static final String SEARCH_NAME = "search-name";
+
+    public static final String PROFILE = "profile";
+
+    public static final String IS_SELLER = "is-seller";
 
 }

@@ -18,21 +18,20 @@ public final class TableConstant {
     public static final String USER_COLUMN_FIRST_NAME = "first_name";
     public static final String USER_COLUMN_PHONE_NUMBER = "phone_number";
     public static final String USER_COLUMN_EMAIL = "email";
-    public static final String USER_COLUMN_BALANCE = "balance";
     public static final String USER_COLUMN_IS_BANNED = "is_banned";
     public static final String USER_COLUMN_USER_ROLE_ID = "user_role_id";
 
     public static final String USER_QUERY_FIND_ALL =
-            "SELECT `user_id`, `username`, `password`, `last_name`, `middle_name`, `first_name`, `phone_number`, `email`, `balance`, `is_banned`, `user_role_id` FROM `user`";
+            "SELECT `user_id`, `username`, `password`, `last_name`, `middle_name`, `first_name`, `phone_number`, `email`, `is_banned`, `user_role_id` FROM `user`";
     public static final String USER_QUERY_FIND_BY_ID =
-            "SELECT `user_id`, `username`, `password`, `last_name`, `middle_name`, `first_name`, `phone_number`, `email`, `balance`, `is_banned`, `user_role_id` FROM `user` WHERE `user_id` = ?";
+            "SELECT `user_id`, `username`, `password`, `last_name`, `middle_name`, `first_name`, `phone_number`, `email`, `is_banned`, `user_role_id` FROM `user` WHERE `user_id` = ?";
     public static final String USER_QUERY_CREATE =
-            "INSERT INTO `user`(`username`, `password`, `last_name`, `middle_name`, `first_name`, `phone_number`, `email`, `balance`, `is_banned`, `user_role_id`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            "INSERT INTO `user`(`username`, `password`, `last_name`, `middle_name`, `first_name`, `phone_number`, `email`, `is_banned`, `user_role_id`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
     public static final String USER_QUERY_UPDATE =
-            "UPDATE `user` SET `username` = ?, `password` = ?, `last_name` = ?, `middle_name` = ?, `first_name` = ?, `phone_number` = ?, `email` = ?, `balance` = ?, `is_banned` = ?, `user_role_id` = ? WHERE `user_id` = ?";
+            "UPDATE `user` SET `username` = ?, `password` = ?, `last_name` = ?, `middle_name` = ?, `first_name` = ?, `phone_number` = ?, `email` = ?, `is_banned` = ?, `user_role_id` = ? WHERE `user_id` = ?";
 
     public static final String USER_QUERY_IS_EXIST =
-            "SELECT `user_id`, `last_name`, `middle_name`, `first_name`, `phone_number`, `email`, `balance`, `is_banned`, `user_role_id` FROM `user` WHERE `username` = ? AND `password` = ?";
+            "SELECT `user_id`, `last_name`, `middle_name`, `first_name`, `phone_number`, `email`, `is_banned`, `user_role_id` FROM `user` WHERE `username` = ? AND `password` = ?";
 
     public static final String USER_QUERY_IS_EXIST_USERNAME =
             "SELECT EXISTS(SELECT * FROM `user` WHERE `username` = ?)";
@@ -115,17 +114,18 @@ public final class TableConstant {
     public static final String ITEM_COLUMN_STATUS_ID = "item_status_id";
     public static final String ITEM_COLUMN_CATEGORY_ID = "item_category_id";
     public static final String ITEM_COLUMN_SELLER_ID = "seller_id";
+    public static final String ITEM_COLUMN_DELIVERY_STATUS_ID = "delivery_status_id";
 
     public static final String ITEM_QUERY_FIND_ALL =
-            "SELECT `item_id`, `name`, `description`, `start_price`, `blitz_price`, `actual_price`, `start_date`, `close_date`, `item_status_id`, `item_category_id`, `seller_id` FROM `item`";
+            "SELECT `item_id`, `name`, `description`, `start_price`, `blitz_price`, `actual_price`, `start_date`, `close_date`, `item_status_id`, `item_category_id`, `seller_id`, `delivery_status_id` FROM `item`";
     public static final String ITEM_QUERY_FIND_BY_ID =
-            "SELECT `item_id`, `name`, `description`, `start_price`, `blitz_price`, `actual_price`, `start_date`, `close_date`, `item_status_id`, `item_category_id`, `seller_id` FROM `item` WHERE `item_id` = ?";
+            "SELECT `item_id`, `name`, `description`, `start_price`, `blitz_price`, `actual_price`, `start_date`, `close_date`, `item_status_id`, `item_category_id`, `seller_id`, `delivery_status_id` FROM `item` WHERE `item_id` = ?";
     public static final String ITEM_QUERY_DELETE =
             "DELETE FROM `item` WHERE `item_id` = ?";
     public static final String ITEM_QUERY_CREATE =
-            "INSERT INTO `item`(`name`, `description`, `start_price`, `blitz_price`, `actual_price`, `start_date`, `close_date`, `item_status_id`, `item_category_id`, `seller_id`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            "INSERT INTO `item`(`name`, `description`, `start_price`, `blitz_price`, `actual_price`, `start_date`, `close_date`, `item_status_id`, `item_category_id`, `seller_id`, `delivery_status_id`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     public static final String ITEM_QUERY_UPDATE =
-            "UPDATE `item` SET `name` = ?, `description` = ?, `start_price` = ?, `blitz_price` = ?, `actual_price` = ?, `start_date` = ?, `close_date` = ?, `item_status_id` = ?, `item_category_id` = ?, `seller_id` = ? WHERE `item_id` = ?";
+            "UPDATE `item` SET `name` = ?, `description` = ?, `start_price` = ?, `blitz_price` = ?, `actual_price` = ?, `start_date` = ?, `close_date` = ?, `item_status_id` = ?, `item_category_id` = ?, `seller_id` = ?, `delivery_status_id` = ? WHERE `item_id` = ?";
 
     public static final String ITEM_QUERY_UPDATE_STATUS =
             "UPDATE `item` SET `item_status_id` = ? WHERE `item_id` = ?";
@@ -140,8 +140,11 @@ public final class TableConstant {
     public static final String ITEM_QUERY_PURCHASED_ROWS_COUNT =
             ITEM_QUERY_FIND_ROWS_COUNT + ITEM_QUERY_PURCHASED_JOIN;
     public static final String ITEM_QUERY_PURCHASED =
-            "SELECT `item`.`item_id`, `item`.`name`, `item`.`description`, `item`.`start_price`, `item`.`blitz_price`, `item`.`actual_price`, `item`.`start_date`, `item`.`close_date`, `item`.`item_status_id`, `item`.`item_category_id`, `item`.`seller_id` FROM `item`" +
+            "SELECT `item`.`item_id`, `item`.`name`, `item`.`description`, `item`.`start_price`, `item`.`blitz_price`, `item`.`actual_price`, `item`.`start_date`, `item`.`close_date`, `item`.`item_status_id`, `item`.`item_category_id`, `item`.`seller_id`, `item`.`delivery_status_id` FROM `item`" +
                     ITEM_QUERY_PURCHASED_JOIN;
+
+    public static final String ITEM_QUERY_UPDATE_DELIVERY_STATUS =
+            "UPDATE `item` SET `delivery_status_id` = ? WHERE `item_id` = ?";
 
     //    Notification table
 

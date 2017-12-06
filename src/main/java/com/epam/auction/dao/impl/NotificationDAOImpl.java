@@ -14,12 +14,12 @@ import java.util.List;
 /**
  * Provides the base model implementation for `notification` table DAO.
  */
-public class NotificationDAOImpl extends GenericDAOImpl<Notification> implements NotificationDAO {
+class NotificationDAOImpl extends GenericDAOImpl<Notification> implements NotificationDAO {
 
     /**
      * Constructs dao for `notification` table.
      */
-    public NotificationDAOImpl() {
+    NotificationDAOImpl() {
         super(TableConstant.NOTIFICATION_QUERY_FIND_ALL,
                 TableConstant.NOTIFICATION_QUERY_FIND_BY_ID,
                 null,

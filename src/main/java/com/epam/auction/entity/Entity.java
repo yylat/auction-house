@@ -5,7 +5,8 @@ import java.io.Serializable;
 /**
  * Represents common database table's properties.
  */
-public abstract class Entity implements Serializable {
+public abstract class
+Entity implements Serializable {
 
     /**
      * Represent primary key from table in database.

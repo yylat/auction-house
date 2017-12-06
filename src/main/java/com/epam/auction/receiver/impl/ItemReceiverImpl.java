@@ -1,19 +1,23 @@
 package com.epam.auction.receiver.impl;
 
 import com.epam.auction.controller.RequestContent;
+import com.epam.auction.dao.impl.DAOFactory;
 import com.epam.auction.dao.ItemDAO;
 import com.epam.auction.dao.PhotoDAO;
 import com.epam.auction.dao.criteria.FilterCriteria;
 import com.epam.auction.dao.criteria.FilterType;
 import com.epam.auction.dao.criteria.OrderCriteria;
-import com.epam.auction.dao.impl.ItemDAOImpl;
-import com.epam.auction.dao.impl.PhotoDAOImpl;
 import com.epam.auction.db.DAOManager;
+import com.epam.auction.entity.DeliveryStatus;
 import com.epam.auction.entity.Item;
 import com.epam.auction.entity.ItemStatus;
 import com.epam.auction.entity.Photo;
 import com.epam.auction.entity.User;
-import com.epam.auction.exception.*;
+import com.epam.auction.exception.DAOException;
+import com.epam.auction.exception.MethodNotSupportedException;
+import com.epam.auction.exception.PhotoLoadingException;
+import com.epam.auction.exception.ReceiverException;
+import com.epam.auction.exception.WrongFilterParameterException;
 import com.epam.auction.receiver.ItemReceiver;
 import com.epam.auction.receiver.RequestConstant;
 import com.epam.auction.util.SiteManager;
@@ -31,7 +35,7 @@ import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 
-public class ItemReceiverImpl implements ItemReceiver {
+class ItemReceiverImpl implements ItemReceiver {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
@@ -51,8 +55,8 @@ public class ItemReceiverImpl implements ItemReceiver {
         if (itemValidator.validateItemParam(item)) {
             Map<String, InputStream> files = requestContent.getFiles();
 
-            ItemDAO itemDAO = new ItemDAOImpl();
-            PhotoDAO photoDAO = new PhotoDAOImpl();
+            ItemDAO itemDAO = DAOFactory.getInstance().getItemDAO();
+            PhotoDAO photoDAO = DAOFactory.getInstance().getPhotoDAO();
 
             DAOManager daoManager = new DAOManager(true, itemDAO, photoDAO);
             daoManager.beginTransaction();
@@ -79,7 +83,7 @@ public class ItemReceiverImpl implements ItemReceiver {
     public void loadItem(RequestContent requestContent) throws ReceiverException {
         int itemId = Integer.valueOf(requestContent.getRequestParameter(RequestConstant.ITEM_ID)[0]);
 
-        ItemDAO itemDAO = new ItemDAOImpl();
+        ItemDAO itemDAO = DAOFactory.getInstance().getItemDAO();
 
         try (DAOManager daoManager = new DAOManager(itemDAO)) {
             requestContent.setSessionAttribute(RequestConstant.ITEM,
@@ -110,7 +114,7 @@ public class ItemReceiverImpl implements ItemReceiver {
             item.setStartDate(newStartDate);
             item.setCloseDate(newCloseDate);
 
-            ItemDAO itemDAO = new ItemDAOImpl();
+            ItemDAO itemDAO = DAOFactory.getInstance().getItemDAO();
             DAOManager daoManager = new DAOManager(true, itemDAO);
 
             daoManager.beginTransaction();
@@ -135,8 +139,8 @@ public class ItemReceiverImpl implements ItemReceiver {
         Map<String, InputStream> files = requestContent.getFiles();
         if (files != null) {
 
-            PhotoDAO photoDAO = new PhotoDAOImpl();
-            ItemDAO itemDAO = new ItemDAOImpl();
+            PhotoDAO photoDAO = DAOFactory.getInstance().getPhotoDAO();
+            ItemDAO itemDAO = DAOFactory.getInstance().getItemDAO();
             DAOManager daoManager = new DAOManager(true, photoDAO, itemDAO);
 
             daoManager.beginTransaction();
@@ -157,8 +161,8 @@ public class ItemReceiverImpl implements ItemReceiver {
     public void deleteItem(RequestContent requestContent) throws ReceiverException {
         long itemId = ((Item) requestContent.getSessionAttribute(RequestConstant.ITEM)).getId();
 
-        ItemDAO itemDAO = new ItemDAOImpl();
-        PhotoDAO photoDAO = new PhotoDAOImpl();
+        ItemDAO itemDAO = DAOFactory.getInstance().getItemDAO();
+        PhotoDAO photoDAO = DAOFactory.getInstance().getPhotoDAO();
         DAOManager daoManager = new DAOManager(true, itemDAO, photoDAO);
 
         daoManager.beginTransaction();
@@ -209,11 +213,10 @@ public class ItemReceiverImpl implements ItemReceiver {
         User user = (User) requestContent.getSessionAttribute(RequestConstant.USER);
         if (user != null) {
 
-            ItemDAO itemDAO = new ItemDAOImpl();
+            ItemDAO itemDAO = DAOFactory.getInstance().getItemDAO();
 
             try (DAOManager daoManager = new DAOManager(itemDAO)) {
-                FilterCriteria filterCriteria = new FilterCriteria();
-                extractFilterParameters(requestContent, filterCriteria);
+                FilterCriteria filterCriteria = extractFilter(requestContent);
                 OrderCriteria orderCriteria = extractOrderParameters(requestContent);
 
                 PaginationHelper paginationHelper = new PaginationHelper(SiteManager.getInstance().getItemsForPage());
@@ -236,10 +239,10 @@ public class ItemReceiverImpl implements ItemReceiver {
     public void loadUserItems(RequestContent requestContent) throws ReceiverException {
         User user = (User) requestContent.getSessionAttribute(RequestConstant.USER);
         if (user != null) {
-            FilterCriteria filterCriteria = new FilterCriteria();
+            FilterCriteria filterCriteria = extractFilter(requestContent);
             try {
                 filterCriteria.put(FilterType.SELLER_ID, user.getId());
-                loadItems(requestContent, filterCriteria);
+                loadItems(requestContent, filterCriteria, extractOrderParameters(requestContent));
             } catch (WrongFilterParameterException e) {
                 throw new ReceiverException(e);
             }
@@ -255,7 +258,57 @@ public class ItemReceiverImpl implements ItemReceiver {
         loadItems(requestContent, filterCriteria, orderCriteria);
     }
 
-    private void extractFilterParameters(RequestContent requestContent, FilterCriteria filterCriteria) {
+    @Override
+    public void confirmDelivery(RequestContent requestContent) throws ReceiverException {
+        Item item = (Item) requestContent.getSessionAttribute(RequestConstant.ITEM);
+        DeliveryStatus itemDeliveryStatus = item.getDeliveryStatus();
+
+        if (Boolean.valueOf(requestContent.getRequestParameter(RequestConstant.IS_SELLER)[0])) {
+            if (DeliveryStatus.BUYER_C.equals(itemDeliveryStatus)) {
+                updateDeliveryStatus(item, DeliveryStatus.SELLER_BUYER_C);
+            } else if (DeliveryStatus.BUYER_RV.equals(itemDeliveryStatus)) {
+                updateDeliveryStatus(item, DeliveryStatus.SELLER_C_BUYER_RV);
+            } else if (DeliveryStatus.NO_DELIVERY.equals(itemDeliveryStatus)) {
+                updateDeliveryStatus(item, DeliveryStatus.SELLER_C);
+            }
+        } else {
+            if (DeliveryStatus.SELLER_C.equals(itemDeliveryStatus)) {
+                updateDeliveryStatus(item, DeliveryStatus.SELLER_BUYER_C);
+            } else if (DeliveryStatus.SELLER_RV.equals(itemDeliveryStatus)) {
+                updateDeliveryStatus(item, DeliveryStatus.SELLER_RV_BUYER_C);
+            } else if (DeliveryStatus.NO_DELIVERY.equals(itemDeliveryStatus)) {
+                updateDeliveryStatus(item, DeliveryStatus.BUYER_C);
+            }
+        }
+    }
+
+    @Override
+    public void reportViolation(RequestContent requestContent) throws ReceiverException {
+        Item item = (Item) requestContent.getSessionAttribute(RequestConstant.ITEM);
+        DeliveryStatus itemDeliveryStatus = item.getDeliveryStatus();
+
+        if (Boolean.valueOf(requestContent.getRequestParameter(RequestConstant.IS_SELLER)[0])) {
+            if (DeliveryStatus.BUYER_RV.equals(itemDeliveryStatus)) {
+                updateDeliveryStatus(item, DeliveryStatus.SELLER_BUYER_RV);
+            } else if (DeliveryStatus.BUYER_C.equals(itemDeliveryStatus)) {
+                updateDeliveryStatus(item, DeliveryStatus.SELLER_RV_BUYER_C);
+            } else if (DeliveryStatus.NO_DELIVERY.equals(itemDeliveryStatus)) {
+                updateDeliveryStatus(item, DeliveryStatus.SELLER_RV);
+            }
+        } else {
+            if (DeliveryStatus.SELLER_RV.equals(itemDeliveryStatus)) {
+                updateDeliveryStatus(item, DeliveryStatus.SELLER_BUYER_RV);
+            } else if (DeliveryStatus.SELLER_C.equals(itemDeliveryStatus)) {
+                updateDeliveryStatus(item, DeliveryStatus.SELLER_C_BUYER_RV);
+            } else if (DeliveryStatus.NO_DELIVERY.equals(itemDeliveryStatus)) {
+                updateDeliveryStatus(item, DeliveryStatus.BUYER_RV);
+            }
+        }
+    }
+
+    private FilterCriteria extractFilter(RequestContent requestContent) {
+        FilterCriteria filterCriteria = new FilterCriteria();
+
         if (requestContent.getRequestParameter(RequestConstant.INITIAL) == null) {
             for (FilterType filterType : FilterType.values()) {
                 String[] requestParameter = requestContent
@@ -269,6 +322,8 @@ public class ItemReceiverImpl implements ItemReceiver {
         } else {
             filterCriteria = (FilterCriteria) requestContent.getSessionAttribute(RequestConstant.FILTER_CRITERIA);
         }
+
+        return filterCriteria;
     }
 
     private OrderCriteria extractOrderParameters(RequestContent requestContent) {
@@ -294,24 +349,18 @@ public class ItemReceiverImpl implements ItemReceiver {
     }
 
     private void loadItemsWithStatus(RequestContent requestContent, ItemStatus itemStatus) throws ReceiverException {
-        FilterCriteria filterCriteria = new FilterCriteria();
+        FilterCriteria filterCriteria = extractFilter(requestContent);
         try {
             filterCriteria.put(FilterType.STATUS, itemStatus.ordinal());
-            loadItems(requestContent, filterCriteria);
+            loadItems(requestContent, filterCriteria, extractOrderParameters(requestContent));
         } catch (WrongFilterParameterException e) {
             throw new ReceiverException(e);
         }
     }
 
-    private void loadItems(RequestContent requestContent, FilterCriteria filterCriteria) throws ReceiverException {
-        extractFilterParameters(requestContent, filterCriteria);
-        OrderCriteria orderCriteria = extractOrderParameters(requestContent);
-        loadItems(requestContent, filterCriteria, orderCriteria);
-    }
-
     private void loadItems(RequestContent requestContent, FilterCriteria filterCriteria, OrderCriteria orderCriteria)
             throws ReceiverException {
-        ItemDAO itemDAO = new ItemDAOImpl();
+        ItemDAO itemDAO = DAOFactory.getInstance().getItemDAO();
 
         try (DAOManager daoManager = new DAOManager(itemDAO)) {
 
@@ -333,7 +382,7 @@ public class ItemReceiverImpl implements ItemReceiver {
     private void updateItemStatus(RequestContent requestContent, ItemStatus itemStatus) throws ReceiverException {
         Item item = (Item) requestContent.getSessionAttribute(RequestConstant.ITEM);
 
-        ItemDAO itemDAO = new ItemDAOImpl();
+        ItemDAO itemDAO = DAOFactory.getInstance().getItemDAO();
 
         DAOManager daoManager = new DAOManager(true, itemDAO);
         daoManager.beginTransaction();
@@ -347,6 +396,21 @@ public class ItemReceiverImpl implements ItemReceiver {
             throw new ReceiverException(e);
         } finally {
             daoManager.endTransaction();
+        }
+    }
+
+    private void updateDeliveryStatus(Item item, DeliveryStatus deliveryStatus) throws ReceiverException {
+        ItemDAO itemDAO = DAOFactory.getInstance().getItemDAO();
+
+        DAOManager daoManager = new DAOManager(true, itemDAO);
+        daoManager.beginTransaction();
+
+        try {
+            itemDAO.updateDeliveryStatus(item.getId(), deliveryStatus);
+            item.setDeliveryStatus(deliveryStatus);
+            daoManager.commit();
+        } catch (DAOException e) {
+            throw new ReceiverException(e);
         }
     }
 

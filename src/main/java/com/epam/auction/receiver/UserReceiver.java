@@ -33,14 +33,6 @@ public interface UserReceiver extends Receiver {
     void logOut(RequestContent requestContent);
 
     /**
-     * Replenishes balance of the user.
-     *
-     * @param requestContent request content
-     * @throws ReceiverException if can not update balance of the user
-     */
-    void replenishBalance(RequestContent requestContent) throws ReceiverException;
-
-    /**
      * Changes username of the user.
      *
      * @param requestContent request content
@@ -89,4 +81,12 @@ public interface UserReceiver extends Receiver {
      */
     void findUsersByUsername(RequestContent requestContent) throws ReceiverException;
 
+    /**
+     * Loads user's info. Used for showing seller's contact info
+     * to buyer.
+     *
+     * @param requestContent request content
+     * @throws ReceiverException if can not load user
+     */
+    void showProfile(RequestContent requestContent) throws ReceiverException;
 }

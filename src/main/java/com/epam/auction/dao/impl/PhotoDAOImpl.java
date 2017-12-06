@@ -13,12 +13,12 @@ import java.util.List;
 /**
  * Provides the base model implementation for `photo` table DAO.
  */
-public class PhotoDAOImpl extends GenericDAOImpl<Photo> implements PhotoDAO {
+class PhotoDAOImpl extends GenericDAOImpl<Photo> implements PhotoDAO {
 
     /**
      * Constructs dao for `photo` table.
      */
-    public PhotoDAOImpl() {
+    PhotoDAOImpl() {
         super(TableConstant.PHOTO_QUERY_FIND_ALL,
                 TableConstant.PHOTO_QUERY_FIND_BY_ID,
                 TableConstant.PHOTO_QUERY_DELETE,

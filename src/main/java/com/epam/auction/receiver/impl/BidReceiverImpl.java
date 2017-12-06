@@ -2,9 +2,8 @@ package com.epam.auction.receiver.impl;
 
 import com.epam.auction.controller.RequestContent;
 import com.epam.auction.dao.BidDAO;
+import com.epam.auction.dao.impl.DAOFactory;
 import com.epam.auction.dao.ItemDAO;
-import com.epam.auction.dao.impl.BidDAOImpl;
-import com.epam.auction.dao.impl.ItemDAOImpl;
 import com.epam.auction.db.DAOManager;
 import com.epam.auction.entity.*;
 import com.epam.auction.exception.DAOException;
@@ -21,7 +20,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
-public class BidReceiverImpl implements BidReceiver {
+class BidReceiverImpl implements BidReceiver {
 
     @Override
     public void makeBid(RequestContent requestContent) throws ReceiverException {
@@ -30,7 +29,7 @@ public class BidReceiverImpl implements BidReceiver {
             Item item = (Item) requestContent.getSessionAttribute(RequestConstant.ITEM);
             BigDecimal bidValue = new BigDecimal(requestContent.getRequestParameter(RequestConstant.BID_VALUE)[0]);
 
-            BidDAO bidDAO = new BidDAOImpl();
+            BidDAO bidDAO = DAOFactory.getInstance().getBidDAO();
             DAOManager daoManager = new DAOManager(true, bidDAO);
 
             daoManager.beginTransaction();
@@ -58,8 +57,8 @@ public class BidReceiverImpl implements BidReceiver {
         User user = (User) requestContent.getSessionAttribute(RequestConstant.USER);
 
         if (user != null) {
-            BidDAO bidDAO = new BidDAOImpl();
-            ItemDAO itemDAO = new ItemDAOImpl();
+            BidDAO bidDAO = DAOFactory.getInstance().getBidDAO();
+            ItemDAO itemDAO = DAOFactory.getInstance().getItemDAO();
 
             try (DAOManager daoManager = new DAOManager(bidDAO, itemDAO)) {
 
@@ -92,14 +91,12 @@ public class BidReceiverImpl implements BidReceiver {
         lock.lock();
         String resultMessage;
         try {
-            if (bidValue.compareTo(user.getBalance()) <= 0) {
                 Bid winningBid = bidDAO.findWinning(item.getId());
 
                 if (winningBid == null) {
                     bidDAO.create(new Bid(item.getId(), user.getId(), bidValue));
 
                     resultMessage = messageProvider.getMessage(MessageProvider.BID_MADE_SUCCESSFULLY);
-                    user.setBalance(user.getBalance().subtract(bidValue));
                     updateSessionItem(item, bidValue);
 
                 } else if (winningBid.getBidderId() == user.getId()) {
@@ -109,16 +106,12 @@ public class BidReceiverImpl implements BidReceiver {
                     bidDAO.create(new Bid(item.getId(), user.getId(), bidValue), winningBid.getId());
 
                     resultMessage = messageProvider.getMessage(MessageProvider.BID_MADE_SUCCESSFULLY);
-                    user.setBalance(user.getBalance().subtract(bidValue));
                     updateSessionItem(item, bidValue);
 
                 } else {
                     resultMessage = messageProvider.getMessage(MessageProvider.WINNING_BID_CHANGED);
                     updateSessionItem(item, winningBid.getBidValue());
                 }
-            } else {
-                resultMessage = messageProvider.getMessage(MessageProvider.NOT_ENOUGH_MONEY);
-            }
         } finally {
             lock.unlock();
         }

@@ -12,12 +12,12 @@ import java.util.List;
 /**
  * Provides the base model implementation for `bid` table DAO.
  */
-public class BidDAOImpl extends GenericDAOImpl<Bid> implements BidDAO {
+class BidDAOImpl extends GenericDAOImpl<Bid> implements BidDAO {
 
     /**
      * Constructs dao for `bid` table.
      */
-    public BidDAOImpl() {
+    BidDAOImpl() {
         super(TableConstant.BID_QUERY_FIND_ALL,
                 TableConstant.BID_QUERY_FIND_BY_ID,
                 null,
