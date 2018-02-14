@@ -29,7 +29,7 @@ public enum FilterType {
     /**
      * Stores query representations for methods of comparing.
      */
-    private static class QueryOperator {
+    private class QueryOperator {
         private static final String LESS_OR_EQUAL = " <= ?";
         private static final String MORE_OR_EQUAL = " >= ?";
         private static final String EQUAL = " = ?";

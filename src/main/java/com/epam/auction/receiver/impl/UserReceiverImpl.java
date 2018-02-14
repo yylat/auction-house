@@ -228,7 +228,7 @@ class UserReceiverImpl implements UserReceiver {
             try (DAOManager daoManager = new DAOManager(userDAO)) {
                 PaginationHelper paginationHelper = new PaginationHelper(SiteManager.getInstance().getUsersForPage());
                 paginationHelper.definePage(requestContent);
-                if (!paginationHelper.pagesNumberDefined(requestContent)) {
+                if (paginationHelper.pagesNumberNotDefined(requestContent)) {
                     paginationHelper.definePages(requestContent, userDAO.countRows());
                 }
 
@@ -253,7 +253,7 @@ class UserReceiverImpl implements UserReceiver {
             try (DAOManager daoManager = new DAOManager(userDAO)) {
                 PaginationHelper paginationHelper = new PaginationHelper(SiteManager.getInstance().getUsersForPage());
                 paginationHelper.definePage(requestContent);
-                if (!paginationHelper.pagesNumberDefined(requestContent)) {
+                if (paginationHelper.pagesNumberNotDefined(requestContent)) {
                     paginationHelper.definePages(requestContent, userDAO.countRows());
                 }
 

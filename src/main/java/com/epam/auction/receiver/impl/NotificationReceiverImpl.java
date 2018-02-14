@@ -31,7 +31,7 @@ class NotificationReceiverImpl implements NotificationReceiver {
 
                 PaginationHelper paginationHelper = new PaginationHelper(SiteManager.getInstance().getNotificationsForPage());
                 paginationHelper.definePage(requestContent);
-                if (!paginationHelper.pagesNumberDefined(requestContent)) {
+                if (paginationHelper.pagesNumberNotDefined(requestContent)) {
                     paginationHelper.definePages(requestContent, notificationDAO.countRows(user.getId()));
                 }
 

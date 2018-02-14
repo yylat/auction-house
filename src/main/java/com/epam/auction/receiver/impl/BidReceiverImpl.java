@@ -64,7 +64,7 @@ class BidReceiverImpl implements BidReceiver {
 
                 PaginationHelper paginationHelper = new PaginationHelper(SiteManager.getInstance().getBidsForPage());
                 paginationHelper.definePage(requestContent);
-                if (!paginationHelper.pagesNumberDefined(requestContent)) {
+                if (paginationHelper.pagesNumberNotDefined(requestContent)) {
                     paginationHelper.definePages(requestContent, bidDAO.countRows(user.getId()));
                 }
 

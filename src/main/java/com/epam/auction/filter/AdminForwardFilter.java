@@ -20,7 +20,7 @@ public class AdminForwardFilter implements Filter {
     private static final Logger LOGGER = LogManager.getLogger();
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(FilterConfig filterConfig) {
         LOGGER.log(Level.DEBUG, this.getClass().getName() + " initialized.");
     }
 

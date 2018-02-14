@@ -221,7 +221,7 @@ class ItemReceiverImpl implements ItemReceiver {
 
                 PaginationHelper paginationHelper = new PaginationHelper(SiteManager.getInstance().getItemsForPage());
                 paginationHelper.definePage(requestContent);
-                if (!paginationHelper.pagesNumberDefined(requestContent)) {
+                if (paginationHelper.pagesNumberNotDefined(requestContent)) {
                     paginationHelper.definePages(requestContent, itemDAO.countRows(user.getId(), filterCriteria));
                 }
 
@@ -366,7 +366,7 @@ class ItemReceiverImpl implements ItemReceiver {
 
             PaginationHelper paginationHelper = new PaginationHelper(SiteManager.getInstance().getItemsForPage());
             paginationHelper.definePage(requestContent);
-            if (!paginationHelper.pagesNumberDefined(requestContent)) {
+            if (paginationHelper.pagesNumberNotDefined(requestContent)) {
                 paginationHelper.definePages(requestContent, itemDAO.countRows(filterCriteria));
             }
 

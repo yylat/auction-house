@@ -34,9 +34,9 @@ class PaginationHelper {
         return (page - 1) * limit;
     }
 
-    boolean pagesNumberDefined(RequestContent requestContent) {
-        return !(requestContent.getRequestParameter(RequestConstant.INITIAL) == null) &&
-                requestContent.getSessionAttribute(RequestConstant.PAGES) != null;
+    boolean pagesNumberNotDefined(RequestContent requestContent) {
+        return requestContent.getRequestParameter(RequestConstant.INITIAL) == null ||
+                requestContent.getSessionAttribute(RequestConstant.PAGES) == null;
     }
 
 }
