@@ -50,7 +50,7 @@
 
 <script src="${pageContext.request.contextPath}/js/controller/sign.controller.js"></script>
 
-<c:set scope="session" var="currentPage" value="/jsp/error.jsp"/>
+<c:set scope="session" var="currentPage" value="/WEB-INF/jsp/error.jsp"/>
 
 </body>
 </html>

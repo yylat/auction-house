@@ -97,7 +97,7 @@
                                         </form>
 
                                         <div class="w3-bar-item ">
-                                            <a href="${pageContext.request.contextPath}/jsp/user/edit_item.jsp"
+                                            <a href="${pageContext.request.contextPath}/WEB-INF/jsp/user/edit_item.jsp"
                                                class="w3-button pro-green w3-ripple">
                                                     ${edit}
                                             </a>
@@ -312,7 +312,7 @@
 
 <script src="${pageContext.request.contextPath}/js/controller/item.controller.js"></script>
 
-<c:set scope="session" var="currentPage" value="/jsp/item.jsp"/>
+<c:set scope="session" var="currentPage" value="/WEB-INF/jsp/item.jsp"/>
 
 </body>
 

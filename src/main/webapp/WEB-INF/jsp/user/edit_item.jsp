@@ -173,7 +173,7 @@
 <script src="${pageContext.request.contextPath}/js/controller/edit-item.controller.js"></script>
 <script src="${pageContext.request.contextPath}/js/custom-file-input.js"></script>
 
-<c:set scope="session" var="currentPage" value="/jsp/user/edit_item.jsp"/>
+<c:set scope="session" var="currentPage" value="/WEB-INF/jsp/user/edit_item.jsp"/>
 
 </body>
 

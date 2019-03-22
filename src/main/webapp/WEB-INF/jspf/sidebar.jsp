@@ -116,7 +116,7 @@
 
     </c:if>
 
-    <a href="${pageContext.request.contextPath}/jsp/contacts.jsp"
+    <a href="${pageContext.request.contextPath}/WEB-INF/jsp/contacts.jsp"
        class="w3-bar-item pro-bottom-button pro-margin-bottom">${contactPage}</a>
 
 </div>

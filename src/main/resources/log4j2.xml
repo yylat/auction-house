@@ -10,8 +10,8 @@
             <PatternLayout pattern="${consolePattern}"/>
         </Console>
         <RollingFile name="File"
-                     fileName="auction/logs/log.txt"
-                     filePattern="auction/logs/$${date:yyyy-MM-dd}/log-%i.txt">
+                     fileName="./auction/logs/log.log"
+                     filePattern="./auction/logs/$${date:yyyy-MM-dd}/log-%i.log">
             <PatternLayout pattern="${filePattern}"/>
             <Policies>
                 <SizeBasedTriggeringPolicy size="100 KB"/>

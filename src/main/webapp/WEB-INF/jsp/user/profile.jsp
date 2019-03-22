@@ -58,7 +58,7 @@
 
 <%@ include file="/WEB-INF/jspf/footer.jsp" %>
 
-<c:set scope="session" var="currentPage" value="/jsp/user/profile.jsp"/>
+<c:set scope="session" var="currentPage" value="/WEB-INF/jsp/user/profile.jsp"/>
 
 </body>
 

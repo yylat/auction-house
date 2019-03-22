@@ -137,7 +137,7 @@
 <script src="${pageContext.request.contextPath}/js/pagination.js"></script>
 <script src="${pageContext.request.contextPath}/js/controller/search.controller.js"></script>
 
-<c:set scope="session" var="currentPage" value="/jsp/admin/user_managenment.jsp"/>
+<c:set scope="session" var="currentPage" value="/WEB-INF/jsp/admin/user_managenment.jsp"/>
 
 </body>
 </html>

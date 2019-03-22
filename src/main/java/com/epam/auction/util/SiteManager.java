@@ -19,7 +19,7 @@ public class SiteManager {
     private static final String NOTIFICATIONS_FOR_PAGE_PROP_NAME = "page.notifications";
     private static final String USERS_FOR_PAGE_PROP_NAME = "page.users";
 
-    private static final String DEFAULT_UPLOAD_PATH = "C:/AuctionHouse/photos/";
+    private static final String DEFAULT_UPLOAD_PATH = "./auction/photos/";
     private static final int DEFAULT_ITEMS_FOR_PAGE = 8;
     private static final int DEFAULT_BIDS_FOR_PAGE = 20;
     private static final int DEFAULT_NOTIFICATIONS_FOR_PAGE = 20;

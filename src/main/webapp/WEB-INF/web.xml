@@ -11,17 +11,17 @@
 
     <error-page>
         <exception-type>java.lang.Exception</exception-type>
-        <location>/jsp/error.jsp</location>
+        <location>/WEB-INF/jsp/error.jsp</location>
     </error-page>
 
     <error-page>
         <error-code>500</error-code>
-        <location>/jsp/error.jsp</location>
+        <location>/WEB-INF/jsp/error.jsp</location>
     </error-page>
 
     <error-page>
         <error-code>404</error-code>
-        <location>/jsp/error_404.jsp</location>
+        <location>/WEB-INF/jsp/error_404.jsp</location>
     </error-page>
 
     <jsp-config>

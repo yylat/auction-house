@@ -49,7 +49,7 @@
     <script src="${pageContext.request.contextPath}/js/controller/sign.controller.js"></script>
 </c:if>
 
-<c:set scope="session" var="currentPage" value="/jsp/active_items.jsp"/>
+<c:set scope="session" var="currentPage" value="/WEB-INF/jsp/active_items.jsp"/>
 
 </body>
 
