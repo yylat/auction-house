@@ -1,0 +1,21 @@
+version: '3.2'
+
+services:
+  db:
+    image: mysql:5.7
+    ports:
+      - '3306:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: 'admin'
+    volumes:
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  webapp:
+    build:
+      context: .
+    ports:
+      - '8080:8080'
+      - '8000:8000'
+    command: jpda run
+    depends_on:
+      - db

@@ -37,7 +37,7 @@ class DBManager {
     private static final String ENCODING_PROP_NAME = "encoding";
     private static final String USE_SSL_PROP_NAME = "useSSL";
 
-    private static final String DEFAULT_URL = "jdbc:mysql://localhost:3306/auction";
+    private static final String DEFAULT_URL = "jdbc:mysql://db:3306/auction_house";
     private static final String DEFAULT_USE_UNICODE = "true";
     private static final String DEFAULT_ENCODING = "UTF-8";
     private static final String DEFAULT_USE_SSL = "false";
